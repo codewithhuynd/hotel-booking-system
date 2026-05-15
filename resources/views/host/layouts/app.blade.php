@@ -101,13 +101,13 @@
             Manage Rooms
         </a>
 
-        <a href="#">
-            Manage Bookings
-        </a>
+        <a href="{{ route('host.bookings.index') }}">
+    Manage Bookings
+</a>
 
-        <a href="#">
-            Payments
-        </a>
+        <a href="{{ route('host.payments.index') }}">
+    Payments
+</a>
 
         <a href="{{ route('home') }}">
             Home Page

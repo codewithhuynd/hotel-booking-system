@@ -9,13 +9,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
+
             $table->id();
 
             $table->foreignId('booking_id')
                 ->constrained()
                 ->onDelete('cascade');
 
-            $table->string('transaction_code')->nullable();
+            $table->string('transaction_code')
+                ->nullable();
 
             $table->decimal('deposit_amount', 10, 2);
 
@@ -30,10 +32,12 @@ return new class extends Migration
                 'unpaid',
                 'pending',
                 'paid',
+                'expired',
                 'refunded'
             ])->default('unpaid');
 
-            $table->timestamp('paid_at')->nullable();
+            $table->timestamp('paid_at')
+                ->nullable();
 
             $table->timestamp('deposit_deadline');
 
