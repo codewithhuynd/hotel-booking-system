@@ -24,12 +24,12 @@ class PaymentController extends Controller
     {
         $expiredCount =
             $this->depositPaymentService
-                ->expireOverduePayments();
+            ->expireOverduePayments();
 
         $payments = Payment::with([
-                'booking.user',
-                'booking.room',
-            ])
+            'booking.user',
+            'booking.room',
+        ])
             ->latest()
             ->get();
 
@@ -72,32 +72,20 @@ class PaymentController extends Controller
         Payment $payment
     ) {
 
-        $validated = $request->validate([
-            'transaction_code' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
+        $payment->update([
+
+            'status' => 'paid',
+
+            'paid_at' => now(),
+
+            'transaction_code' =>
+            $request->transaction_code,
         ]);
 
-        try {
+        $payment->booking->update([
 
-            $this->depositPaymentService
-                ->confirmDeposit(
-                    $payment,
-                    $validated['transaction_code']
-                        ?? null
-                );
-
-        } catch (
-            InvalidArgumentException $exception
-        ) {
-
-            return back()->with(
-                'error',
-                $exception->getMessage()
-            );
-        }
+            'status' => 'confirmed',
+        ]);
 
         return back()->with(
             'success',

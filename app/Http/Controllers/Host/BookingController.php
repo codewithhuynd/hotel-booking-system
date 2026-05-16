@@ -19,8 +19,8 @@ class BookingController extends Controller
             'user',
             'room'
         ])
-        ->latest()
-        ->get();
+            ->latest()
+            ->get();
 
         return view(
             'host.bookings.index',
@@ -57,24 +57,21 @@ class BookingController extends Controller
 
     public function confirm(Booking $booking)
     {
-        $booking->load('payment');
+        if ($booking->status !== 'pending') {
 
-        if ($booking->payment && in_array($booking->payment->status, ['unpaid', 'pending'], true)) {
-            $booking->update(['status' => 'awaiting_deposit']);
-
-            if (! $booking->payment->deposit_deadline) {
-                $booking->payment->update([
-                    'deposit_deadline' => now()->addHours(config('hotel.deposit_deadline_hours', 24)),
-                    'status' => 'pending',
-                ]);
-            }
-        } else {
-            $booking->update(['status' => 'confirmed']);
+            return back()->with(
+                'error',
+                'Booking không hợp lệ.'
+            );
         }
+
+        $booking->update([
+            'status' => 'awaiting_deposit'
+        ]);
 
         return back()->with(
             'success',
-            'Booking confirmed successfully.'
+            'Đã xác nhận booking. Chờ khách đặt cọc.'
         );
     }
 
@@ -86,6 +83,14 @@ class BookingController extends Controller
 
     public function checkIn(Booking $booking)
     {
+        if ($booking->status !== 'confirmed') {
+
+            return back()->with(
+                'error',
+                'Booking chưa được xác nhận.'
+            );
+        }
+
         $booking->update([
             'status' => 'checked_in'
         ]);
@@ -108,9 +113,35 @@ class BookingController extends Controller
 
     public function checkOut(Booking $booking)
     {
+        /*
+    |------------------------------------------------------------------
+    | CHECK VALID STATUS
+    |------------------------------------------------------------------
+    */
+
+        if ($booking->status !== 'checked_in') {
+
+            return back()->with(
+                'error',
+                'Booking chưa check-in.'
+            );
+        }
+
+        /*
+    |------------------------------------------------------------------
+    | UPDATE BOOKING
+    |------------------------------------------------------------------
+    */
+
         $booking->update([
             'status' => 'checked_out'
         ]);
+
+        /*
+    |------------------------------------------------------------------
+    | UPDATE ROOM
+    |------------------------------------------------------------------
+    */
 
         $booking->room->update([
             'status' => 'available'
@@ -118,7 +149,7 @@ class BookingController extends Controller
 
         return back()->with(
             'success',
-            'Guest checked out successfully.'
+            'Check-out thành công.'
         );
     }
 
@@ -132,10 +163,6 @@ class BookingController extends Controller
     {
         $booking->update([
             'status' => 'cancelled'
-        ]);
-
-        $booking->room->update([
-            'status' => 'available'
         ]);
 
         return back()->with(

@@ -22,9 +22,9 @@ return new class extends Migration
 
             $table->enum('status', [
                 'available',
-                'booked',
                 'occupied',
-                'cleaning'
+                'cleaning',
+                'maintenance'
             ])->default('available');
 
             $table->timestamps();

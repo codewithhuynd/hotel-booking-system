@@ -13,6 +13,7 @@ class Payment extends Model
         'payment_method',
         'status',
         'paid_at',
+        'proof_image',
         'deposit_deadline',
     ];
 

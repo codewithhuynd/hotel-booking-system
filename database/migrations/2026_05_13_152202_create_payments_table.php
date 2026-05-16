@@ -39,7 +39,11 @@ return new class extends Migration
             $table->timestamp('paid_at')
                 ->nullable();
 
-            $table->timestamp('deposit_deadline');
+            $table->string('proof_image')
+                ->nullable();
+
+            $table->timestamp('deposit_deadline')
+                ->nullable();
 
             $table->timestamps();
         });
