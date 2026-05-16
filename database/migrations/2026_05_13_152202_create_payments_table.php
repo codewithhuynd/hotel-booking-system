@@ -9,15 +9,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-
             $table->id();
 
             $table->foreignId('booking_id')
                 ->constrained()
                 ->onDelete('cascade');
 
-            $table->string('transaction_code')
-                ->nullable();
+            $table->enum('type', [
+                'deposit',
+                'final',
+            ])->default('deposit');
+
+            $table->string('transaction_code')->nullable();
 
             $table->decimal('deposit_amount', 10, 2);
 
@@ -25,7 +28,7 @@ return new class extends Migration
                 'cash',
                 'banking',
                 'momo',
-                'vnpay'
+                'vnpay',
             ]);
 
             $table->enum('status', [
@@ -33,17 +36,12 @@ return new class extends Migration
                 'pending',
                 'paid',
                 'expired',
-                'refunded'
+                'refunded',
             ])->default('unpaid');
 
-            $table->timestamp('paid_at')
-                ->nullable();
-
-            $table->string('proof_image')
-                ->nullable();
-
-            $table->timestamp('deposit_deadline')
-                ->nullable();
+            $table->timestamp('paid_at')->nullable();
+            $table->string('proof_image')->nullable();
+            $table->timestamp('deposit_deadline')->nullable();
 
             $table->timestamps();
         });

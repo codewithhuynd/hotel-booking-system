@@ -160,6 +160,12 @@ Route::middleware('auth')->group(function () {
             '/payments/{payment}/upload-proof',
             [GuestPaymentController::class, 'uploadProof']
         )->name('guest.payments.upload-proof');
+
+
+        Route::post(
+            '/my-bookings/{booking}/cancel',
+            [GuestBookingController::class, 'cancel']
+        )->name('guest.bookings.cancel');
     });
 
     /*

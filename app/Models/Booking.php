@@ -27,6 +27,12 @@ class Booking extends Model
         'booked_at',
     ];
 
+    protected $casts = [
+        'check_in_date' => 'date',
+        'check_out_date' => 'date',
+        'booked_at' => 'datetime',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONSHIPS
@@ -43,9 +49,28 @@ class Booking extends Model
         return $this->belongsTo(Room::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function payment()
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Payment::class)->latestOfMany();
+    }
+
+    public function depositPayment()
+    {
+        return $this->hasOne(Payment::class)
+            ->where('type', 'deposit')
+            ->latestOfMany();
+    }
+
+    public function finalPayment()
+    {
+        return $this->hasOne(Payment::class)
+            ->where('type', 'final')
+            ->latestOfMany();
     }
 
     public function cancellation()

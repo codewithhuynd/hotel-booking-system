@@ -21,6 +21,36 @@ return new class extends Migration
 
             $table->text('reason')->nullable();
 
+            /*
+    |--------------------------------------------------------------------------
+    | REFUND INFO
+    |--------------------------------------------------------------------------
+    */
+
+            $table->string('bank_name')->nullable();
+
+            $table->string('bank_account_number')->nullable();
+
+            $table->string('bank_account_name')->nullable();
+
+            /*
+    |--------------------------------------------------------------------------
+    | REFUND STATUS
+    |--------------------------------------------------------------------------
+    */
+
+            $table->boolean('refund_completed')
+                ->default(false);
+
+            $table->timestamp('refund_completed_at')
+                ->nullable();
+
+            /*
+    |--------------------------------------------------------------------------
+    | CANCELLED
+    |--------------------------------------------------------------------------
+    */
+
             $table->timestamp('cancelled_at')->nullable();
 
             $table->timestamps();

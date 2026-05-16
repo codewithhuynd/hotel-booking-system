@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Services\DepositPaymentService;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
 
 class PaymentController extends Controller
 {
@@ -22,23 +21,18 @@ class PaymentController extends Controller
 
     public function index()
     {
-        $expiredCount =
-            $this->depositPaymentService
-            ->expireOverduePayments();
+        $expiredCount = $this->depositPaymentService->expireOverduePayments();
 
         $payments = Payment::with([
-            'booking.user',
-            'booking.room',
-        ])
+                'booking.user',
+                'booking.room',
+            ])
             ->latest()
             ->get();
 
         return view(
             'host.payments.index',
-            compact(
-                'payments',
-                'expiredCount'
-            )
+            compact('payments', 'expiredCount')
         );
     }
 
@@ -53,6 +47,7 @@ class PaymentController extends Controller
         $payment->load([
             'booking.user',
             'booking.room',
+            'booking.payments',
         ]);
 
         return view(
@@ -63,33 +58,46 @@ class PaymentController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | CONFIRM DEPOSIT
+    | CONFIRM PAYMENT
     |--------------------------------------------------------------------------
     */
 
-    public function confirm(
-        Request $request,
-        Payment $payment
-    ) {
+    public function confirm(Request $request, Payment $payment)
+    {
+        $request->validate([
+            'transaction_code' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        if ($payment->isPaid()) {
+            return back()->with('error', 'Payment đã được xác nhận rồi.');
+        }
+
+        if ($payment->isDeposit() && $payment->booking->status !== 'awaiting_deposit') {
+            return back()->with('error', 'Booking chưa sẵn sàng cho deposit.');
+        }
+
+        if ($payment->isFinal() && $payment->booking->status !== 'checked_out') {
+            return back()->with('error', 'Booking chưa checkout để xác nhận final payment.');
+        }
 
         $payment->update([
-
             'status' => 'paid',
-
             'paid_at' => now(),
-
-            'transaction_code' =>
-            $request->transaction_code,
+            'transaction_code' => $request->transaction_code ?? $payment->transaction_code,
         ]);
 
-        $payment->booking->update([
+        if ($payment->isDeposit()) {
+            $payment->booking->update([
+                'status' => 'confirmed',
+            ]);
+        }
 
-            'status' => 'confirmed',
-        ]);
+        if ($payment->isFinal()) {
+            $payment->booking->update([
+                'status' => 'completed',
+            ]);
+        }
 
-        return back()->with(
-            'success',
-            'Deposit confirmed successfully.'
-        );
+        return back()->with('success', 'Payment confirmed successfully.');
     }
 }

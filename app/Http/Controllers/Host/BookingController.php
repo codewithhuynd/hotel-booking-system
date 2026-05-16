@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Host;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Payment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
@@ -16,16 +20,13 @@ class BookingController extends Controller
     public function index()
     {
         $bookings = Booking::with([
-            'user',
-            'room'
-        ])
+                'user',
+                'room',
+            ])
             ->latest()
             ->get();
 
-        return view(
-            'host.bookings.index',
-            compact('bookings')
-        );
+        return view('host.bookings.index', compact('bookings'));
     }
 
     /*
@@ -43,10 +44,7 @@ class BookingController extends Controller
             'cancellation',
         ]);
 
-        return view(
-            'host.bookings.show',
-            compact('booking')
-        );
+        return view('host.bookings.show', compact('booking'));
     }
 
     /*
@@ -58,21 +56,30 @@ class BookingController extends Controller
     public function confirm(Booking $booking)
     {
         if ($booking->status !== 'pending') {
-
-            return back()->with(
-                'error',
-                'Booking không hợp lệ.'
-            );
+            return back()->with('error', 'Booking không hợp lệ.');
         }
 
-        $booking->update([
-            'status' => 'awaiting_deposit'
-        ]);
+        DB::transaction(function () use ($booking) {
+            $booking->update([
+                'status' => 'awaiting_deposit',
+            ]);
 
-        return back()->with(
-            'success',
-            'Đã xác nhận booking. Chờ khách đặt cọc.'
-        );
+            Payment::firstOrCreate(
+                [
+                    'booking_id' => $booking->id,
+                    'type' => 'deposit',
+                ],
+                [
+                    'transaction_code' => 'DEP-' . strtoupper(Str::random(10)),
+                    'deposit_amount' => $booking->deposit_amount,
+                    'payment_method' => 'banking',
+                    'status' => 'unpaid',
+                    'deposit_deadline' => now()->addHours(config('hotel.deposit_deadline_hours', 24)),
+                ]
+            );
+        });
+
+        return back()->with('success', 'Đã xác nhận booking. Chờ khách đặt cọc.');
     }
 
     /*
@@ -84,25 +91,18 @@ class BookingController extends Controller
     public function checkIn(Booking $booking)
     {
         if ($booking->status !== 'confirmed') {
-
-            return back()->with(
-                'error',
-                'Booking chưa được xác nhận.'
-            );
+            return back()->with('error', 'Booking chưa được xác nhận hoặc chưa thanh toán cọc.');
         }
 
         $booking->update([
-            'status' => 'checked_in'
+            'status' => 'checked_in',
         ]);
 
         $booking->room->update([
-            'status' => 'occupied'
+            'status' => 'occupied',
         ]);
 
-        return back()->with(
-            'success',
-            'Guest checked in successfully.'
-        );
+        return back()->with('success', 'Guest checked in successfully.');
     }
 
     /*
@@ -113,44 +113,48 @@ class BookingController extends Controller
 
     public function checkOut(Booking $booking)
     {
-        /*
-    |------------------------------------------------------------------
-    | CHECK VALID STATUS
-    |------------------------------------------------------------------
-    */
-
         if ($booking->status !== 'checked_in') {
-
-            return back()->with(
-                'error',
-                'Booking chưa check-in.'
-            );
+            return back()->with('error', 'Booking chưa check-in.');
         }
 
-        /*
-    |------------------------------------------------------------------
-    | UPDATE BOOKING
-    |------------------------------------------------------------------
-    */
+        $depositPaid = (float) $booking->payments()
+            ->deposit()
+            ->where('status', 'paid')
+            ->sum('deposit_amount');
 
-        $booking->update([
-            'status' => 'checked_out'
-        ]);
+        if ($depositPaid <= 0) {
+            return back()->with('error', 'Khách chưa thanh toán cọc, không thể checkout.');
+        }
 
-        /*
-    |------------------------------------------------------------------
-    | UPDATE ROOM
-    |------------------------------------------------------------------
-    */
+        DB::transaction(function () use ($booking, $depositPaid) {
+            $booking->update([
+                'status' => 'checked_out',
+            ]);
 
-        $booking->room->update([
-            'status' => 'available'
-        ]);
+            $booking->room->update([
+                'status' => 'available',
+            ]);
 
-        return back()->with(
-            'success',
-            'Check-out thành công.'
-        );
+            $remainingAmount = max((float) $booking->total_price - $depositPaid, 0);
+
+            if ($remainingAmount > 0) {
+                Payment::firstOrCreate(
+                    [
+                        'booking_id' => $booking->id,
+                        'type' => 'final',
+                    ],
+                    [
+                        'transaction_code' => 'FIN-' . strtoupper(Str::random(10)),
+                        'deposit_amount' => $remainingAmount,
+                        'payment_method' => 'banking',
+                        'status' => 'unpaid',
+                        'deposit_deadline' => now()->addHours(config('hotel.final_deadline_hours', 24)),
+                    ]
+                );
+            }
+        });
+
+        return back()->with('success', 'Check-out thành công. Đã tạo payment final nếu còn dư.');
     }
 
     /*
@@ -161,13 +165,14 @@ class BookingController extends Controller
 
     public function cancel(Booking $booking)
     {
+        if (in_array($booking->status, ['checked_in', 'checked_out', 'completed'], true)) {
+            return back()->with('error', 'Không thể hủy booking ở trạng thái hiện tại.');
+        }
+
         $booking->update([
-            'status' => 'cancelled'
+            'status' => 'cancelled',
         ]);
 
-        return back()->with(
-            'success',
-            'Booking cancelled successfully.'
-        );
+        return back()->with('success', 'Booking cancelled successfully.');
     }
 }

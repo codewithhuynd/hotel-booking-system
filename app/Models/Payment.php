@@ -8,6 +8,7 @@ class Payment extends Model
 {
     protected $fillable = [
         'booking_id',
+        'type',
         'transaction_code',
         'deposit_amount',
         'payment_method',
@@ -41,9 +42,35 @@ class Payment extends Model
 
     /*
     |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeDeposit($query)
+    {
+        return $query->where('type', 'deposit');
+    }
+
+    public function scopeFinal($query)
+    {
+        return $query->where('type', 'final');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | HELPERS
     |--------------------------------------------------------------------------
     */
+
+    public function isDeposit(): bool
+    {
+        return $this->type === 'deposit';
+    }
+
+    public function isFinal(): bool
+    {
+        return $this->type === 'final';
+    }
 
     public function isPaid(): bool
     {
@@ -62,29 +89,23 @@ class Payment extends Model
             && now()->greaterThan($this->deposit_deadline);
     }
 
-    public function canConfirmDeposit(): bool
+    public function displayTypeLabel(): string
     {
-        return in_array($this->status, [
-            'unpaid',
-            'pending',
-        ], true)
-        && ! $this->isOverdue();
+        return match ($this->type) {
+            'deposit' => 'Deposit',
+            'final' => 'Final',
+            default => 'Unknown',
+        };
     }
 
     public function displayStatusLabel(): string
     {
         return match ($this->status) {
-
             'unpaid' => 'Waiting Deposit',
-
             'pending' => 'Pending',
-
             'paid' => 'Paid',
-
             'expired' => 'Expired',
-
             'refunded' => 'Refunded',
-
             default => 'Unknown',
         };
     }

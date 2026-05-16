@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -29,13 +29,10 @@ return new class extends Migration
 
             $table->string('contact_name');
             $table->string('contact_phone');
-
             $table->string('contact_email')->nullable();
 
             $table->decimal('room_price', 10, 2);
-
             $table->decimal('total_price', 10, 2);
-
             $table->decimal('deposit_amount', 10, 2);
 
             $table->text('note')->nullable();
@@ -46,13 +43,13 @@ return new class extends Migration
                 'confirmed',
                 'checked_in',
                 'checked_out',
-                'cancelled'
+                'completed',
+                'cancelled',
             ])->default('pending');
 
             $table->timestamp('booked_at');
 
             $table->timestamps();
-
             $table->softDeletes();
         });
 
