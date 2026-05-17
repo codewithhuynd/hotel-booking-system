@@ -9,7 +9,9 @@ class BookingCancellation extends Model
     protected $fillable = [
         'booking_id',
         'cancelled_by_user_id',
+
         'reason',
+        'cancelled_at',
 
         'bank_name',
         'bank_account_number',
@@ -18,14 +20,15 @@ class BookingCancellation extends Model
         'refund_completed',
         'refund_completed_at',
 
-        'cancelled_at',
+        'refund_transaction_code',
+        'refund_proof_image',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIONSHIPS
-    |--------------------------------------------------------------------------
-    */
+    protected $casts = [
+        'refund_completed' => 'boolean',
+        'cancelled_at' => 'datetime',
+        'refund_completed_at' => 'datetime',
+    ];
 
     public function booking()
     {

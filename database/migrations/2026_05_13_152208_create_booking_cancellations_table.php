@@ -19,13 +19,21 @@ return new class extends Migration
                 ->constrained('users')
                 ->onDelete('cascade');
 
+            /*
+            |--------------------------------------------------------------------------
+            | CANCEL INFO
+            |--------------------------------------------------------------------------
+            */
+
             $table->text('reason')->nullable();
 
+            $table->timestamp('cancelled_at')->nullable();
+
             /*
-    |--------------------------------------------------------------------------
-    | REFUND INFO
-    |--------------------------------------------------------------------------
-    */
+            |--------------------------------------------------------------------------
+            | REFUND BANK INFO
+            |--------------------------------------------------------------------------
+            */
 
             $table->string('bank_name')->nullable();
 
@@ -34,10 +42,10 @@ return new class extends Migration
             $table->string('bank_account_name')->nullable();
 
             /*
-    |--------------------------------------------------------------------------
-    | REFUND STATUS
-    |--------------------------------------------------------------------------
-    */
+            |--------------------------------------------------------------------------
+            | REFUND INFO
+            |--------------------------------------------------------------------------
+            */
 
             $table->boolean('refund_completed')
                 ->default(false);
@@ -45,13 +53,11 @@ return new class extends Migration
             $table->timestamp('refund_completed_at')
                 ->nullable();
 
-            /*
-    |--------------------------------------------------------------------------
-    | CANCELLED
-    |--------------------------------------------------------------------------
-    */
+            $table->string('refund_transaction_code')
+                ->nullable();
 
-            $table->timestamp('cancelled_at')->nullable();
+            $table->string('refund_proof_image')
+                ->nullable();
 
             $table->timestamps();
         });

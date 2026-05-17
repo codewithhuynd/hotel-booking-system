@@ -33,12 +33,6 @@ class Booking extends Model
         'booked_at' => 'datetime',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIONSHIPS
-    |--------------------------------------------------------------------------
-    */
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -54,23 +48,14 @@ class Booking extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function payment()
-    {
-        return $this->hasOne(Payment::class)->latestOfMany();
-    }
-
     public function depositPayment()
     {
-        return $this->hasOne(Payment::class)
-            ->where('type', 'deposit')
-            ->latestOfMany();
+        return $this->hasOne(Payment::class)->where('type', 'deposit');
     }
 
     public function finalPayment()
     {
-        return $this->hasOne(Payment::class)
-            ->where('type', 'final')
-            ->latestOfMany();
+        return $this->hasOne(Payment::class)->where('type', 'final');
     }
 
     public function cancellation()
