@@ -11,7 +11,6 @@ use App\Http\Controllers\Host\PaymentController;
 use App\Http\Controllers\Guest\RoomController as GuestRoomController;
 use App\Http\Controllers\Guest\BookingController as GuestBookingController;
 use App\Http\Controllers\Guest\PaymentController as GuestPaymentController;
-use App\Models\BookingCancellation;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -30,7 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::middleware('guest.role')->group(function () {
-
         Route::get('/my-bookings', [GuestBookingController::class, 'index'])
             ->name('guest.bookings.index');
 
@@ -46,6 +44,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/my-bookings/{booking}/cancel', [GuestBookingController::class, 'cancel'])
             ->name('guest.bookings.cancel');
 
+        Route::post('/my-bookings/{booking}/refund-bank', [GuestBookingController::class, 'submitRefundBank'])
+            ->name('guest.bookings.refund-bank');
+
         Route::get('/payments/{payment}', [GuestPaymentController::class, 'show'])
             ->name('guest.payments.show');
 
@@ -57,7 +58,6 @@ Route::middleware('auth')->group(function () {
         ->prefix('host')
         ->name('host.')
         ->group(function () {
-
             Route::redirect('/', '/host/dashboard');
 
             Route::get('/dashboard', function () {

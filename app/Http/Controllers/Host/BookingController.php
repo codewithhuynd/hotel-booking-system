@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\BookingCancellation;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -133,37 +134,69 @@ class BookingController extends Controller
         return back()->with('success', 'Check-out thành công. Đã tạo payment cuối nếu còn dư.');
     }
 
-    public function cancel(Booking $booking)
+    public function cancel(Request $request, Booking $booking)
     {
-        if (in_array($booking->status, ['checked_in', 'checked_out', 'completed', 'cancelled'], true)) {
+        if (in_array($booking->status, [
+            'checked_in',
+            'checked_out',
+            'completed',
+            'cancelled',
+        ], true)) {
             return back()->with('error', 'Không thể hủy booking ở trạng thái hiện tại.');
         }
 
-        $booking->update([
-            'status' => 'cancelled',
+        $validated = $request->validate([
+            'reason' => ['required', 'string', 'max:1000'],
         ]);
 
-        if ($booking->room) {
-            $booking->room->update([
-                'status' => 'available',
-            ]);
-        }
+        $hasTransferredDeposit =
+            $booking->depositPayment &&
+            in_array($booking->depositPayment->status, ['pending', 'paid'], true);
 
-        foreach ($booking->payments as $payment) {
-            if (in_array($payment->status, ['unpaid', 'pending'], true)) {
-                $payment->update([
-                    'status' => 'expired',
+        DB::transaction(function () use ($booking, $validated, $hasTransferredDeposit) {
+            BookingCancellation::create([
+                'booking_id' => $booking->id,
+                'cancelled_by_user_id' => Auth::id(),
+                'cancelled_by_type' => 'host',
+                'reason' => $validated['reason'],
+                'refund_completed' => $hasTransferredDeposit ? false : true,
+                'cancelled_at' => now(),
+            ]);
+
+            $booking->update([
+                'status' => 'cancelled',
+            ]);
+
+            if ($booking->room) {
+                $booking->room->update([
+                    'status' => 'available',
                 ]);
             }
-        }
 
-        return back()->with('success', 'Booking đã được hủy.');
+            foreach ($booking->payments as $payment) {
+                if ($payment->status === 'unpaid') {
+                    $payment->update([
+                        'status' => 'expired',
+                    ]);
+                }
+            }
+        });
+
+        return back()->with('success', 'Đã hủy booking.');
     }
 
     public function refund(Request $request, BookingCancellation $cancellation)
     {
         if ($cancellation->refund_completed) {
             return back()->with('error', 'Refund đã được xử lý rồi.');
+        }
+
+        if (
+            blank($cancellation->bank_name) ||
+            blank($cancellation->bank_account_number) ||
+            blank($cancellation->bank_account_name)
+        ) {
+            return back()->with('error', 'Khách chưa cung cấp thông tin ngân hàng.');
         }
 
         $validated = $request->validate([
@@ -175,7 +208,6 @@ class BookingController extends Controller
             ->store('refund_proofs', 'public');
 
         DB::transaction(function () use ($cancellation, $validated, $proofPath) {
-
             $cancellation->update([
                 'refund_transaction_code' => $validated['refund_transaction_code'],
                 'refund_proof_image' => $proofPath,
@@ -186,9 +218,7 @@ class BookingController extends Controller
             $booking = $cancellation->booking;
 
             foreach ($booking->payments as $payment) {
-
-                if ($payment->status === 'paid') {
-
+                if (in_array($payment->status, ['pending', 'paid'], true)) {
                     $payment->update([
                         'status' => 'refunded',
                     ]);

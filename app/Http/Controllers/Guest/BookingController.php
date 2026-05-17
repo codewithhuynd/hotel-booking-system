@@ -122,32 +122,15 @@ class BookingController extends Controller
                 ->with('error', 'Booking này không thể hủy.');
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | CHECK DEPOSIT STATUS
-        |--------------------------------------------------------------------------
-        | pending = guest đã chuyển khoản, đang chờ host xác nhận
-        | paid = host đã xác nhận đã nhận tiền
-        | unpaid = chưa chuyển khoản
-        */
-        $hasPaidDeposit =
+        $hasTransferredDeposit =
             $booking->depositPayment &&
-            in_array(
-                $booking->depositPayment->status,
-                ['pending', 'paid'],
-                true
-            );
+            in_array($booking->depositPayment->status, ['pending', 'paid'], true);
 
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDATION
-        |--------------------------------------------------------------------------
-        */
         $rules = [
             'reason' => ['required', 'string', 'max:1000'],
         ];
 
-        if ($hasPaidDeposit) {
+        if ($hasTransferredDeposit) {
             $rules['bank_name'] = ['required', 'string', 'max:255'];
             $rules['bank_account_number'] = ['required', 'string', 'max:255'];
             $rules['bank_account_name'] = ['required', 'string', 'max:255'];
@@ -155,35 +138,17 @@ class BookingController extends Controller
 
         $validated = $request->validate($rules);
 
-        DB::transaction(function () use (
-            $booking,
-            $validated,
-            $hasPaidDeposit
-        ) {
+        DB::transaction(function () use ($booking, $validated, $hasTransferredDeposit) {
             BookingCancellation::create([
                 'booking_id' => $booking->id,
                 'cancelled_by_user_id' => Auth::id(),
+                'cancelled_by_type' => 'guest',
                 'reason' => $validated['reason'],
-
-                'bank_name' => $hasPaidDeposit
-                    ? $validated['bank_name']
-                    : null,
-
-                'bank_account_number' => $hasPaidDeposit
-                    ? $validated['bank_account_number']
-                    : null,
-
-                'bank_account_name' => $hasPaidDeposit
-                    ? $validated['bank_account_name']
-                    : null,
-
-                /*
-                |--------------------------------------------------------------------------
-                | Nếu chưa cọc thì xem như không cần hoàn tiền
-                |--------------------------------------------------------------------------
-                */
-                'refund_completed' => $hasPaidDeposit ? false : true,
-
+                'bank_name' => $hasTransferredDeposit ? $validated['bank_name'] : null,
+                'bank_account_number' => $hasTransferredDeposit ? $validated['bank_account_number'] : null,
+                'bank_account_name' => $hasTransferredDeposit ? $validated['bank_account_name'] : null,
+                'refund_info_submitted_at' => $hasTransferredDeposit ? now() : null,
+                'refund_completed' => $hasTransferredDeposit ? false : true,
                 'cancelled_at' => now(),
             ]);
 
@@ -197,11 +162,6 @@ class BookingController extends Controller
                 ]);
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | Chỉ expire unpaid, KHÔNG đụng pending
-            |--------------------------------------------------------------------------
-            */
             foreach ($booking->payments as $payment) {
                 if ($payment->status === 'unpaid') {
                     $payment->update([
@@ -214,5 +174,47 @@ class BookingController extends Controller
         return redirect()
             ->route('guest.bookings.index')
             ->with('success', 'Đã hủy booking thành công.');
+    }
+
+    public function submitRefundBank(Request $request, Booking $booking)
+    {
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (!$booking->cancellation) {
+            return back()->with('error', 'Booking chưa có thông tin hủy.');
+        }
+
+        if ($booking->cancellation->refund_completed) {
+            return back()->with('error', 'Refund đã hoàn tất.');
+        }
+
+        if ($booking->cancellation->cancelled_by_type !== 'host') {
+            return back()->with('error', 'Chỉ booking bị host hủy mới cần bổ sung thông tin refund.');
+        }
+
+        $hasTransferredDeposit =
+            $booking->depositPayment &&
+            in_array($booking->depositPayment->status, ['pending', 'paid'], true);
+
+        if (! $hasTransferredDeposit) {
+            return back()->with('error', 'Booking này không cần hoàn tiền cọc.');
+        }
+
+        $validated = $request->validate([
+            'bank_name' => ['required', 'string', 'max:255'],
+            'bank_account_number' => ['required', 'string', 'max:255'],
+            'bank_account_name' => ['required', 'string', 'max:255'],
+        ]);
+
+        $booking->cancellation->update([
+            'bank_name' => $validated['bank_name'],
+            'bank_account_number' => $validated['bank_account_number'],
+            'bank_account_name' => $validated['bank_account_name'],
+            'refund_info_submitted_at' => now(),
+        ]);
+
+        return back()->with('success', 'Đã cập nhật thông tin nhận refund.');
     }
 }

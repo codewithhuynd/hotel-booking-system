@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="utf-8">
     <title>My Bookings</title>
@@ -77,8 +78,18 @@
             border: none;
             border-top: 1px solid #e2e8f0;
         }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin-top: 8px;
+            margin-bottom: 14px;
+        }
     </style>
 </head>
+
 <body>
 <div class="container">
 
@@ -199,14 +210,65 @@
 
                 <h3>Thông tin hủy</h3>
 
+                <p>
+                    <strong>Hủy bởi:</strong>
+                    {{ $booking->cancellation->cancelled_by_type === 'host' ? 'Host' : 'Guest' }}
+                </p>
+
                 <p><strong>Lý do:</strong> {{ $booking->cancellation->reason }}</p>
-                <p><strong>Ngân hàng refund:</strong> {{ $booking->cancellation->bank_name }}</p>
-                <p><strong>STK:</strong> {{ $booking->cancellation->bank_account_number }}</p>
-                <p><strong>Chủ TK:</strong> {{ $booking->cancellation->bank_account_name }}</p>
+
+                @if($booking->cancellation->bank_name)
+                    <p><strong>Ngân hàng refund:</strong> {{ $booking->cancellation->bank_name }}</p>
+                    <p><strong>STK:</strong> {{ $booking->cancellation->bank_account_number }}</p>
+                    <p><strong>Chủ TK:</strong> {{ $booking->cancellation->bank_account_name }}</p>
+                @endif
+
                 <p>
                     <strong>Hoàn tiền:</strong>
                     {{ $booking->cancellation->refund_completed ? 'Đã hoàn tiền' : 'Chờ hoàn tiền' }}
                 </p>
+
+                @if(
+                    $booking->status === 'cancelled'
+                    && $booking->cancellation->cancelled_by_type === 'host'
+                    && !$booking->cancellation->refund_completed
+                    && !$booking->cancellation->bank_name
+                    && ($booking->depositPayment && in_array($booking->depositPayment->status, ['pending', 'paid'], true))
+                )
+                    <hr style="margin: 16px 0;">
+
+                    <h3>Nhập thông tin tài khoản để nhận refund</h3>
+
+                    <p class="muted">
+                        Host đã hủy booking. Vui lòng cung cấp thông tin ngân hàng để host hoàn tiền.
+                    </p>
+
+                    <form method="POST" action="{{ route('guest.bookings.refund-bank', $booking) }}">
+                        @csrf
+
+                        <label>Ngân hàng</label>
+                        <input type="text" name="bank_name" required value="{{ old('bank_name') }}">
+
+                        <label>Số tài khoản</label>
+                        <input type="text" name="bank_account_number" required value="{{ old('bank_account_number') }}">
+
+                        <label>Tên chủ tài khoản</label>
+                        <input type="text" name="bank_account_name" required value="{{ old('bank_account_name') }}">
+
+                        <button type="submit" class="btn">
+                            Gửi thông tin refund
+                        </button>
+                    </form>
+                @elseif(
+                    $booking->status === 'cancelled'
+                    && $booking->cancellation->cancelled_by_type === 'host'
+                    && !$booking->cancellation->refund_completed
+                    && $booking->cancellation->bank_name
+                )
+                    <p class="muted">
+                        Bạn đã gửi thông tin ngân hàng. Vui lòng chờ host hoàn tiền.
+                    </p>
+                @endif
             @endif
 
             @if(!in_array($booking->status, ['checked_in', 'checked_out', 'completed', 'cancelled'], true))
@@ -227,4 +289,5 @@
 
 </div>
 </body>
+
 </html>

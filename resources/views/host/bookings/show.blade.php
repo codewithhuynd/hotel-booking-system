@@ -43,19 +43,20 @@
         'maintenance' => 'Bảo trì',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | CHỈ CÓ DEPOSIT PAYMENT VÀ ĐANG pending/paid MỚI ĐƯỢC REFUND
-    |--------------------------------------------------------------------------
-    */
-    $hasPaidPayment = $booking->payments
+    $hasRefundableDeposit = $booking->payments
         ->where('type', 'deposit')
         ->whereIn('status', ['pending', 'paid'])
         ->isNotEmpty();
 
+    $hasRefundBankInfo =
+        filled($booking->cancellation?->bank_name) &&
+        filled($booking->cancellation?->bank_account_number) &&
+        filled($booking->cancellation?->bank_account_name);
+
     $canRefund =
         $booking->status === 'cancelled'
-        && $hasPaidPayment
+        && $hasRefundableDeposit
+        && $hasRefundBankInfo
         && !($booking->cancellation?->refund_completed);
 @endphp
 
@@ -78,6 +79,13 @@
     .booking-detail .alert-error {
         color: #991b1b;
         background: #fee2e2;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    .booking-detail .alert-warning {
+        color: #92400e;
+        background: #fef3c7;
         padding: 0.75rem 1rem;
         border-radius: 8px;
         margin-bottom: 1rem;
@@ -419,7 +427,9 @@
                 <div class="grid">
                     <div class="field">
                         <label>Người hủy</label>
-                        <div class="value">{{ $booking->cancellation->cancelledBy?->full_name ?? '—' }}</div>
+                        <div class="value">
+                            {{ $booking->cancellation->cancelled_by_type === 'host' ? 'Host' : 'Guest' }}
+                        </div>
                     </div>
 
                     <div class="field">
@@ -434,7 +444,16 @@
                         <div class="value">{{ $booking->cancellation->reason ?? '—' }}</div>
                     </div>
 
-                    @if($hasPaidPayment)
+                    @if($booking->cancellation->cancelled_by_type === 'host' && !$booking->cancellation->bank_name && $hasRefundableDeposit)
+                        <div class="field" style="grid-column: 1 / -1;">
+                            <label>Trạng thái refund</label>
+                            <div class="value">
+                                <span style="color:#92400e;">Chờ guest nhập thông tin ngân hàng</span>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($hasRefundBankInfo)
                         <div class="field">
                             <label>Ngân hàng refund</label>
                             <div class="value">{{ $booking->cancellation->bank_name ?? '—' }}</div>
@@ -448,6 +467,13 @@
                         <div class="field">
                             <label>Chủ tài khoản</label>
                             <div class="value">{{ $booking->cancellation->bank_account_name ?? '—' }}</div>
+                        </div>
+
+                        <div class="field">
+                            <label>Guest đã gửi bank info lúc</label>
+                            <div class="value">
+                                {{ $booking->cancellation->refund_info_submitted_at?->format('d/m/Y H:i') ?? '—' }}
+                            </div>
                         </div>
 
                         <div class="field">
@@ -530,6 +556,13 @@
                 </button>
             </form>
         </div>
+    @elseif($booking->status === 'cancelled' && $booking->cancellation && $hasRefundableDeposit && !$hasRefundBankInfo)
+        <div class="card">
+            <h2>Chờ khách bổ sung thông tin refund</h2>
+            <div class="alert-warning" style="margin-bottom:0;">
+                Khách chưa gửi thông tin ngân hàng. Khi khách nhập xong, nút hoàn tiền sẽ xuất hiện ở đây.
+            </div>
+        </div>
     @endif
 
     <div class="card">
@@ -559,7 +592,27 @@
             @if(!in_array($booking->status, ['checked_out', 'cancelled', 'completed'], true))
                 <form method="POST" action="{{ route('host.bookings.cancel', $booking) }}">
                     @csrf
-                    <button type="submit" class="btn-cancel" onclick="return confirm('Hủy booking này?')">
+
+                    <div style="width:100%; margin-bottom:12px;">
+                        <textarea
+                            name="reason"
+                            required
+                            placeholder="Nhập lý do hủy booking..."
+                            style="
+                                width:100%;
+                                min-height:120px;
+                                padding:12px;
+                                border:1px solid #cbd5e1;
+                                border-radius:8px;
+                            "
+                        >{{ old('reason') }}</textarea>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn-cancel"
+                        onclick="return confirm('Xác nhận hủy booking này?')"
+                    >
                         Hủy booking
                     </button>
                 </form>

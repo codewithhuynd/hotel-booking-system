@@ -19,6 +19,8 @@ return new class extends Migration
                 ->constrained('users')
                 ->onDelete('cascade');
 
+            $table->enum('cancelled_by_type', ['guest', 'host'])->nullable();
+
             /*
             |--------------------------------------------------------------------------
             | CANCEL INFO
@@ -26,7 +28,6 @@ return new class extends Migration
             */
 
             $table->text('reason')->nullable();
-
             $table->timestamp('cancelled_at')->nullable();
 
             /*
@@ -36,10 +37,9 @@ return new class extends Migration
             */
 
             $table->string('bank_name')->nullable();
-
             $table->string('bank_account_number')->nullable();
-
             $table->string('bank_account_name')->nullable();
+            $table->timestamp('refund_info_submitted_at')->nullable();
 
             /*
             |--------------------------------------------------------------------------

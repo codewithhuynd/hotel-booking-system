@@ -1,173 +1,93 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <title>Hủy booking</title>
-
     <style>
-        body {
+        body{
             font-family: Arial, sans-serif;
-            background: #f5f6fa;
-            padding: 40px;
+            background:#f5f6fa;
+            padding:40px;
         }
-
-        .box {
-            max-width: 700px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
+        .box{
+            max-width:700px;
+            margin:auto;
+            background:white;
+            padding:30px;
+            border-radius:12px;
         }
-
         input,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            margin-top: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
+        textarea{
+            width:100%;
+            padding:12px;
+            margin-top:8px;
+            margin-bottom:20px;
+            border:1px solid #cbd5e1;
+            border-radius:8px;
         }
-
-        button {
-            padding: 12px 20px;
-            border: none;
-            background: #dc2626;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
+        button{
+            padding:12px 20px;
+            border:none;
+            background:#dc2626;
+            color:white;
+            border-radius:8px;
+            cursor:pointer;
         }
-
-        .muted {
-            color: #64748b;
-        }
-
-        .refund-box {
-            background: #fff7ed;
-            border: 1px solid #fdba74;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
+        .muted{
+            color:#64748b;
         }
     </style>
 </head>
-
 <body>
 
-    <div class="box">
+<div class="box">
 
-        <h1>Hủy booking</h1>
+    <h1>Hủy booking</h1>
 
-        <br>
+    <br>
 
-        <p>
-            <strong>Phòng:</strong>
-            {{ $booking->room->room_name }}
-        </p>
+    <p><strong>Phòng:</strong> {{ $booking->room->room_name }}</p>
+    <p><strong>Booking code:</strong> {{ $booking->booking_code }}</p>
 
-        <p>
-            <strong>Booking code:</strong>
-            {{ $booking->booking_code }}
-        </p>
+    <br>
+
+    @if($errors->any())
+        <div style="color:red; margin-bottom:20px;">
+            @foreach($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+
+    <form action="{{ route('guest.bookings.cancel', $booking) }}" method="POST">
+        @csrf
+
+        <label>Lý do hủy</label>
+        <textarea name="reason" rows="5" required>{{ old('reason') }}</textarea>
 
         @php
-        $hasPaidDeposit =
-        $booking->depositPayment &&
-        in_array(
-        $booking->depositPayment->status,
-        ['pending', 'paid'],
-        true
-        );
+            $needsRefund = $booking->depositPayment && in_array($booking->depositPayment->status, ['pending', 'paid'], true);
         @endphp
 
-        <br>
-
-        @if($hasPaidDeposit)
-
-        <div class="refund-box">
-
-            <strong>Booking này đã thanh toán cọc.</strong>
-
-            <p class="muted">
-                Vui lòng nhập thông tin ngân hàng để host hoàn tiền.
-            </p>
-
-        </div>
-
-        @else
-
-        <p class="muted">
-            Booking này chưa thanh toán cọc.
-            Bạn chỉ cần nhập lý do hủy.
-        </p>
-
-        @endif
-
-        <br>
-
-        @if($errors->any())
-
-        <div style="color:red; margin-bottom:20px;">
-
-            @foreach($errors->all() as $error)
-            <p>{{ $error }}</p>
-            @endforeach
-
-        </div>
-
-        @endif
-
-        <form
-            action="{{ route('guest.bookings.cancel', $booking) }}"
-            method="POST">
-            @csrf
-
-            <label>Lý do hủy</label>
-
-            <textarea
-                name="reason"
-                rows="5"
-                required>{{ old('reason') }}</textarea>
-
-            @if($hasPaidDeposit)
+        @if($needsRefund)
+            <p class="muted">Bạn đã chuyển cọc. Vui lòng nhập thông tin tài khoản để nhận refund.</p>
 
             <label>Ngân hàng nhận refund</label>
-
-            <input
-                type="text"
-                name="bank_name"
-                value="{{ old('bank_name') }}"
-                required>
+            <input type="text" name="bank_name" value="{{ old('bank_name') }}" required>
 
             <label>Số tài khoản</label>
-
-            <input
-                type="text"
-                name="bank_account_number"
-                value="{{ old('bank_account_number') }}"
-                required>
+            <input type="text" name="bank_account_number" value="{{ old('bank_account_number') }}" required>
 
             <label>Tên chủ tài khoản</label>
+            <input type="text" name="bank_account_name" value="{{ old('bank_account_name') }}" required>
+        @endif
 
-            <input
-                type="text"
-                name="bank_account_name"
-                value="{{ old('bank_account_name') }}"
-                required>
+        <button type="submit" onclick="return confirm('Bạn chắc chắn muốn hủy booking này?')">
+            Xác nhận hủy booking
+        </button>
+    </form>
 
-            @endif
-
-            <button
-                type="submit"
-                onclick="return confirm('Bạn chắc chắn muốn hủy booking này?')">
-                Xác nhận hủy booking
-            </button>
-
-        </form>
-
-    </div>
+</div>
 
 </body>
-
 </html>
