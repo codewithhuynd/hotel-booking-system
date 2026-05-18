@@ -10,31 +10,31 @@
 
 @if(session('success'))
 
-    <p style="color:green;">
-        {{ session('success') }}
-    </p>
+<p style="color:green;">
+    {{ session('success') }}
+</p>
 
-    <br>
+<br>
 
 @endif
 
 @if($errors->any())
 
-    <div style="color:red;">
+<div style="color:red;">
 
-        <ul>
+    <ul>
 
-            @foreach($errors->all() as $error)
+        @foreach($errors->all() as $error)
 
-                <li>{{ $error }}</li>
+        <li>{{ $error }}</li>
 
-            @endforeach
+        @endforeach
 
-        </ul>
+    </ul>
 
-    </div>
+</div>
 
-    <br>
+<br>
 
 @endif
 
@@ -52,8 +52,7 @@
         padding:20px;
         border-radius:10px;
         margin-bottom:30px;
-    "
->
+    ">
 
     @csrf
     @method('PUT')
@@ -69,8 +68,7 @@
         name="room_code"
         value="{{ old('room_code', $room->room_code) }}"
         placeholder="Room Code"
-        style="width:100%; padding:10px;"
-    >
+        style="width:100%; padding:10px;">
 
     <br><br>
 
@@ -85,8 +83,7 @@
         name="room_name"
         value="{{ old('room_name', $room->room_name) }}"
         placeholder="Room Name"
-        style="width:100%; padding:10px;"
-    >
+        style="width:100%; padding:10px;">
 
     <br><br>
 
@@ -103,8 +100,7 @@
             width:100%;
             padding:10px;
             min-height:120px;
-        "
-    >{{ old('description', $room->description) }}</textarea>
+        ">{{ old('description', $room->description) }}</textarea>
 
     <br><br>
 
@@ -119,8 +115,7 @@
         name="price"
         value="{{ old('price', $room->price) }}"
         placeholder="Price"
-        style="width:100%; padding:10px;"
-    >
+        style="width:100%; padding:10px;">
 
     <br><br>
 
@@ -135,8 +130,7 @@
         name="capacity"
         value="{{ old('capacity', $room->capacity) }}"
         placeholder="Capacity"
-        style="width:100%; padding:10px;"
-    >
+        style="width:100%; padding:10px;">
 
     <br><br>
 
@@ -148,34 +142,29 @@
 
     <select
         name="status"
-        style="width:100%; padding:10px;"
-    >
+        style="width:100%; padding:10px;">
 
         <option
             value="available"
-            {{ $room->status == 'available' ? 'selected' : '' }}
-        >
+            {{ $room->status == 'available' ? 'selected' : '' }}>
             Available
         </option>
 
         <option
-            value="booked"
-            {{ $room->status == 'booked' ? 'selected' : '' }}
-        >
-            Booked
+            value="maintenance"
+            {{ $room->status == 'maintenance' ? 'selected' : '' }}>
+            maintenance
         </option>
 
         <option
             value="occupied"
-            {{ $room->status == 'occupied' ? 'selected' : '' }}
-        >
+            {{ $room->status == 'occupied' ? 'selected' : '' }}>
             Occupied
         </option>
 
         <option
             value="cleaning"
-            {{ $room->status == 'cleaning' ? 'selected' : '' }}
-        >
+            {{ $room->status == 'cleaning' ? 'selected' : '' }}>
             Cleaning
         </option>
 
@@ -192,8 +181,7 @@
             color:white;
             border-radius:8px;
             cursor:pointer;
-        "
-    >
+        ">
         Update Room
     </button>
 
@@ -210,8 +198,7 @@
         background:white;
         padding:20px;
         border-radius:10px;
-    "
->
+    ">
 
     <h2>Room Images</h2>
 
@@ -222,28 +209,27 @@
     <form
         method="POST"
         action="{{ route('host.rooms.images.store', $room) }}"
-        enctype="multipart/form-data"
-    >
+        enctype="multipart/form-data">
 
         @csrf
 
         <input
             type="file"
-            name="image"
-        >
+            name="images[]"
+            multiple
+            accept="image/*">
 
         <button
             type="submit"
             style="
-                padding:10px 16px;
-                border:none;
-                background:#16a34a;
-                color:white;
-                border-radius:8px;
-                cursor:pointer;
-            "
-        >
-            Upload Image
+            padding:10px 16px;
+            border:none;
+            background:#16a34a;
+            color:white;
+            border-radius:8px;
+            cursor:pointer;
+        ">
+            Upload Images
         </button>
 
     </form>
@@ -257,57 +243,52 @@
             display:grid;
             grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
             gap:20px;
-        "
-    >
+        ">
 
         @forelse($room->images as $image)
 
-            <div
-                style="
+        <div
+            style="
                     border:1px solid #ddd;
                     border-radius:10px;
                     overflow:hidden;
                     background:#fafafa;
-                "
-            >
+                ">
 
-                <img
-                    src="{{ asset('storage/' . $image->image_path) }}"
-                    alt="Room Image"
-                    style="
+            <img
+                src="{{ asset('storage/' . $image->image_path) }}"
+                alt="Room Image"
+                style="
                         width:100%;
                         height:180px;
                         object-fit:cover;
-                    "
-                >
+                    ">
 
-                <div style="padding:15px;">
+            <div style="padding:15px;">
 
-                    @if($image->is_main)
+                @if($image->is_main)
 
-                        <p
-                            style="
+                <p
+                    style="
                                 color:green;
                                 font-weight:bold;
                                 margin-bottom:10px;
-                            "
-                        >
-                            Main Image
-                        </p>
+                            ">
+                    Main Image
+                </p>
 
-                    @else
+                @else
 
-                        <form
-                            method="POST"
-                            action="{{ route('host.rooms.images.main', $image) }}"
-                        >
+                <form
+                    method="POST"
+                    action="{{ route('host.rooms.images.main', $image) }}">
 
-                            @csrf
-                            
+                    @csrf
 
-                            <button
-                                type="submit"
-                                style="
+
+                    <button
+                        type="submit"
+                        style="
                                     width:100%;
                                     padding:10px;
                                     border:none;
@@ -316,29 +297,27 @@
                                     border-radius:8px;
                                     cursor:pointer;
                                     margin-bottom:10px;
-                                "
-                            >
-                                Set Main Image
-                            </button>
+                                ">
+                        Set Main Image
+                    </button>
 
-                        </form>
+                </form>
 
-                    @endif
+                @endif
 
-                    <!-- DELETE IMAGE -->
+                <!-- DELETE IMAGE -->
 
-                    <form
-                        method="POST"
-                        action="{{ route('host.rooms.images.destroy', $image) }}"
-                    >
+                <form
+                    method="POST"
+                    action="{{ route('host.rooms.images.destroy', $image) }}">
 
-                        @csrf
-                        @method('DELETE')
+                    @csrf
+                    @method('DELETE')
 
-                        <button
-                            type="submit"
-                            onclick="return confirm('Delete this image?')"
-                            style="
+                    <button
+                        type="submit"
+                        onclick="return confirm('Delete this image?')"
+                        style="
                                 width:100%;
                                 padding:10px;
                                 border:none;
@@ -346,22 +325,21 @@
                                 color:white;
                                 border-radius:8px;
                                 cursor:pointer;
-                            "
-                        >
-                            Delete Image
-                        </button>
+                            ">
+                        Delete Image
+                    </button>
 
-                    </form>
-
-                </div>
+                </form>
 
             </div>
 
+        </div>
+
         @empty
 
-            <p>
-                No images uploaded yet.
-            </p>
+        <p>
+            No images uploaded yet.
+        </p>
 
         @endforelse
 

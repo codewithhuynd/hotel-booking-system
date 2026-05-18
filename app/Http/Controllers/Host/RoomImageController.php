@@ -19,23 +19,27 @@ class RoomImageController extends Controller
     public function store(Request $request, Room $room)
     {
         $request->validate([
-            'image' => 'required|image|max:2048',
+            'images' => 'required',
+            'images.*' => 'image|max:5120',
         ]);
 
-        $path = $request->file('image')->store(
-            'rooms',
-            'public'
-        );
+        foreach ($request->file('images') as $file) {
 
-        RoomImage::create([
-            'room_id' => $room->id,
-            'image_path' => $path,
-            'is_main' => false,
-        ]);
+            $path = $file->store(
+                'rooms',
+                'public'
+            );
+
+            RoomImage::create([
+                'room_id' => $room->id,
+                'image_path' => $path,
+                'is_main' => false,
+            ]);
+        }
 
         return back()->with(
             'success',
-            'Image uploaded successfully.'
+            'Images uploaded successfully.'
         );
     }
 
