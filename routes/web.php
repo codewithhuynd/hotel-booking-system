@@ -11,11 +11,20 @@ use App\Http\Controllers\Host\PaymentController;
 use App\Http\Controllers\Guest\RoomController as GuestRoomController;
 use App\Http\Controllers\Guest\BookingController as GuestBookingController;
 use App\Http\Controllers\Guest\PaymentController as GuestPaymentController;
+use App\Http\Controllers\Host\HotelSettingController;
+use App\Http\Controllers\Host\AboutSectionController;
+use App\Http\Controllers\Host\ServiceController;
+use App\Http\Controllers\ContactMessageController;
+use App\Http\Controllers\Host\ContactMessageController as HostContactMessageController;
+use App\Http\Controllers\Guest\ProfileController;
+use App\Http\Controllers\Host\UserController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/rooms', [GuestRoomController::class, 'index'])->name('rooms.index');
 Route::get('/rooms/{room}', [GuestRoomController::class, 'show'])->name('rooms.show');
+Route::post('/contact-message', [ContactMessageController::class, 'store'])
+    ->name('contact-messages.store');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -52,6 +61,14 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/payments/{payment}/upload-proof', [GuestPaymentController::class, 'uploadProof'])
             ->name('guest.payments.upload-proof');
+        Route::get('/profile', [ProfileController::class, 'edit'])
+            ->name('profile.edit');
+
+        Route::post('/profile', [ProfileController::class, 'update'])
+            ->name('profile.update');
+
+        Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])
+            ->name('profile.change-password');
     });
 
     Route::middleware('host')
@@ -61,7 +78,7 @@ Route::middleware('auth')->group(function () {
             Route::redirect('/', '/host/dashboard');
 
             Route::get('/dashboard', function () {
-                return view('host.dashboard');
+                return view('host.layouts.app');
             })->name('dashboard');
 
             Route::get('/register-host', [HostRegisterController::class, 'create'])
@@ -102,5 +119,28 @@ Route::middleware('auth')->group(function () {
 
             Route::post('/booking-cancellations/{cancellation}/refund', [BookingController::class, 'refund'])
                 ->name('booking-cancellations.refund');
+
+            Route::get('/hotel-settings', [HotelSettingController::class, 'index'])
+                ->name('hotel-settings.index');
+
+            Route::get('/hotel-settings/edit', [HotelSettingController::class, 'edit'])
+                ->name('hotel-settings.edit');
+
+            Route::put('/hotel-settings', [HotelSettingController::class, 'update'])
+                ->name('hotel-settings.update');
+
+            Route::resource('about-sections', AboutSectionController::class)->except(['show']);
+            Route::resource('services', ServiceController::class)->except(['show']);
+
+            Route::resource('contact-messages', HostContactMessageController::class)
+                ->only(['index', 'show', 'destroy']);
+
+            Route::post(
+                '/contact-messages/{contactMessage}/reply',
+                [HostContactMessageController::class, 'reply']
+            )->name('contact-messages.reply');
+
+            Route::resource('users', UserController::class)
+                ->only(['index', 'show', 'edit', 'update', 'destroy']);
         });
 });

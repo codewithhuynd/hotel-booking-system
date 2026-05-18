@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use Illuminate\Http\Request;
+use App\Models\HotelSetting;
+use App\Models\AboutSection;
+use App\Models\Service;
 
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Room::query();
+        $query = Room::with('images');
+        $hotelSetting = HotelSetting::first();
+
+        $aboutSections = AboutSection::latest()->get();
+
+        $services = Service::latest()->get();
 
         /*
         |--------------------------------------------------------------------------
@@ -91,6 +99,11 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
-        return view('home', compact('rooms'));
+        return view('home', compact(
+            'rooms',
+            'hotelSetting',
+            'aboutSections',
+            'services'
+        ));
     }
 }

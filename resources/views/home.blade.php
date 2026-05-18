@@ -1,3 +1,5 @@
+{{-- resources/views/home.blade.php --}}
+
 <?php
 
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +18,10 @@ use Illuminate\Support\Facades\Auth;
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <style>
         * {
@@ -51,40 +56,45 @@ use Illuminate\Support\Facades\Auth;
             top: 0;
             left: 0;
             width: 100%;
+
             z-index: 1000;
 
-            padding: 26px 70px;
+            padding: 22px 70px;
 
             display: flex;
             justify-content: space-between;
             align-items: center;
 
-            background: linear-gradient(to bottom,
-                    rgba(2, 6, 23, 0.65),
-                    rgba(2, 6, 23, 0.10));
+            background: rgba(2, 6, 23, 0.75);
+            backdrop-filter: blur(10px);
         }
 
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 800;
             letter-spacing: 2px;
             color: #fff;
             text-transform: uppercase;
         }
 
+        .nav-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .nav-left,
         .nav-right {
             display: flex;
             align-items: center;
             gap: 14px;
-            flex-wrap: wrap;
         }
 
         .nav-link {
             color: #e2e8f0;
             font-weight: 500;
-            padding: 8px 10px;
-            opacity: 0.95;
+            transition: 0.2s;
         }
 
         .nav-link:hover {
@@ -95,15 +105,16 @@ use Illuminate\Support\Facades\Auth;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
 
-            padding: 12px 22px;
+            padding: 10px 18px;
+
             border-radius: 999px;
             border: none;
+
             cursor: pointer;
             font-weight: 600;
+
             transition: 0.25s ease;
-            white-space: nowrap;
         }
 
         .btn:hover {
@@ -111,170 +122,144 @@ use Illuminate\Support\Facades\Auth;
         }
 
         .btn-white {
-            background: #ffffff;
+            background: #fff;
             color: #111827;
-            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.10);
         }
 
         .btn-dark {
             background: #111827;
             color: #fff;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
 
         .btn-green {
             background: #16a34a;
             color: #fff;
-            box-shadow: 0 12px 30px rgba(22, 163, 74, 0.18);
-        }
-
-        .btn-red {
-            background: #dc2626;
-            color: #fff;
-            box-shadow: 0 12px 30px rgba(220, 38, 38, 0.18);
         }
 
         .btn-outline {
             border: 1px solid rgba(255, 255, 255, 0.35);
-            color: #fff;
             background: transparent;
+            color: #fff;
         }
 
         .hero {
             min-height: 100vh;
+
             display: flex;
             align-items: center;
-            position: relative;
-            overflow: hidden;
 
-            background: linear-gradient(135deg,
-                rgba(2, 6, 23, 0.75),
-                rgba(15, 23, 42, 0.45)),
+            background: linear-gradient(rgba(2, 6, 23, 0.75),
+                rgba(2, 6, 23, 0.60)),
             url('{{ asset("images/hero.jpg") }}');
 
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 25%),
-                radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.06), transparent 20%);
-            pointer-events: none;
         }
 
         .hero-inner {
             width: 100%;
             max-width: 1280px;
-            margin: 0 auto;
+            margin: auto;
+
             padding: 140px 30px 90px;
-            position: relative;
-            z-index: 1;
         }
 
         .hero-grid {
             display: grid;
-            grid-template-columns: 1.25fr 0.75fr;
+            grid-template-columns: 1.2fr 0.8fr;
             gap: 40px;
-            align-items: end;
-        }
-
-        .hero-content {
-            max-width: 760px;
+            align-items: center;
         }
 
         .hero-kicker {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 16px;
+            display: inline-block;
+
+            padding: 10px 18px;
+
             border-radius: 999px;
+
             background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(10px);
-            color: #fff;
+
+            margin-bottom: 24px;
+
             font-size: 13px;
-            letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 22px;
+            letter-spacing: 2px;
         }
 
         .hero h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(44px, 6vw, 86px);
-            line-height: 1.04;
-            color: #fff;
+            font-size: clamp(46px, 6vw, 84px);
+            line-height: 1.05;
+
             margin-bottom: 20px;
-            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+            color: #fff;
         }
 
         .hero p {
             max-width: 650px;
-            font-size: 17px;
-            color: #e2e8f0;
-            opacity: 0.95;
             margin-bottom: 30px;
+            color: #cbd5e1;
         }
 
         .hero-actions {
             display: flex;
             gap: 14px;
             flex-wrap: wrap;
+
             margin-bottom: 30px;
         }
 
         .hero-stats {
             display: flex;
-            gap: 18px;
+            gap: 16px;
             flex-wrap: wrap;
-            margin-top: 22px;
         }
 
         .stat-chip {
             padding: 14px 18px;
+
             border-radius: 18px;
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(12px);
+
+            background: rgba(255, 255, 255, 0.08);
+
             border: 1px solid rgba(255, 255, 255, 0.10);
-            min-width: 150px;
         }
 
         .stat-chip strong {
             display: block;
-            font-size: 18px;
             color: #fff;
             margin-bottom: 4px;
         }
 
         .stat-chip span {
-            color: #cbd5e1;
             font-size: 13px;
+            color: #cbd5e1;
         }
 
         .hero-card {
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(14px);
+            background: rgba(255, 255, 255, 0.08);
+
             border: 1px solid rgba(255, 255, 255, 0.12);
+
             border-radius: 28px;
+
             padding: 26px;
-            color: #fff;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+
+            backdrop-filter: blur(10px);
         }
 
         .hero-card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 30px;
+
+            margin-bottom: 12px;
         }
 
         .hero-card p {
-            color: #e2e8f0;
-            opacity: 0.95;
-            margin-bottom: 18px;
             font-size: 15px;
+            margin-bottom: 18px;
         }
 
         .card-list {
@@ -283,18 +268,17 @@ use Illuminate\Support\Facades\Auth;
         }
 
         .card-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
             padding: 14px 16px;
-            border-radius: 16px;
-            background: rgba(15, 23, 42, 0.38);
+
+            border-radius: 18px;
+
+            background: rgba(15, 23, 42, 0.4);
+
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .card-item strong {
-            font-size: 14px;
+            color: #fff;
         }
 
         .card-item span {
@@ -304,40 +288,30 @@ use Illuminate\Support\Facades\Auth;
 
         .container {
             max-width: 1280px;
-            margin: 0 auto;
+            margin: auto;
             padding: 0 30px;
         }
 
         .search-box {
-            margin-top: -72px;
-            position: relative;
-            z-index: 20;
-            background: #ffffff;
-            color: #0f172a;
-            border-radius: 28px;
-            padding: 30px;
-            box-shadow: 0 24px 70px rgba(2, 6, 23, 0.18);
-        }
+            margin-top: -70px;
 
-        .search-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            position: relative;
+            z-index: 5;
+
+            background: #fff;
+            color: #111827;
+
+            border-radius: 28px;
+
+            padding: 30px;
+
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
         }
 
         .search-head h2 {
             font-family: 'Playfair Display', serif;
             font-size: 34px;
-            color: #111827;
-            white-space: nowrap;
-        }
-
-        .search-head p {
-            color: #475569;
-            max-width: 560px;
+            margin-bottom: 20px;
         }
 
         .search-grid {
@@ -347,133 +321,162 @@ use Illuminate\Support\Facades\Auth;
             align-items: end;
         }
 
-        .field {
-            min-width: 0;
-        }
-
-        @media (max-width: 1200px) {
-            .search-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .search-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
         .field label {
             display: block;
+
+            margin-bottom: 8px;
+
             font-size: 13px;
             font-weight: 600;
+
             color: #334155;
-            margin-bottom: 8px;
         }
 
         input,
-        select {
+        select,
+        textarea {
             width: 100%;
-            padding: 15px 16px;
-            border: 1px solid #dbe3ee;
+
+            padding: 14px 16px;
+
             border-radius: 14px;
-            font-size: 15px;
+
+            border: 1px solid #dbe3ee;
+
             background: #f8fafc;
-            color: #0f172a;
+
             outline: none;
-            transition: 0.2s;
+
+            font-family: inherit;
         }
 
         input:focus,
-        select:focus {
+        select:focus,
+        textarea:focus {
             border-color: #94a3b8;
             background: #fff;
+
             box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.18);
         }
 
         .rooms-section {
-            padding: 96px 0 90px;
+            padding: 90px 0;
         }
 
         .section-title {
             display: flex;
             justify-content: space-between;
             align-items: end;
+
             gap: 20px;
-            margin-bottom: 32px;
+
+            margin-bottom: 34px;
+
             flex-wrap: wrap;
         }
 
         .section-title h2 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(30px, 4vw, 48px);
+            font-size: clamp(32px, 4vw, 50px);
             color: #fff;
         }
 
         .section-title p {
-            color: #cbd5e1;
             max-width: 700px;
+            color: #cbd5e1;
         }
 
         .room-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+
             gap: 28px;
         }
 
         .room-card {
             background: #fff;
-            color: #0f172a;
+            color: #111827;
+
             border-radius: 26px;
             overflow: hidden;
-            box-shadow: 0 16px 40px rgba(2, 6, 23, 0.10);
-            transition: 0.28s ease;
-            border: 1px solid rgba(148, 163, 184, 0.14);
+
+            transition: 0.25s ease;
+        }
+
+        .room-slider {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+
+            width: 40px;
+            height: 40px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 18px;
+            z-index: 5;
+        }
+
+        .prev-btn {
+            left: 10px;
+        }
+
+        .next-btn {
+            right: 10px;
+        }
+
+        .slider-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
         }
 
         .room-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 22px 55px rgba(2, 6, 23, 0.18);
         }
 
         .room-image {
             width: 100%;
-            height: 260px;
+
+            aspect-ratio: 16 / 10;
+
             object-fit: cover;
-            background: linear-gradient(135deg, #cbd5e1, #e2e8f0);
+
+            background: #e2e8f0;
         }
 
         .room-content {
-            padding: 22px 22px 24px;
-        }
-
-        .room-topline {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
+            padding: 22px;
         }
 
         .room-content h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            line-height: 1.2;
-            margin-bottom: 10px;
-            color: #111827;
+            font-size: 28px;
+
+            margin-bottom: 12px;
         }
 
         .price {
             font-size: 30px;
             font-weight: 800;
-            color: #0f172a;
+
             margin-bottom: 14px;
         }
 
         .meta {
             display: grid;
             gap: 8px;
-            margin-bottom: 16px;
+
+            margin-bottom: 20px;
         }
 
         .meta p {
@@ -481,77 +484,41 @@ use Illuminate\Support\Facades\Auth;
             font-size: 14px;
         }
 
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 7px 12px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 18px;
-        }
-
-        .badge.available {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .badge.occupied {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .badge.cleaning {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .badge.maintenance {
-            background: #e2e8f0;
-            color: #334155;
-        }
-
-        .top-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
         .welcome-box {
-            margin-top: 26px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
-            color: #0f172a;
-            padding: 24px;
-            border-radius: 24px;
-            box-shadow: 0 16px 40px rgba(2, 6, 23, 0.08);
-            border: 1px solid rgba(148, 163, 184, 0.12);
-        }
+            margin-top: 40px;
 
-        .welcome-box p {
-            color: #334155;
+            background: #fff;
+            color: #111827;
+
+            padding: 30px;
+
+            border-radius: 28px;
         }
 
         .info-strip {
             margin-top: 36px;
+
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 18px;
         }
 
         .info-card {
             background: rgba(255, 255, 255, 0.06);
+
             border: 1px solid rgba(255, 255, 255, 0.08);
+
             border-radius: 22px;
-            padding: 18px;
-            backdrop-filter: blur(8px);
+
+            padding: 22px;
+
+            backdrop-filter: blur(10px);
         }
 
         .info-card h4 {
+            margin-bottom: 10px;
             color: #fff;
-            font-size: 18px;
-            margin-bottom: 8px;
         }
 
         .info-card p {
@@ -560,80 +527,140 @@ use Illuminate\Support\Facades\Auth;
         }
 
         .empty-box {
-            margin-top: 20px;
-            padding: 18px 20px;
-            border-radius: 18px;
             background: #fff;
-            color: #0f172a;
-            box-shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+            color: #111827;
+
+            padding: 20px;
+
+            border-radius: 20px;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-btn {
+            background: rgba(255, 255, 255, 0.10);
+
+            border: 1px solid rgba(255, 255, 255, 0.10);
+
+            color: #fff;
+
+            padding: 10px 16px;
+
+            border-radius: 999px;
+
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+
+            top: 120%;
+            right: 0;
+
+            width: 220px;
+
+            background: #fff;
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transform: translateY(10px);
+
+            transition: 0.25s;
+
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+
+            padding: 14px 18px;
+
+            background: #fff;
+            color: #111827;
+
+            border: none;
+
+            text-align: left;
+
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background: #f8fafc;
+        }
+
+        .logout-btn {
+            font-family: inherit;
+        }
+
+        @media (max-width: 1200px) {
+            .search-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (max-width: 1024px) {
             .hero-grid {
                 grid-template-columns: 1fr;
             }
-
-            .info-strip {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
         @media (max-width: 768px) {
+
             .navbar {
-                padding: 18px 18px;
+                padding: 18px;
                 flex-direction: column;
-                gap: 14px;
                 align-items: flex-start;
+                gap: 16px;
             }
 
-            .logo {
-                font-size: 24px;
+            .nav-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                width: 100%;
+            }
+
+            .nav-left,
+            .nav-right {
+                flex-wrap: wrap;
             }
 
             .hero-inner {
-                padding: 150px 18px 80px;
-            }
-
-            .hero {
-                min-height: auto;
-                padding-bottom: 30px;
-            }
-
-            .search-box {
-                margin-top: -36px;
-                padding: 20px;
+                padding: 170px 18px 80px;
             }
 
             .container {
                 padding: 0 18px;
             }
 
-            .rooms-section {
-                padding: 72px 0 80px;
+            .search-box {
+                margin-top: -30px;
+                padding: 20px;
             }
 
-            .section-title {
-                align-items: flex-start;
-            }
-
-            .info-strip {
+            .search-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        textarea:focus {
-            border-color: #94a3b8;
-            background: #fff;
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.18);
-        }
-
-        .info-strip {
-            align-items: stretch;
-        }
-
-        .info-card {
-            height: 100%;
+            .rooms-section {
+                padding: 70px 0;
+            }
         }
     </style>
 </head>
@@ -644,79 +671,102 @@ use Illuminate\Support\Facades\Auth;
     <div class="navbar">
 
         <div class="logo">
-            dolPHPhins HOTEL BOOKING
-
+            DolPHPhins Hotel Booking
         </div>
 
-        <div class="nav-right">
+        <div class="nav-wrapper">
 
-            <a href="#rooms" class="nav-link">Rooms</a>
-            <a href="#about" class="nav-link">About</a>
-            <a href="#services" class="nav-link">Services</a>
-            <a href="#contact" class="nav-link">Contact</a>
+            <div class="nav-left">
 
-            @guest
+                <a href="#rooms" class="nav-link">
+                    Rooms
+                </a>
 
-            <a
-                href="{{ route('login') }}"
-                class="btn btn-white">
-                Đăng nhập
-            </a>
+                <a href="#about" class="nav-link">
+                    About
+                </a>
 
-            <a
-                href="{{ route('register') }}"
-                class="btn btn-green">
-                Đăng ký
-            </a>
+                <a href="#services" class="nav-link">
+                    Services
+                </a>
 
-            @else
+                <a href="#contact" class="nav-link">
+                    Contact
+                </a>
 
+            </div>
 
-            @if(Auth::user()->role === 'guest')
+            <div class="nav-right">
 
-            <a
-                href="{{ route('guest.bookings.index') }}"
-                class="nav-link">
-                My Bookings
-            </a>
+                @guest
 
-            <a
-                href="#"
-                class="nav-link">
-                My Profile
-            </a>
+                <a
+                    href="{{ route('login') }}"
+                    class="btn btn-white">
+                    Login
+                </a>
 
-            @endif
+                <a
+                    href="{{ route('register') }}"
+                    class="btn btn-green">
+                    Register
+                </a>
 
-            @if(Auth::user()->role === 'host')
+                @else
 
-            <a
-                href="{{ route('host.dashboard') }}"
-                class="btn btn-dark">
-                Host Dashboard
-            </a>
+                @if(Auth::user()->role === 'host')
 
-            @endif
-            <span>
-                Xin chào,
-                <strong>
-                    {{ Auth::user()->full_name }}
-                </strong>
-            </span>
+                <a
+                    href="{{ route('host.dashboard') }}"
+                    class="btn btn-dark">
+                    Dashboard
+                </a>
 
-            <form
-                method="POST"
-                action="{{ route('logout') }}">
-                @csrf
+                @endif
 
-                <button
-                    type="submit"
-                    class="btn btn-red">
-                    Đăng xuất
-                </button>
-            </form>
+                <div class="user-dropdown">
 
-            @endguest
+                    <button class="user-btn">
+                        {{ Auth::user()->full_name }} ▼
+                    </button>
+
+                    <div class="dropdown-menu">
+
+                        @if(Auth::user()->role === 'guest')
+
+                        <a
+                            href="{{ route('guest.bookings.index') }}"
+                            class="dropdown-item">
+                            My Bookings
+                        </a>
+
+                        <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                            My Profile
+                        </a>
+
+                        @endif
+
+                        <form
+                            method="POST"
+                            action="{{ route('logout') }}">
+
+                            @csrf
+
+                            <button
+                                type="submit"
+                                class="dropdown-item logout-btn">
+                                Logout
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                @endguest
+
+            </div>
 
         </div>
 
@@ -729,71 +779,91 @@ use Illuminate\Support\Facades\Auth;
 
             <div class="hero-grid">
 
-                <div class="hero-content">
+                <div>
 
                     <div class="hero-kicker">
                         Luxury stay • Easy booking • Best experience
                     </div>
 
                     <h1>
-                        Tìm khách sạn phù hợp cho bạn
+                        {{ $hotelSetting->hero_title }}
                     </h1>
 
                     <p>
-                        Đặt phòng nhanh chóng, dễ dàng và tiện lợi. Khám phá những căn phòng đẹp,
-                        không gian sang trọng và dịch vụ chuyên nghiệp dành cho bạn.
+                        {{ $hotelSetting->hero_description }}
                     </p>
 
                     <div class="hero-actions">
-                        <a href="#rooms" class="btn btn-white">Explore Rooms</a>
-                        <a href="{{ route('login') }}" class="btn btn-outline">Login to Book</a>
+
+                        <a href="#rooms" class="btn btn-white">
+                            Explore Rooms
+                        </a>
+
+                        @guest
+                        <a
+                            href="{{ route('login') }}"
+                            class="btn btn-outline">
+                            Login to Book
+                        </a>
+                        @endguest
+
                     </div>
 
                     <div class="hero-stats">
+
                         <div class="stat-chip">
                             <strong>100+</strong>
                             <span>Phòng đẹp</span>
                         </div>
+
                         <div class="stat-chip">
                             <strong>24/7</strong>
                             <span>Hỗ trợ khách hàng</span>
                         </div>
+
                         <div class="stat-chip">
                             <strong>Luxury</strong>
                             <span>Không gian đẳng cấp</span>
                         </div>
+
                     </div>
+
                 </div>
 
                 <div class="hero-card">
-                    <h3>Quick Highlights</h3>
-                    <p>Những điểm nổi bật giúp khách mới có cảm giác tin tưởng ngay từ trang đầu.</p>
+
+                    <h3>
+                        Quick Highlights
+                    </h3>
+
+                    <p>
+                        Những điểm nổi bật giúp khách hàng
+                        tin tưởng ngay từ lần đầu truy cập.
+                    </p>
 
                     <div class="card-list">
+
                         <div class="card-item">
-                            <div>
-                                <strong>Đặt phòng nhanh</strong><br>
-                                <span>Tìm và xem phòng chỉ trong vài giây</span>
-                            </div>
+                            <strong>Đặt phòng nhanh</strong><br>
+                            <span>Tìm và xem phòng chỉ trong vài giây</span>
                         </div>
 
                         <div class="card-item">
-                            <div>
-                                <strong>Ảnh phòng rõ ràng</strong><br>
-                                <span>Xem hình ảnh thực tế của từng phòng</span>
-                            </div>
+                            <strong>Ảnh phòng rõ ràng</strong><br>
+                            <span>Xem hình ảnh thực tế của từng phòng</span>
                         </div>
 
                         <div class="card-item">
-                            <div>
-                                <strong>Giá hiển thị minh bạch</strong><br>
-                                <span>Biết ngay mức giá trước khi đặt</span>
-                            </div>
+                            <strong>Giá minh bạch</strong><br>
+                            <span>Hiển thị rõ ràng trước khi đặt</span>
                         </div>
+
                     </div>
+
                 </div>
 
             </div>
+
         </div>
 
     </section>
@@ -804,71 +874,106 @@ use Illuminate\Support\Facades\Auth;
         <div class="search-box">
 
             <div class="search-head">
-                <div>
-                    <h2>Tìm phòng phù hợp</h2>
 
-                </div>
+                <h2>
+                    Tìm phòng phù hợp
+                </h2>
+
             </div>
 
             <form
                 method="GET"
                 action="{{ route('home') }}">
+
                 <div class="search-grid">
 
                     <div class="field">
-                        <label>Tên phòng</label>
+
+                        <label>
+                            Tên phòng
+                        </label>
+
                         <input
                             type="text"
                             name="keyword"
                             placeholder="Tên phòng..."
                             value="{{ request('keyword') }}">
+
                     </div>
 
                     <div class="field">
-                        <label>Giá phòng</label>
+
+                        <label>
+                            Giá phòng
+                        </label>
+
                         <select name="price">
-                            <option value="">Tất cả mức giá</option>
+
+                            <option value="">
+                                Tất cả mức giá
+                            </option>
+
                             <option
                                 value="low"
                                 {{ request('price') == 'low' ? 'selected' : '' }}>
                                 Dưới 500k
                             </option>
+
                             <option
                                 value="medium"
                                 {{ request('price') == 'medium' ? 'selected' : '' }}>
                                 500k - 1 triệu
                             </option>
+
                             <option
                                 value="high"
                                 {{ request('price') == 'high' ? 'selected' : '' }}>
                                 Trên 1 triệu
                             </option>
+
                         </select>
+
                     </div>
 
                     <div class="field">
-                        <label>Sức chứa</label>
+
+                        <label>
+                            Sức chứa
+                        </label>
+
                         <select name="capacity">
-                            <option value="">Tất cả sức chứa</option>
+
+                            <option value="">
+                                Tất cả sức chứa
+                            </option>
+
                             <option
                                 value="1"
                                 {{ request('capacity') == '1' ? 'selected' : '' }}>
                                 1 người
                             </option>
+
                             <option
                                 value="2"
                                 {{ request('capacity') == '2' ? 'selected' : '' }}>
                                 2 người
                             </option>
+
                             <option
                                 value="4"
                                 {{ request('capacity') == '4' ? 'selected' : '' }}>
                                 4+ người
                             </option>
+
                         </select>
+
                     </div>
+
                     <div class="field">
-                        <label>Trạng thái</label>
+
+                        <label>
+                            Trạng thái
+                        </label>
 
                         <select name="status">
 
@@ -883,9 +988,14 @@ use Illuminate\Support\Facades\Auth;
                             </option>
 
                         </select>
+
                     </div>
+
                     <div class="field">
-                        <label>Sắp xếp giá</label>
+
+                        <label>
+                            Sắp xếp giá
+                        </label>
 
                         <select name="sort_price">
 
@@ -906,9 +1016,14 @@ use Illuminate\Support\Facades\Auth;
                             </option>
 
                         </select>
+
                     </div>
+
                     <div class="field">
-                        <label>Sắp xếp</label>
+
+                        <label>
+                            Sắp xếp
+                        </label>
 
                         <select name="sort_time">
 
@@ -925,29 +1040,31 @@ use Illuminate\Support\Facades\Auth;
                             </option>
 
                         </select>
+
                     </div>
 
                     <div class="field">
-                        <label>&nbsp;</label>
+
+                        <label>
+                            &nbsp;
+                        </label>
+
                         <button
                             type="submit"
                             class="btn btn-dark"
                             style="width:100%;">
                             Tìm kiếm
                         </button>
+
                     </div>
 
                 </div>
+
             </form>
 
         </div>
 
-        <!-- USER / ROLE SECTION -->
-
-
-
-
-
+        <!-- HOST -->
         @if(Auth::check() && Auth::user()->role === 'host')
 
         <div class="welcome-box">
@@ -965,10 +1082,9 @@ use Illuminate\Support\Facades\Auth;
 
                     <h2
                         style="
-                            font-family:'Playfair Display',serif;
+                            font-family:'Playfair Display', serif;
                             margin-bottom:10px;
                             font-size:32px;
-                            color:#111827;
                         ">
                         Host Dashboard
                     </h2>
@@ -987,93 +1103,20 @@ use Illuminate\Support\Facades\Auth;
 
             </div>
 
-            <div
-                style="
-                    display:grid;
-                    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-                    gap:18px;
-                    margin-top:28px;
-                ">
-
-                <div
-                    style="
-                        background:#f8fafc;
-                        padding:24px;
-                        border-radius:20px;
-                        border:1px solid #e2e8f0;
-                    ">
-
-                    <h3
-                        style="
-                            color:#111827;
-                            margin-bottom:8px;
-                        ">
-                        Manage Rooms
-                    </h3>
-
-                    <p style="color:#475569;">
-                        Thêm, sửa, xóa và cập nhật trạng thái phòng.
-                    </p>
-
-                </div>
-
-                <div
-                    style="
-                        background:#f8fafc;
-                        padding:24px;
-                        border-radius:20px;
-                        border:1px solid #e2e8f0;
-                    ">
-
-                    <h3
-                        style="
-                            color:#111827;
-                            margin-bottom:8px;
-                        ">
-                        Manage Bookings
-                    </h3>
-
-                    <p style="color:#475569;">
-                        Theo dõi booking mới,
-                        xác nhận cọc và check-in.
-                    </p>
-
-                </div>
-
-                <div
-                    style="
-                        background:#f8fafc;
-                        padding:24px;
-                        border-radius:20px;
-                        border:1px solid #e2e8f0;
-                    ">
-
-                    <h3
-                        style="
-                            color:#111827;
-                            margin-bottom:8px;
-                        ">
-                        Revenue
-                    </h3>
-
-                    <p style="color:#475569;">
-                        Theo dõi doanh thu và hoạt động khách sạn.
-                    </p>
-
-                </div>
-
-            </div>
-
         </div>
 
         @endif
 
-        <!-- ROOM LIST -->
+        <!-- ROOMS -->
         <section class="rooms-section" id="rooms">
 
             <div class="section-title">
+
                 <div>
-                    <h2>Luxury Rooms</h2>
+
+                    <h2>
+                        Rooms
+                    </h2>
 
                 </div>
 
@@ -1082,6 +1125,7 @@ use Illuminate\Support\Facades\Auth;
                     class="btn btn-white">
                     Xem tất cả
                 </a>
+
             </div>
 
             <div class="room-grid">
@@ -1090,22 +1134,45 @@ use Illuminate\Support\Facades\Auth;
 
                 <div class="room-card">
 
-                    @if($room->mainImage)
+                    <div class="room-slider">
 
-                    <img
-                        src="{{ asset('storage/' . $room->mainImage->image_path) }}"
-                        class="room-image"
-                        alt="{{ $room->room_name }}">
+                        @if($room->images->count())
 
-                    @else
+                        @foreach($room->images as $index => $image)
 
-                    <div class="room-image"></div>
+                        <img
+                            src="{{ asset('storage/' . $image->image_path) }}"
+                            class="room-image slide-image slide-{{ $room->id }}"
+                            style="{{ $index !== 0 ? 'display:none;' : '' }}"
+                            alt="{{ $room->room_name }}">
 
-                    @endif
+                        @endforeach
+
+                        @if($room->images->count() > 1)
+
+                        <button
+                            class="slider-btn prev-btn"
+                            onclick='changeSlide({{ $room->id }}, -1)'>
+                            ❮
+                        </button>
+
+                        <button
+                            class="slider-btn next-btn"
+                            onclick='changeSlide({{ $room->id }}, 1)'>
+                            ❯
+                        </button>
+
+                        @endif
+
+                        @else
+
+                        <div class="room-image"></div>
+
+                        @endif
+
+                    </div>
 
                     <div class="room-content">
-
-
 
                         <h3>
                             {{ $room->room_name }}
@@ -1116,6 +1183,7 @@ use Illuminate\Support\Facades\Auth;
                         </div>
 
                         <div class="meta">
+
                             <p>
                                 <strong>Sức chứa:</strong>
                                 {{ $room->capacity }} người
@@ -1125,6 +1193,7 @@ use Illuminate\Support\Facades\Auth;
                                 <strong>Mã phòng:</strong>
                                 {{ $room->room_code }}
                             </p>
+
                         </div>
 
                         <a
@@ -1134,6 +1203,7 @@ use Illuminate\Support\Facades\Auth;
                         </a>
 
                     </div>
+
                 </div>
 
                 @empty
@@ -1152,54 +1222,39 @@ use Illuminate\Support\Facades\Auth;
         <section id="about" style="padding:0 0 100px;">
 
             <div class="section-title">
+
                 <div>
-                    <h2>About Our Hotel</h2>
+
+                    <h2>
+                        About Our Hotel
+                    </h2>
 
                     <p>
                         Trải nghiệm nghỉ dưỡng hiện đại, sang trọng và tiện nghi
                         dành cho khách du lịch, gia đình và doanh nhân.
                     </p>
+
                 </div>
+
             </div>
 
-            <!-- INTRODUCTION -->
             <div class="info-strip">
 
-                <div class="info-card">
-                    <h4>Introduction</h4>
-
-                    <p>
-                        DolPHPhins Hotel Booking mang đến trải nghiệm đặt phòng
-                        đơn giản, nhanh chóng và chuyên nghiệp với không gian nghỉ dưỡng cao cấp.
-                    </p>
-                </div>
+                @foreach($aboutSections as $about)
 
                 <div class="info-card">
-                    <h4>Why Choose Us</h4>
+
+                    <h4>
+                        {{ $about->title }}
+                    </h4>
 
                     <p>
-                        Hệ thống đặt phòng dễ sử dụng, hình ảnh thực tế,
-                        giá minh bạch và hỗ trợ khách hàng 24/7.
+                        {{ $about->description }}
                     </p>
+
                 </div>
 
-                <div class="info-card">
-                    <h4>Hotel Statistics</h4>
-
-                    <p>
-                        100+ phòng • 5000+ khách hàng •
-                        4.9/5 đánh giá • hỗ trợ toàn thời gian.
-                    </p>
-                </div>
-
-                <div class="info-card">
-                    <h4>Hotel Vision</h4>
-
-                    <p>
-                        Xây dựng trải nghiệm nghỉ dưỡng hiện đại,
-                        tiện nghi và đáng tin cậy cho mọi khách hàng.
-                    </p>
-                </div>
+                @endforeach
 
             </div>
 
@@ -1209,61 +1264,38 @@ use Illuminate\Support\Facades\Auth;
         <section id="services" style="padding:0 0 100px;">
 
             <div class="section-title">
+
                 <div>
-                    <h2>Our Services</h2>
+
+                    <h2>
+                        Our Services
+                    </h2>
 
                     <p>
-                        Những tiện ích nổi bật giúp nâng cao trải nghiệm khách hàng
-                        trong suốt thời gian lưu trú.
+                        Những tiện ích nổi bật giúp nâng cao trải nghiệm khách hàng.
                     </p>
+
                 </div>
+
             </div>
 
             <div class="info-strip">
 
-                <div class="info-card">
-                    <h4>Internet</h4>
-
-                    <p>
-                        Wi-Fi tốc độ cao miễn phí trong toàn bộ khách sạn,
-                        phù hợp cho cả làm việc và giải trí.
-                    </p>
-                </div>
+                @foreach($services as $service)
 
                 <div class="info-card">
-                    <h4>Dining</h4>
+
+                    <h4>
+                        {{ $service->title }}
+                    </h4>
 
                     <p>
-                        Nhà hàng sang trọng với nhiều món ăn đa dạng,
-                        phục vụ bữa sáng và đồ uống.
+                        {{ $service->description }}
                     </p>
+
                 </div>
 
-                <div class="info-card">
-                    <h4>Relaxation</h4>
-
-                    <p>
-                        Không gian thư giãn hiện đại với khu nghỉ dưỡng,
-                        phòng lounge và dịch vụ chăm sóc khách hàng.
-                    </p>
-                </div>
-
-                <div class="info-card">
-                    <h4>Transportation</h4>
-
-                    <p>
-                        Hỗ trợ đưa đón sân bay, gọi taxi và hướng dẫn di chuyển thuận tiện.
-                    </p>
-                </div>
-
-                <div class="info-card">
-                    <h4>Customer Support</h4>
-
-                    <p>
-                        Đội ngũ hỗ trợ 24/7 luôn sẵn sàng giải đáp
-                        và hỗ trợ khách hàng nhanh chóng.
-                    </p>
-                </div>
+                @endforeach
 
             </div>
 
@@ -1273,86 +1305,147 @@ use Illuminate\Support\Facades\Auth;
         <section id="contact" style="padding:0 0 100px;">
 
             <div class="section-title">
+
                 <div>
-                    <h2>Contact Us</h2>
+
+                    <h2>
+                        Contact Us
+                    </h2>
 
                     <p>
-                        Liên hệ với chúng tôi để được hỗ trợ đặt phòng
-                        và giải đáp thông tin nhanh chóng.
+                        Liên hệ với chúng tôi để được hỗ trợ nhanh chóng.
                     </p>
+
                 </div>
+
             </div>
 
             <div class="info-strip">
 
                 <div class="info-card">
-                    <h4>Hotline</h4>
+
+                    <h4>
+                        Hotline
+                    </h4>
 
                     <p>
-                        +84 123 456 789
+                        {{ $hotelSetting->hotline }}
                     </p>
+
                 </div>
 
                 <div class="info-card">
-                    <h4>Email</h4>
+
+                    <h4>
+                        Email
+                    </h4>
 
                     <p>
-                        support@hotelbooking.com
+                        {{ $hotelSetting->email }}
                     </p>
+
                 </div>
 
                 <div class="info-card">
-                    <h4>Address</h4>
+
+                    <h4>
+                        Address
+                    </h4>
 
                     <p>
-                        123 Nguyễn Văn Linh, TP. Hồ Chí Minh, Việt Nam
+                        {{ $hotelSetting->address }}
                     </p>
+
                 </div>
 
                 <div class="info-card">
-                    <h4>Working Hours</h4>
+
+                    <h4>
+                        Working Hours
+                    </h4>
 
                     <p>
-                        Hỗ trợ khách hàng 24/7 tất cả các ngày trong tuần.
+                        {{ $hotelSetting->working_hours }}
                     </p>
+
+                </div>
+                <div class="info-card">
+
+                    <h4>
+                        FaceBook
+                    </h4>
+
+                    <p>
+                        {{ $hotelSetting->facebook_link }}
+                    </p>
+
+                </div>
+                <div class="info-card">
+
+                    <h4>
+                        Map
+                    </h4>
+
+                    <p>
+                        {{ $hotelSetting->google_map_link }}
+                    </p>
+
                 </div>
 
                 <div class="info-card">
-                    <h4>Social Links</h4>
 
-                    <p>
-                        Facebook • Instagram • YouTube • TikTok
-                    </p>
-                </div>
+                    <form
+                        method="POST"
+                        action="{{ route('contact-messages.store') }}"
+                        style="margin-top:12px;">
+                        @csrf
 
-                <div class="info-card">
-                    <h4>Contact Form</h4>
-
-                    <form style="margin-top:12px;">
-
+                        @auth
+                        @if(Auth::user()->role !== 'host')
                         <input
                             type="text"
+                            name="name"
+                            value="{{ old('name', Auth::user()->full_name) }}"
                             placeholder="Your name"
                             style="margin-bottom:12px;">
 
                         <input
                             type="email"
+                            name="email"
+                            value="{{ old('email', Auth::user()->email) }}"
                             placeholder="Your email"
                             style="margin-bottom:12px;">
+                        @endif
+                        @else
+                        <input
+                            type="text"
+                            name="name"
+                            value="{{ old('name') }}"
+                            placeholder="Your name"
+                            style="margin-bottom:12px;">
+
+                        <input
+                            type="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            placeholder="Your email"
+                            style="margin-bottom:12px;">
+                        @endauth
 
                         <textarea
+                            name="message"
                             placeholder="Your message"
                             style="
-                        width:100%;
-                        min-height:120px;
-                        padding:15px;
-                        border-radius:14px;
-                        border:1px solid #dbe3ee;
-                        background:#f8fafc;
-                        resize:none;
-                        margin-bottom:12px;
-                        font-family:Poppins,sans-serif;
-                    "></textarea>
+            width:100%;
+            min-height:120px;
+            padding:15px;
+            border-radius:14px;
+            border:1px solid #dbe3ee;
+            background:#f8fafc;
+            resize:none;
+            margin-bottom:12px;
+            font-family:Poppins,sans-serif;
+        ">{{ old('message') }}</textarea>
 
                         <button
                             type="submit"
@@ -1360,14 +1453,43 @@ use Illuminate\Support\Facades\Auth;
                             style="width:100%;">
                             Send Message
                         </button>
-
                     </form>
+
                 </div>
 
             </div>
 
         </section>
 
+    </div>
+
+    <script>
+        const sliders = {};
+
+        function changeSlide(roomId, direction) {
+            const slides = document.querySelectorAll('.slide-' + roomId);
+
+            if (!slides.length) return;
+
+            if (!(roomId in sliders)) {
+                sliders[roomId] = 0;
+            }
+
+            slides[sliders[roomId]].style.display = 'none';
+
+            sliders[roomId] += direction;
+
+            if (sliders[roomId] >= slides.length) {
+                sliders[roomId] = 0;
+            }
+
+            if (sliders[roomId] < 0) {
+                sliders[roomId] = slides.length - 1;
+            }
+
+            slides[sliders[roomId]].style.display = 'block';
+        }
+    </script>
 </body>
 
 </html>

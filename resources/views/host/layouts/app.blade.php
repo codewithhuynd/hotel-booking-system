@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,19 +8,18 @@
     <title>@yield('title')</title>
 
     <style>
-
-        *{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body{
+        body {
             font-family: Arial, sans-serif;
             background: #f5f6fa;
         }
 
-        .container{
+        .container {
             display: flex;
             min-height: 100vh;
         }
@@ -30,18 +30,18 @@
         |--------------------------------------------------------------------------
         */
 
-        .sidebar{
+        .sidebar {
             width: 250px;
             background: #1e293b;
             color: white;
             padding: 20px;
         }
 
-        .sidebar h2{
+        .sidebar h2 {
             margin-bottom: 30px;
         }
 
-        .sidebar a{
+        .sidebar a {
             display: block;
             color: white;
             text-decoration: none;
@@ -50,7 +50,7 @@
             border-radius: 8px;
         }
 
-        .sidebar a:hover{
+        .sidebar a:hover {
             background: #334155;
         }
 
@@ -60,12 +60,12 @@
         |--------------------------------------------------------------------------
         */
 
-        .content{
+        .content {
             flex: 1;
             padding: 30px;
         }
 
-        .logout-btn{
+        .logout-btn {
             width: 100%;
             padding: 12px;
             border: none;
@@ -76,66 +76,71 @@
             margin-top: 20px;
         }
 
-        .logout-btn:hover{
+        .logout-btn:hover {
             background: #b91c1c;
         }
-
     </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <!-- SIDEBAR -->
+        <!-- SIDEBAR -->
 
-    <div class="sidebar">
+        <div class="sidebar">
 
-        <h2>HOST PANEL</h2>
+            <h2>HOST PANEL</h2>
 
-        <a href="{{ route('host.dashboard') }}">
-            Dashboard
-        </a>
+            <a href="{{ route('host.users.index') }}">
+                Manage Users
+            </a>
+            <a href="{{ route('host.rooms.index') }}">
+                Manage Rooms
+            </a>
 
-        <a href="{{ route('host.rooms.index') }}">
-            Manage Rooms
-        </a>
+            <a href="{{ route('host.bookings.index') }}">
+                Manage Bookings
+            </a>
 
-        <a href="{{ route('host.bookings.index') }}">
-    Manage Bookings
-</a>
+            <a href="{{ route('host.payments.index') }}">
+                Payments
+            </a>
+            <a href="{{ route('host.hotel-settings.index') }}">Hotel Settings</a>
+            <a href="{{ route('host.about-sections.index') }}">About Sections</a>
+            <a href="{{ route('host.services.index') }}">Services</a>
+            <a href="{{ route('host.contact-messages.index') }}">
+                Contact Messages
+            </a>
 
-        <a href="{{ route('host.payments.index') }}">
-    Payments
-</a>
+            <a href="{{ route('home') }}">
+                Home Page
+            </a>
 
-        <a href="{{ route('home') }}">
-            Home Page
-        </a>
+            <a href="{{ route('host.register-host.create') }}">
+                Create Host Account
+            </a>
 
-        <a href="{{ route('host.register-host.create') }}">
-            Create Host Account
-        </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
+                <button type="submit" class="logout-btn">
+                    Logout
+                </button>
+            </form>
 
-            <button type="submit" class="logout-btn">
-                Logout
-            </button>
-        </form>
+        </div>
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+            @yield('content')
+
+        </div>
 
     </div>
-
-    <!-- CONTENT -->
-
-    <div class="content">
-
-        @yield('content')
-
-    </div>
-
-</div>
 
 </body>
+
 </html>

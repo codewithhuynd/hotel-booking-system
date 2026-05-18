@@ -43,4 +43,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function contactMessages()
+    {
+        return $this->hasMany(ContactMessage::class);
+    }
 }
