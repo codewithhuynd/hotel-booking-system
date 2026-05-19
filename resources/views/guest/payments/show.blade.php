@@ -58,7 +58,7 @@
         </div>
 
         @php
-            $defaultMethod = $paymentMethods->first();
+        $defaultMethod = $paymentMethods->first();
         @endphp
 
         <!-- GRID -->
@@ -82,10 +82,10 @@
 
                             @if($payment->deposit_deadline)
 
-                                <div class="bg-amber-50 text-amber-700 text-xs px-3 py-1 rounded-lg">
-                                    Hạn:
-                                    {{ $payment->deposit_deadline->format('d/m/Y H:i') }}
-                                </div>
+                            <div class="bg-amber-50 text-amber-700 text-xs px-3 py-1 rounded-lg">
+                                Hạn:
+                                {{ $payment->deposit_deadline->format('d/m/Y H:i') }}
+                            </div>
 
                             @endif
                         </div>
@@ -194,8 +194,9 @@
                         </div>
 
                         <!-- QR -->
+
                         <div id="qr-container"
-                            class="{{ $defaultMethod?->qr_image ? '' : 'hidden' }} pt-4">
+                            class="{{ $defaultMethod?->type === 'vnpay' && $defaultMethod?->qr_image ? '' : 'hidden' }} pt-4">
 
                             <div class="text-sm text-slate-500 mb-3">
                                 Quét mã QR
@@ -203,8 +204,8 @@
 
                             <img id="qr-image"
                                 src="{{ $defaultMethod?->qr_image
-                                    ? asset('storage/' . $defaultMethod->qr_image)
-                                    : '' }}"
+            ? asset('storage/' . $defaultMethod->qr_image)
+            : '' }}"
                                 class="w-72 rounded-xl border">
                         </div>
 
@@ -234,26 +235,26 @@
 
                     @if ($errors->any())
 
-                        <div class="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 mb-6 text-sm">
+                    <div class="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 mb-6 text-sm">
 
-                            <ul class="list-disc pl-5 space-y-1">
+                        <ul class="list-disc pl-5 space-y-1">
 
-                                @foreach ($errors->all() as $error)
+                            @foreach ($errors->all() as $error)
 
-                                    <li>{{ $error }}</li>
+                            <li>{{ $error }}</li>
 
-                                @endforeach
+                            @endforeach
 
-                            </ul>
-                        </div>
+                        </ul>
+                    </div>
 
                     @endif
 
                     @if(session('success'))
 
-                        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl p-4 mb-6 text-sm">
-                            {{ session('success') }}
-                        </div>
+                    <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl p-4 mb-6 text-sm">
+                        {{ session('success') }}
+                    </div>
 
                     @endif
 
@@ -295,9 +296,9 @@
 
                                 @foreach($paymentMethods as $method)
 
-                                    <option value="{{ $method->id }}">
-                                        {{ $method->name }}
-                                    </option>
+                                <option value="{{ $method->id }}">
+                                    {{ $method->name }}
+                                </option>
 
                                 @endforeach
 
@@ -324,7 +325,6 @@
 
     <!-- SCRIPT -->
     <script>
-
         const paymentMethods = @json($paymentMethods);
 
         const select = document.getElementById('payment-method-select');
@@ -339,7 +339,7 @@
 
         const qrContainer = document.getElementById('qr-container');
 
-        select.addEventListener('change', function () {
+        select.addEventListener('change', function() {
 
             const selectedId = this.value;
 
@@ -355,7 +355,7 @@
 
             accountName.innerText = method.account_name ?? '---';
 
-            if (method.qr_image) {
+            if (method.type === 'vnpay' && method.qr_image) {
 
                 qrImage.src = '/storage/' + method.qr_image;
 
@@ -366,8 +366,8 @@
                 qrContainer.classList.add('hidden');
             }
         });
-
     </script>
 
 </body>
+
 </html>
