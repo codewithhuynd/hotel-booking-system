@@ -3,265 +3,371 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Thanh toán
-    </title>
+    <title>Thanh toán | Grand Elite Hotel</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f6fa;
-            padding: 40px;
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
         }
-
-        .container {
-            max-width: 700px;
-            margin: auto;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        h1 {
-            margin-bottom: 20px;
-        }
-
-        .payment-type {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 999px;
-            background: #dbeafe;
-            color: #1d4ed8;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .price {
-            color: #16a34a;
-            font-size: 28px;
-            font-weight: bold;
-            margin: 15px 0;
-        }
-
-        .section {
-            margin-top: 25px;
-        }
-
-        .section h3 {
-            margin-bottom: 10px;
-        }
-
-        .bank-box {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 16px;
-            border-radius: 10px;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            margin-top: 8px;
-            margin-bottom: 18px;
-        }
-
-        button {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 14px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 15px;
-        }
-
-        .error {
-            color: red;
-            margin-bottom: 15px;
-        }
-
-        .success {
-            color: green;
-            margin-bottom: 15px;
-        }
-
-        .back {
-            display: inline-block;
-            margin-bottom: 20px;
-            text-decoration: none;
-            color: #2563eb;
-        }
-    </style>
+    </script>
 </head>
 
-<body>
+<body class="bg-slate-50 font-sans text-slate-700 min-h-screen">
 
-<div class="container">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <a
-        href="{{ route('guest.bookings.index') }}"
-        class="back">
-        ← Quay lại bookings
-    </a>
+        <!-- TOPBAR -->
+        <div class="flex items-center justify-between border-b pb-4 mb-8">
 
-    <div class="card">
+            <a href="{{ route('guest.bookings.index') }}"
+                class="flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition">
 
-        <h1>
-            {{ $payment->type === 'deposit'
-                ? 'Thanh toán tiền cọc'
-                : 'Thanh toán phần còn lại' }}
-        </h1>
+                <svg class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
 
-        <div class="payment-type">
-            {{ strtoupper($payment->type) }}
+                    <path stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+
+                Quay lại bookings
+            </a>
+
+            <div class="font-serif text-sm tracking-[0.2em] font-bold">
+                THE GRAND ELITE
+            </div>
         </div>
 
-        <div class="price">
-            {{ number_format($payment->deposit_amount) }} VND
-        </div>
+        @php
+            $defaultMethod = $paymentMethods->first();
+        @endphp
 
-        <p>
-            <strong>Mã giao dịch:</strong>
-            {{ $payment->transaction_code }}
-        </p>
+        <!-- GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        <br>
+            <!-- LEFT -->
+            <div class="lg:col-span-7 space-y-6">
 
-        <p>
-            <strong>Deadline:</strong>
+                <!-- PAYMENT INFO -->
+                <div class="bg-white rounded-2xl border shadow-sm overflow-hidden">
 
-            {{ $payment->deposit_deadline
-                ? $payment->deposit_deadline->format('d/m/Y H:i')
-                : '—' }}
-        </p>
+                    <div class="h-1.5 bg-blue-600"></div>
 
-        <div class="section">
+                    <div class="p-6 sm:p-8">
 
-            <h3>
-                Thông tin chuyển khoản
-            </h3>
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
 
-            <div class="bank-box">
+                            <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+                                {{ strtoupper($payment->type) }}
+                            </span>
 
-                <p>
-                    <strong>Ngân hàng:</strong>
-                    MB BANK
-                </p>
+                            @if($payment->deposit_deadline)
 
-                <br>
+                                <div class="bg-amber-50 text-amber-700 text-xs px-3 py-1 rounded-lg">
+                                    Hạn:
+                                    {{ $payment->deposit_deadline->format('d/m/Y H:i') }}
+                                </div>
 
-                <p>
-                    <strong>Số tài khoản:</strong>
-                    123456789
-                </p>
+                            @endif
+                        </div>
 
-                <br>
+                        <h1 class="font-serif text-3xl text-slate-900 mb-2">
 
-                <p>
-                    <strong>Chủ tài khoản:</strong>
-                    HOTEL BOOKING
-                </p>
+                            {{ $payment->type === 'deposit'
+                                ? 'Thanh toán tiền cọc'
+                                : 'Thanh toán phần còn lại' }}
 
-                <br>
+                        </h1>
 
-                <p>
-                    <strong>Nội dung CK:</strong>
-                    {{ $payment->transaction_code }}
-                </p>
+                        <p class="text-sm text-slate-500 mb-6">
+                            Vui lòng chuyển khoản đúng số tiền bên dưới.
+                        </p>
 
+                        <!-- MONEY -->
+                        <div class="bg-slate-50 rounded-xl border p-5">
+
+                            <div class="text-xs uppercase tracking-widest text-slate-500 mb-2">
+                                Số tiền cần thanh toán
+                            </div>
+
+                            <div class="text-3xl font-extrabold text-emerald-600">
+                                {{ number_format($payment->deposit_amount) }} VND
+                            </div>
+                        </div>
+
+                        <!-- TRANSACTION -->
+                        <div class="grid grid-cols-2 gap-4 mt-6 border-t pt-5 text-sm">
+
+                            <div>
+
+                                <div class="text-slate-500 text-xs mb-1">
+                                    Mã giao dịch
+                                </div>
+
+                                <div class="font-bold">
+                                    {{ $payment->transaction_code }}
+                                </div>
+                            </div>
+
+                            <div>
+
+                                <div class="text-slate-500 text-xs mb-1">
+                                    Trạng thái
+                                </div>
+
+                                <div class="font-bold capitalize">
+                                    {{ $payment->status }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BANK INFO -->
+                <div class="bg-white rounded-2xl border shadow-sm p-6 sm:p-8">
+
+                    <h2 class="font-serif text-xl text-slate-900 mb-6">
+                        Thông tin thanh toán
+                    </h2>
+
+                    <div class="space-y-4">
+
+                        <!-- METHOD -->
+                        <div class="flex justify-between border-b border-dashed pb-3">
+
+                            <span class="text-slate-500">
+                                Phương thức
+                            </span>
+
+                            <span id="method-name" class="font-bold">
+                                {{ $defaultMethod?->name }}
+                            </span>
+                        </div>
+
+                        <!-- ACCOUNT NUMBER -->
+                        <div class="flex justify-between border-b border-dashed pb-3">
+
+                            <span class="text-slate-500">
+                                Số tài khoản
+                            </span>
+
+                            <span id="account-number"
+                                class="font-bold font-mono">
+
+                                {{ $defaultMethod?->account_number ?? '---' }}
+
+                            </span>
+                        </div>
+
+                        <!-- ACCOUNT NAME -->
+                        <div class="flex justify-between border-b border-dashed pb-3">
+
+                            <span class="text-slate-500">
+                                Chủ tài khoản
+                            </span>
+
+                            <span id="account-name"
+                                class="font-bold uppercase">
+
+                                {{ $defaultMethod?->account_name ?? '---' }}
+
+                            </span>
+                        </div>
+
+                        <!-- QR -->
+                        <div id="qr-container"
+                            class="{{ $defaultMethod?->qr_image ? '' : 'hidden' }} pt-4">
+
+                            <div class="text-sm text-slate-500 mb-3">
+                                Quét mã QR
+                            </div>
+
+                            <img id="qr-image"
+                                src="{{ $defaultMethod?->qr_image
+                                    ? asset('storage/' . $defaultMethod->qr_image)
+                                    : '' }}"
+                                class="w-72 rounded-xl border">
+                        </div>
+
+                        <!-- TRANSFER CONTENT -->
+                        <div class="bg-blue-50 border rounded-xl p-4 flex justify-between items-center">
+
+                            <span class="text-sm text-slate-500">
+                                Nội dung CK
+                            </span>
+
+                            <span class="font-bold text-blue-700 font-mono">
+                                {{ $payment->transaction_code }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <!-- RIGHT -->
+            <div class="lg:col-span-5">
+
+                <div class="bg-white rounded-2xl border shadow-sm p-6 sm:p-8 sticky top-8">
+
+                    <h2 class="font-serif text-xl text-slate-900 mb-6">
+                        Xác nhận thanh toán
+                    </h2>
+
+                    @if ($errors->any())
+
+                        <div class="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 mb-6 text-sm">
+
+                            <ul class="list-disc pl-5 space-y-1">
+
+                                @foreach ($errors->all() as $error)
+
+                                    <li>{{ $error }}</li>
+
+                                @endforeach
+
+                            </ul>
+                        </div>
+
+                    @endif
+
+                    @if(session('success'))
+
+                        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl p-4 mb-6 text-sm">
+                            {{ session('success') }}
+                        </div>
+
+                    @endif
+
+                    <!-- FORM -->
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data"
+                        action="{{ route('guest.payments.upload-proof', $payment) }}"
+                        class="space-y-5">
+
+                        @csrf
+
+                        <!-- FILE -->
+                        <div>
+
+                            <label class="block text-sm font-semibold mb-2">
+                                Ảnh bill chuyển khoản
+                            </label>
+
+                            <input
+                                type="file"
+                                name="proof_image"
+                                required
+                                class="w-full border rounded-xl p-3 bg-slate-50">
+                        </div>
+
+                        <!-- PAYMENT METHOD -->
+                        <div>
+
+                            <label class="block text-sm font-semibold mb-2">
+                                Phương thức thanh toán
+                            </label>
+
+                            <select
+                                id="payment-method-select"
+                                name="payment_method_id"
+                                required
+                                class="w-full border rounded-xl p-3 bg-slate-50">
+
+                                @foreach($paymentMethods as $method)
+
+                                    <option value="{{ $method->id }}">
+                                        {{ $method->name }}
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+                        </div>
+
+                        <!-- BUTTON -->
+                        <button
+                            type="submit"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition">
+
+                            Tôi đã thanh toán
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
 
-        <div class="section">
-
-            <h3>
-                Upload minh chứng thanh toán
-            </h3>
-
-            @if ($errors->any())
-
-                <div class="error">
-
-                    @foreach ($errors->all() as $error)
-                        <div>{{ $error }}</div>
-                    @endforeach
-
-                </div>
-
-            @endif
-
-            @if(session('success'))
-
-                <div class="success">
-                    {{ session('success') }}
-                </div>
-
-            @endif
-
-            <form
-                method="POST"
-                enctype="multipart/form-data"
-                action="{{ route('guest.payments.upload-proof', $payment) }}">
-
-                @csrf
-
-                <label>
-                    Ảnh bill chuyển khoản
-                </label>
-
-                <input
-                    type="file"
-                    name="proof_image"
-                    required>
-
-                <label>
-                    Phương thức thanh toán
-                </label>
-
-                <select
-                    name="payment_method"
-                    required>
-
-                    <option value="banking">
-                        Chuyển khoản ngân hàng
-                    </option>
-
-                    <option value="momo">
-                        MoMo
-                    </option>
-
-                    <option value="vnpay">
-                        VNPay
-                    </option>
-
-                    <option value="cash">
-                        Tiền mặt
-                    </option>
-
-                </select>
-
-                <button type="submit">
-                    Tôi đã thanh toán
-                </button>
-
-            </form>
-
+        <!-- FOOTER -->
+        <div class="text-center text-xs text-slate-400 mt-16 tracking-widest uppercase">
+            © 2026 The Grand Elite Hotel
         </div>
-
     </div>
 
-</div>
+    <!-- SCRIPT -->
+    <script>
+
+        const paymentMethods = @json($paymentMethods);
+
+        const select = document.getElementById('payment-method-select');
+
+        const methodName = document.getElementById('method-name');
+
+        const accountNumber = document.getElementById('account-number');
+
+        const accountName = document.getElementById('account-name');
+
+        const qrImage = document.getElementById('qr-image');
+
+        const qrContainer = document.getElementById('qr-container');
+
+        select.addEventListener('change', function () {
+
+            const selectedId = this.value;
+
+            const method = paymentMethods.find(
+                item => item.id == selectedId
+            );
+
+            if (!method) return;
+
+            methodName.innerText = method.name ?? '---';
+
+            accountNumber.innerText = method.account_number ?? '---';
+
+            accountName.innerText = method.account_name ?? '---';
+
+            if (method.qr_image) {
+
+                qrImage.src = '/storage/' + method.qr_image;
+
+                qrContainer.classList.remove('hidden');
+
+            } else {
+
+                qrContainer.classList.add('hidden');
+            }
+        });
+
+    </script>
 
 </body>
-
 </html>

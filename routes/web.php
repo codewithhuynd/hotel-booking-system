@@ -18,6 +18,7 @@ use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\Host\ContactMessageController as HostContactMessageController;
 use App\Http\Controllers\Guest\ProfileController;
 use App\Http\Controllers\Host\UserController;
+use App\Http\Controllers\Host\PaymentMethodController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -142,5 +143,9 @@ Route::middleware('auth')->group(function () {
 
             Route::resource('users', UserController::class)
                 ->only(['index', 'show', 'edit', 'update', 'destroy']);
+            Route::resource(
+                'payment-methods',
+                PaymentMethodController::class
+            )->except(['show']);
         });
 });

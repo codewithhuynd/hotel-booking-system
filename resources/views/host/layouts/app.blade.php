@@ -112,6 +112,9 @@
             <a href="{{ route('host.contact-messages.index') }}">
                 Contact Messages
             </a>
+            <a href="{{ route('host.payment-methods.index') }}">
+                Payment Methods
+            </a>
 
             <a href="{{ route('home') }}">
                 Home Page
