@@ -150,7 +150,7 @@ use Illuminate\Support\Facades\Auth;
 
             background: linear-gradient(rgba(2, 6, 23, 0.75),
                 rgba(2, 6, 23, 0.60)),
-            url('{{ asset("images/hero.jpg") }}');
+            url('{{ $hotelSetting && $hotelSetting->hero_image ? asset("storage/" . $hotelSetting->hero_image) : asset("images/hero.jpg") }}');
 
             background-size: cover;
             background-position: center;

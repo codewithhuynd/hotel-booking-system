@@ -61,116 +61,204 @@
 @endphp
 
 <style>
-    .booking-detail h1 { margin-bottom: 0.5rem; }
-    .booking-detail .back-link {
-        display: inline-block;
-        margin-bottom: 1rem;
-        color: #2563eb;
-        text-decoration: none;
+    /* Tổng thể & Typography */
+    .booking-detail {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        color: #1e293b;
+        background-color: #f8fafc;
     }
-    .booking-detail .back-link:hover { text-decoration: underline; }
-    .booking-detail .alert-success {
-        color: #166534;
-        background: #dcfce7;
-        padding: 0.75rem 1rem;
+    .booking-detail h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-top: 0.5rem;
+        margin-bottom: 0.25rem;
+        color: #0f172a;
+    }
+    .booking-detail .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+    .booking-detail .back-link:hover {
+        color: #2563eb;
+    }
+
+    /* Khối thông báo (Alerts) */
+    .booking-detail .alert-success,
+    .booking-detail .alert-error,
+    .booking-detail .alert-warning {
+        padding: 1rem;
         border-radius: 8px;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-left: 4px solid transparent;
+    }
+    .booking-detail .alert-success {
+        color: #15803d;
+        background: #f0fdf4;
+        border-left-color: #16a34a;
     }
     .booking-detail .alert-error {
-        color: #991b1b;
-        background: #fee2e2;
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        margin-bottom: 1rem;
+        color: #b91c1c;
+        background: #fef2f2;
+        border-left-color: #dc2626;
     }
     .booking-detail .alert-warning {
-        color: #92400e;
-        background: #fef3c7;
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        margin-bottom: 1rem;
+        color: #b45309;
+        background: #fffbeb;
+        border-left-color: #d97706;
     }
+
+    /* Cấu trúc các Thẻ (Cards) */
     .booking-detail .card {
         background: white;
         padding: 1.5rem;
-        border-radius: 10px;
-        margin-bottom: 1.25rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
     .booking-detail .card h2 {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid #e2e8f0;
-        color: #1e293b;
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-top: 0;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
     }
+
+    /* Hệ thống lưới thông tin (Grid) */
     .booking-detail .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1rem 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.25rem;
     }
     .booking-detail .field label {
         display: block;
-        font-size: 0.8rem;
-        color: #64748b;
-        margin-bottom: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 0.35rem;
         text-transform: uppercase;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.05em;
     }
     .booking-detail .field .value {
         font-size: 0.95rem;
-        color: #0f172a;
+        font-weight: 500;
+        color: #1e293b;
         word-break: break-word;
     }
     .booking-detail .field .value.muted {
-        color: #94a3b8;
-        font-style: italic;
+        color: #cbd5e1;
+        font-style: normal;
     }
+
+    /* Nhãn trạng thái (Badges) */
     .booking-detail .status-badge {
-        display: inline-block;
-        padding: 0.35rem 0.75rem;
-        border-radius: 999px;
-        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
         font-weight: 600;
-        background: #e2e8f0;
-        color: #334155;
+        background: #f1f5f9;
+        color: #475569;
     }
-    .booking-detail .status-badge.pending { background: #fef3c7; color: #92400e; }
-    .booking-detail .status-badge.awaiting_deposit { background: #ffedd5; color: #9a3412; }
-    .booking-detail .status-badge.confirmed { background: #dbeafe; color: #1e40af; }
-    .booking-detail .status-badge.checked_in { background: #d1fae5; color: #065f46; }
-    .booking-detail .status-badge.checked_out { background: #f3f4f6; color: #374151; }
-    .booking-detail .status-badge.completed { background: #dcfce7; color: #166534; }
-    .booking-detail .status-badge.cancelled { background: #fee2e2; color: #991b1b; }
+    .booking-detail .status-badge.pending { background: #fef3c7; color: #d97706; }
+    .booking-detail .status-badge.awaiting_deposit { background: #ffedd5; color: #ea580c; }
+    .booking-detail .status-badge.confirmed { background: #dbeafe; color: #2563eb; }
+    .booking-detail .status-badge.checked_in { background: #d1fae5; color: #059669; }
+    .booking-detail .status-badge.checked_out { background: #f1f5f9; color: #475569; }
+    .booking-detail .status-badge.completed { background: #dcfce7; color: #16a34a; }
+    .booking-detail .status-badge.cancelled { background: #fee2e2; color: #dc2626; }
+
+    /* Nội dung phụ & Hộp ghi chú */
     .booking-detail .note-box {
         background: #f8fafc;
         padding: 1rem;
         border-radius: 8px;
-        border-left: 4px solid #94a3b8;
+        border-left: 4px solid #cbd5e1;
+        color: #475569;
+        font-size: 0.95rem;
         white-space: pre-wrap;
     }
+    .booking-detail .proof-link {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .booking-detail .proof-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Khu vực Thao tác (Form & Buttons) */
     .booking-detail .actions {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-top: 0.5rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .booking-detail .actions form {
+        margin: 0;
+        width: 100%;
     }
     .booking-detail .actions button,
-    .booking-detail .actions .btn-link {
-        padding: 12px 20px;
+    .booking-detail .btn-refund {
+        padding: 10px 20px;
         border: none;
         border-radius: 8px;
         color: white;
         cursor: pointer;
         font-size: 0.9rem;
-        text-decoration: none;
-        display: inline-block;
+        font-weight: 600;
+        transition: background-color 0.15s ease, transform 0.1s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .booking-detail .actions button:active,
+    .booking-detail .btn-refund:active {
+        transform: scale(0.98);
     }
     .booking-detail .btn-confirm { background: #16a34a; }
+    .booking-detail .btn-confirm:hover { background: #15803d; }
     .booking-detail .btn-checkin { background: #2563eb; }
+    .booking-detail .btn-checkin:hover { background: #1d4ed8; }
     .booking-detail .btn-checkout { background: #7c3aed; }
-    .booking-detail .btn-cancel { background: #dc2626; }
-    .booking-detail .btn-refund { background: #16a34a; }
-    .booking-detail .proof-link { color: #2563eb; text-decoration: none; }
+    .booking-detail .btn-checkout:hover { background: #6d28d9; }
+    .booking-detail .btn-cancel { background: #dc2626; width: auto; }
+    .booking-detail .btn-cancel:hover { background: #b91c1c; }
+    .booking-detail .btn-refund { background: #16a34a; margin-top: 1rem; }
+    .booking-detail .btn-refund:hover { background: #15803d; }
+
+    /* Inputs tinh chỉnh */
+    .booking-detail input[type="text"],
+    .booking-detail input[type="file"],
+    .booking-detail textarea {
+        font-family: inherit;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        padding: 10px 12px !important;
+        background-color: #fff;
+        color: #1e293b;
+        font-size: 0.95rem;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .booking-detail input[type="text"]:focus,
+    .booking-detail textarea:focus {
+        outline: none;
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
 </style>
 
 <div class="booking-detail">
@@ -178,9 +266,9 @@
     <a href="{{ route('host.bookings.index') }}" class="back-link">← Danh sách booking</a>
 
     <h1>Chi tiết booking</h1>
-    <p style="color:#64748b; margin-bottom:1.25rem;">
-        Mã: <strong>{{ $booking->booking_code ?? '—' }}</strong>
-        · ID: #{{ $booking->id }}
+    <p style="color:#64748b; margin-top: 0; margin-bottom:1.5rem; font-size: 0.95rem;">
+        Mã: <strong style="color: #0f172a;">{{ $booking->booking_code ?? '—' }}</strong>
+        <span style="color: #cbd5e1; margin: 0 6px;">·</span> ID: #{{ $booking->id }}
     </p>
 
     @if(session('success'))
@@ -207,7 +295,7 @@
                 </div>
             </div>
             <div class="field">
-                <label>Thời điểm đặt (booked_at)</label>
+                <label>Thời điểm đặt</label>
                 <div class="value">
                     @if($bookedAt)
                         {{ $bookedAt->format('d/m/Y H:i') }}
@@ -301,7 +389,7 @@
             @if($booking->room?->description)
                 <div class="field" style="grid-column: 1 / -1;">
                     <label>Mô tả phòng</label>
-                    <div class="value">{{ $booking->room->description }}</div>
+                    <div class="value" style="color:#475569; font-size:0.9rem;">{{ $booking->room->description }}</div>
                 </div>
             @endif
         </div>
@@ -329,22 +417,16 @@
         <h2>Giá booking</h2>
         <div class="grid">
             <div class="field">
-                <label>Giá phòng tại thời điểm đặt</label>
-                <div class="value">
-                    {{ number_format($booking->room_price, 0, ',', '.') }} VND/đêm
-                </div>
+                <label>Giá tại thời điểm đặt</label>
+                <div class="value">{{ number_format($booking->room_price, 0, ',', '.') }} VND/đêm</div>
             </div>
             <div class="field">
                 <label>Tổng tiền</label>
-                <div class="value">
-                    {{ number_format($booking->total_price, 0, ',', '.') }} VND
-                </div>
+                <div class="value" style="color:#2563eb; font-weight:600;">{{ number_format($booking->total_price, 0, ',', '.') }} VND</div>
             </div>
             <div class="field">
                 <label>Tiền cọc</label>
-                <div class="value">
-                    {{ number_format($booking->deposit_amount, 0, ',', '.') }} VND
-                </div>
+                <div class="value" style="color:#16a34a; font-weight:600;">{{ number_format($booking->deposit_amount, 0, ',', '.') }} VND</div>
             </div>
         </div>
     </div>
@@ -354,8 +436,8 @@
 
         @if($booking->payments->count())
             @foreach($booking->payments as $payment)
-                <div style="border:1px solid #e2e8f0; border-radius:10px; padding:20px; margin-bottom:16px;">
-                    <h3 style="margin-bottom:12px;">
+                <div style="border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:16px; background-color:#f8fafc;">
+                    <h3 style="margin-top:0; margin-bottom:12px; font-size:0.85rem; letter-spacing:0.05em; color:#64748b;">
                         {{ strtoupper($payment->type) }} PAYMENT
                     </h3>
 
@@ -398,7 +480,7 @@
                                 @if($payment->proof_image)
                                     <a href="{{ asset('storage/' . $payment->proof_image) }}" target="_blank" class="proof-link">Xem ảnh</a>
                                 @else
-                                    —
+                                    <span class="muted">—</span>
                                 @endif
                             </div>
                         </div>
@@ -424,7 +506,7 @@
             <h2>Thông tin hủy</h2>
 
             @if($booking->cancellation)
-                <div class="grid">
+                <div class="grid" style="margin-bottom:12px;">
                     <div class="field">
                         <label>Người hủy</label>
                         <div class="value">
@@ -448,7 +530,7 @@
                         <div class="field" style="grid-column: 1 / -1;">
                             <label>Trạng thái refund</label>
                             <div class="value">
-                                <span style="color:#92400e;">Chờ guest nhập thông tin ngân hàng</span>
+                                <span style="color:#b45309; font-weight:500;">Chờ guest nhập thông tin ngân hàng</span>
                             </div>
                         </div>
                     @endif
@@ -470,7 +552,7 @@
                         </div>
 
                         <div class="field">
-                            <label>Guest đã gửi bank info lúc</label>
+                            <label>Guest gửi bank info lúc</label>
                             <div class="value">
                                 {{ $booking->cancellation->refund_info_submitted_at?->format('d/m/Y H:i') ?? '—' }}
                             </div>
@@ -479,7 +561,9 @@
                         <div class="field">
                             <label>Refund status</label>
                             <div class="value">
-                                {{ $booking->cancellation->refund_completed ? 'Đã hoàn tiền' : 'Chờ hoàn tiền' }}
+                                <span class="status-badge {{ $booking->cancellation->refund_completed ? 'completed' : 'pending' }}">
+                                    {{ $booking->cancellation->refund_completed ? 'Đã hoàn tiền' : 'Chờ hoàn tiền' }}
+                                </span>
                             </div>
                         </div>
 
@@ -500,7 +584,7 @@
                                         Xem ảnh
                                     </a>
                                 @else
-                                    —
+                                    <span class="muted">—</span>
                                 @endif
                             </div>
                         </div>
@@ -525,24 +609,24 @@
 
                 <div class="grid">
                     <div class="field" style="grid-column: 1 / -1;">
-                        <label>Mã giao dịch hoàn tiền</label>
+                        <label style="margin-bottom: 0.5rem;">Mã giao dịch hoàn tiền</label>
                         <input
                             type="text"
                             name="refund_transaction_code"
                             required
-                            style="width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:8px;"
+                            style="width:100%; box-sizing: border-box;"
                             value="{{ old('refund_transaction_code') }}"
                         >
                     </div>
 
                     <div class="field" style="grid-column: 1 / -1;">
-                        <label>Ảnh giao dịch hoàn tiền</label>
+                        <label style="margin-bottom: 0.5rem;">Ảnh giao dịch hoàn tiền</label>
                         <input
                             type="file"
                             name="refund_proof_image"
                             accept="image/*"
                             required
-                            style="width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:8px;"
+                            style="width:100%; box-sizing: border-box;"
                         >
                     </div>
                 </div>
@@ -600,10 +684,9 @@
                             placeholder="Nhập lý do hủy booking..."
                             style="
                                 width:100%;
-                                min-height:120px;
-                                padding:12px;
-                                border:1px solid #cbd5e1;
-                                border-radius:8px;
+                                min-height:100px;
+                                box-sizing: border-box;
+                                resize: vertical;
                             "
                         >{{ old('reason') }}</textarea>
                     </div>
