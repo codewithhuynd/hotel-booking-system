@@ -662,6 +662,12 @@ use Illuminate\Support\Facades\Auth;
                 padding: 70px 0;
             }
         }
+
+        #about,
+        #contact,
+        #services {
+            scroll-margin-top: 100px;
+        }
     </style>
 </head>
 
@@ -670,9 +676,9 @@ use Illuminate\Support\Facades\Auth;
     <!-- NAVBAR -->
     <div class="navbar">
 
-        <div class="logo">
+        <a href="/" class="logo">
             DolPHPhins Hotel Booking
-        </div>
+        </a>
 
         <div class="nav-wrapper">
 
@@ -1111,21 +1117,15 @@ use Illuminate\Support\Facades\Auth;
         <section class="rooms-section" id="rooms">
 
             <div class="section-title">
-
                 <div>
-
-                    <h2>
-                        Rooms
-                    </h2>
-
+                    <h2>Rooms</h2>
                 </div>
-
-                <a
-                    href="{{ route('rooms.index') }}"
-                    class="btn btn-white">
+                {{-- Chỉ hiện nút "Xem tất cả" nếu không có bộ lọc nào được áp dụng --}}
+                @if (!request()->anyFilled(['keyword', 'price', 'capacity', 'status', 'sort_price', 'sort_time']))
+                <a href="{{ route('rooms.index') }}" class="btn btn-white">
                     Xem tất cả
                 </a>
-
+                @endif
             </div>
 
             <div class="room-grid">
@@ -1490,6 +1490,22 @@ use Illuminate\Support\Facades\Auth;
             slides[sliders[roomId]].style.display = 'block';
         }
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Nếu URL có query string (tức là đã submit form tìm kiếm)
+            if (window.location.search.length > 0) {
+                var rooms = document.getElementById('rooms');
+                if (rooms) {
+                    // Cuộn xuống phần Rooms với hiệu ứng mượt
+                    rooms.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    </script>
+
 </body>
 
 </html>

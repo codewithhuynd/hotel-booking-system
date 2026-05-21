@@ -96,7 +96,7 @@
 
     /* Cố định kích thước các cột chức năng */
     .col-id { width: 80px; font-weight: 600; color: #64748b !important; }
-    .col-title { width: 220px; font-weight: 600; color: #0f172a !important; }
+    .col-title { width: 220px; font-weight: 600; color: #ffffff !important; }
     .col-actions { width: 160px; white-space: nowrap; }
 
     /* Định dạng nhóm nút hành động */
@@ -169,7 +169,7 @@
                 @forelse($services as $service)
                     <tr>
                         <td class="col-id">#{{ $service->id }}</td>
-                        <td class="col-title">{{ $service->title }}</td>
+                        <td class="col-id">{{ $service->title }}</td>
                         <td style="line-height: 1.5; color: #475569;">
                             {{ Str::limit($service->description, 120, '...') }}
                         </td>

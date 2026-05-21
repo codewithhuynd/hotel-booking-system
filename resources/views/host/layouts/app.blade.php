@@ -92,6 +92,10 @@
 
             <h2>HOST PANEL</h2>
 
+            <a href="{{ route('home') }}">
+                Home Page
+            </a>
+
             <a href="{{ route('host.users.index') }}">
                 Manage Users
             </a>
@@ -114,10 +118,6 @@
             </a>
             <a href="{{ route('host.payment-methods.index') }}">
                 Payment Methods
-            </a>
-
-            <a href="{{ route('home') }}">
-                Home Page
             </a>
 
             <a href="{{ route('host.register-host.create') }}">
