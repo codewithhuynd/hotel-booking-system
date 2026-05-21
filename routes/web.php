@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
             Route::redirect('/', '/host/dashboard');
 
             Route::get('/dashboard', function () {
-                return view('host.layouts.app');
+                return redirect()->route('host.bookings.index');
             })->name('dashboard');
 
             Route::get('/register-host', [HostRegisterController::class, 'create'])
