@@ -598,6 +598,7 @@ use Illuminate\Support\Facades\Auth;
             text-align: left;
 
             cursor: pointer;
+            font-size: 16px;
         }
 
         .dropdown-item:hover {
@@ -606,6 +607,7 @@ use Illuminate\Support\Facades\Auth;
 
         .logout-btn {
             font-family: inherit;
+            font-size: inherit;
         }
 
         @media (max-width: 1200px) {
@@ -1393,68 +1395,29 @@ use Illuminate\Support\Facades\Auth;
                 </div>
 
                 <div class="info-card">
-
-                    <form
-                        method="POST"
-                        action="{{ route('contact-messages.store') }}"
-                        style="margin-top:12px;">
+                    {{-- Chỉ hiển thị form gửi liên hệ nếu KHÔNG phải host --}}
+                    @unless(Auth::check() && Auth::user()->role === 'host')
+                    <form method="POST" action="{{ route('contact-messages.store') }}" style="margin-top:12px;">
                         @csrf
 
                         @auth
-                        @if(Auth::user()->role !== 'host')
-                        <input
-                            type="text"
-                            name="name"
-                            value="{{ old('name', Auth::user()->full_name) }}"
-                            placeholder="Your name"
-                            style="margin-bottom:12px;">
-
-                        <input
-                            type="email"
-                            name="email"
-                            value="{{ old('email', Auth::user()->email) }}"
-                            placeholder="Your email"
-                            style="margin-bottom:12px;">
-                        @endif
+                        {{-- User thường hoặc guest đã đăng nhập --}}
+                        <input type="text" name="name" value="{{ old('name', Auth::user()->full_name) }}" placeholder="Your name" style="margin-bottom:12px;">
+                        <input type="email" name="email" value="{{ old('email', Auth::user()->email) }}" placeholder="Your email" style="margin-bottom:12px;">
                         @else
-                        <input
-                            type="text"
-                            name="name"
-                            value="{{ old('name') }}"
-                            placeholder="Your name"
-                            style="margin-bottom:12px;">
-
-                        <input
-                            type="email"
-                            name="email"
-                            value="{{ old('email') }}"
-                            placeholder="Your email"
-                            style="margin-bottom:12px;">
+                        {{-- Chưa đăng nhập --}}
+                        <input type="text" name="name" value="{{ old('name') }}" placeholder="Your name" style="margin-bottom:12px;">
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Your email" style="margin-bottom:12px;">
                         @endauth
 
-                        <textarea
-                            name="message"
-                            placeholder="Your message"
-                            style="
-            width:100%;
-            min-height:120px;
-            padding:15px;
-            border-radius:14px;
-            border:1px solid #dbe3ee;
-            background:#f8fafc;
-            resize:none;
-            margin-bottom:12px;
-            font-family:Poppins,sans-serif;
-        ">{{ old('message') }}</textarea>
+                        <textarea name="message" placeholder="Your message" style="width:100%; min-height:120px; padding:15px; border-radius:14px; border:1px solid #dbe3ee; background:#f8fafc; resize:none; margin-bottom:12px; font-family:Poppins,sans-serif;">{{ old('message') }}</textarea>
 
-                        <button
-                            type="submit"
-                            class="btn btn-white"
-                            style="width:100%;">
-                            Send Message
-                        </button>
+                        <button type="submit" class="btn btn-white" style="width:100%;">Send Message</button>
                     </form>
-
+                    @else
+                    {{-- Thông báo hoặc để trống cho host --}}
+                    <p style="color: #cbd5e1; text-align: center;">Bạn đang là quản trị viên, hãy dùng trang quản lý để xem tin nhắn.</p>
+                    @endunless
                 </div>
 
             </div>

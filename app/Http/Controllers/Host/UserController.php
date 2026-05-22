@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -52,8 +54,12 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        if (auth()->id() === $user->id) {
+        if (Auth::id() === $user->id) {
             return back()->withErrors('Bạn không thể xoá chính mình');
+        }
+
+        if ($user->role === 'host') {
+            return back()->withErrors('Bạn không thể xoá tài khoản quản trị viên khác');
         }
 
         $user->delete();
