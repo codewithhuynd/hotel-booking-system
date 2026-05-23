@@ -1,4 +1,3 @@
-use Illuminate\Support\Str;
 @extends('host.layouts.app')
 
 @section('title', 'Manage About Sections')
@@ -96,7 +95,7 @@ use Illuminate\Support\Str;
 
     /* Cố định kích thước cột ID và Action để bảng cân đối */
     .col-id { width: 80px; font-weight: 600; color: #64748b !important; }
-    .col-title { width: 220px; font-weight: 600; color: #0f172a !important; }
+    .col-title { width: 220px; font-weight: 600; color: #ffffff !important; }
     .col-actions { width: 160px; white-space: nowrap; }
 
     /* Định dạng nhóm nút hành động */
@@ -169,7 +168,7 @@ use Illuminate\Support\Str;
                 @forelse($sections as $section)
                     <tr>
                         <td class="col-id">#{{ $section->id }}</td>
-                        <td class="col-title">{{ $section->title }}</td>
+                        <td class="col-id">{{ $section->title }}</td>
                         <td style="line-height: 1.5; color: #475569;">
                             {{ Str::limit($section->description, 120, '...') }}
                         </td>
