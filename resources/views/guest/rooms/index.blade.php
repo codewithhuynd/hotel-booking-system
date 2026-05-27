@@ -156,6 +156,48 @@
                 Quay về Trang chủ
             </a>
         </div>
+        <!-- ================= AUTH BUTTON SECTION (ADDED ONLY) ================= -->
+
+        @guest
+        <div class="flex flex-col sm:flex-row gap-4 mb-10">
+
+            <a href="{{ route('login') }}"
+                class="flex items-center justify-center gap-2 border border-slate-700 hover:border-emerald-500/40 bg-slate-950/40 hover:bg-slate-900 text-slate-300 hover:text-white px-6 py-3.5 rounded-2xl transition-all duration-300 text-sm font-semibold">
+                Đăng nhập
+            </a>
+
+            <a href="{{ route('register') }}"
+                class="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white px-6 py-3.5 rounded-2xl transition-all duration-300 text-sm font-semibold shadow-lg">
+                Đăng ký
+            </a>
+
+        </div>
+        @endguest
+
+
+        @auth
+        @php
+        $role = auth()->user()->role ?? null;
+        @endphp
+
+        @if($role === 'guest')
+        <div class="flex flex-col sm:flex-row gap-4 mb-10">
+
+            <a href="{{ route('guest.bookings.index') }}"
+                class="flex items-center justify-center gap-2 border border-slate-700 hover:border-emerald-500/40 bg-slate-950/40 hover:bg-slate-900 text-slate-300 hover:text-white px-6 py-3.5 rounded-2xl transition-all duration-300 text-sm font-semibold">
+                My Booking
+            </a>
+
+            <a href="{{ route('profile.edit') }}"
+                class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3.5 rounded-2xl transition-all duration-300 text-sm font-semibold shadow-lg">
+                My Profile
+            </a>
+
+        </div>
+        @endif
+        @endauth
+
+        <!-- ================= END AUTH BUTTON SECTION ================= -->
 
         <!-- SEARCH & FILTER STUDIO (BỌC KÍNH MỜ SANG TRỌNG) -->
         <div class="luxury-card rounded-3xl p-6 md:p-8 mb-12">
