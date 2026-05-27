@@ -170,6 +170,19 @@ class BookingController extends Controller
                 'status' => 'cancelled',
             ]);
 
+            $hosts = User::where('role', 'host')->get();
+
+            foreach ($hosts as $host) {
+                Notification::create([
+                    'user_id' => $host->id,
+                    'booking_id' => $booking->id,
+                    'type' => 'guest_cancelled_booking',
+                    'title' => 'Khách đã hủy đặt phòng',
+                    'message' => Auth::user()->name . ' đã hủy booking #' . $booking->booking_code . '. Vui lòng kiểm tra yêu cầu hủy.',
+                    'is_read' => false,
+                ]);
+            }
+
             if ($booking->room) {
                 $booking->room->update([
                     'status' => 'available',
