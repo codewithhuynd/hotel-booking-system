@@ -14,7 +14,6 @@ class AuthController extends Controller
     | SHOW REGISTER PAGE
     |--------------------------------------------------------------------------
     */
-
     public function showRegister()
     {
         return view('auth.register');
@@ -25,68 +24,34 @@ class AuthController extends Controller
     | HANDLE REGISTER
     |--------------------------------------------------------------------------
     */
-
     public function register(Request $request)
     {
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDATION
-        |--------------------------------------------------------------------------
-        */
-
+        // Validate
         $validated = $request->validate([
-
-            'full_name' => [
-                'required',
-                'max:255'
-            ],
-
-            'email' => [
-                'required',
-                'email',
-                'unique:users,email'
-            ],
-
-            'password' => [
-                'required',
-                'min:6'
-            ],
+            'full_name' => ['required', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'min:6'],
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | CREATE USER
-        |--------------------------------------------------------------------------
-        */
-
+        // Tạo user
         $user = User::create([
-
             'full_name' => $validated['full_name'],
-
             'email' => $validated['email'],
-
             'password' => Hash::make($validated['password']),
-
             'role' => 'guest',
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | AUTO LOGIN
-        |--------------------------------------------------------------------------
-        */
+        // Gửi email xác thực
+        $user->sendEmailVerificationNotification();
 
+        // Đăng nhập user (họ vẫn cần xác thực email để truy cập các chức năng)
         Auth::login($user);
 
-        /*
-        |--------------------------------------------------------------------------
-        | REGENERATE SESSION
-        |--------------------------------------------------------------------------
-        */
-
+        // Regenerate session
         $request->session()->regenerate();
 
-        return redirect()->route('home');
+        // Chuyển hướng đến trang thông báo xác thực
+        return redirect()->route('verification.notice');
     }
 
     /*
@@ -94,7 +59,6 @@ class AuthController extends Controller
     | SHOW LOGIN PAGE
     |--------------------------------------------------------------------------
     */
-
     public function showLogin()
     {
         return view('auth.login');
@@ -105,56 +69,20 @@ class AuthController extends Controller
     | HANDLE LOGIN
     |--------------------------------------------------------------------------
     */
-
     public function login(Request $request)
     {
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDATE INPUT
-        |--------------------------------------------------------------------------
-        */
-
         $credentials = $request->validate([
-
-            'email' => [
-                'required',
-                'email'
-            ],
-
-            'password' => [
-                'required'
-            ],
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | ATTEMPT LOGIN
-        |--------------------------------------------------------------------------
-        */
-
         if (Auth::attempt($credentials)) {
-
-            /*
-            |--------------------------------------------------------------------------
-            | REGENERATE SESSION
-            |--------------------------------------------------------------------------
-            */
-
             $request->session()->regenerate();
-
             return redirect()->route('home');
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | LOGIN FAILED
-        |--------------------------------------------------------------------------
-        */
-
         return back()->withErrors([
-
             'email' => 'Invalid email or password',
-
         ])->onlyInput('email');
     }
 
@@ -163,33 +91,11 @@ class AuthController extends Controller
     | HANDLE LOGOUT
     |--------------------------------------------------------------------------
     */
-
     public function logout(Request $request)
     {
-        /*
-        |--------------------------------------------------------------------------
-        | REMOVE AUTH
-        |--------------------------------------------------------------------------
-        */
-
         Auth::logout();
-
-        /*
-        |--------------------------------------------------------------------------
-        | INVALIDATE SESSION
-        |--------------------------------------------------------------------------
-        */
-
         $request->session()->invalidate();
-
-        /*
-        |--------------------------------------------------------------------------
-        | REGENERATE CSRF TOKEN
-        |--------------------------------------------------------------------------
-        */
-
         $request->session()->regenerateToken();
-
         return redirect()->route('home');
     }
 }
