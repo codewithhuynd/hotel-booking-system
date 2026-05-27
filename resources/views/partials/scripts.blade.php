@@ -210,6 +210,24 @@
 
             notificationDropdown.classList.toggle('show');
 
+            fetch('{{ route('notifications.readAll') }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: new URLSearchParams({
+                    '_method': 'PATCH'
+                })
+            })
+            .then(() => {
+                pollNotifications();
+            })
+            .catch(error => {
+                console.error('Mark all notifications as read error:', error);
+            });
+
         });
 
         document.addEventListener('click', function (e) {
@@ -224,4 +242,68 @@
         });
 
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | NOTIFICATION POLLING
+    |--------------------------------------------------------------------------
+    */
+
+    function renderNotifications(data) {
+        const badge = document.getElementById('notificationBadge');
+        const list = document.getElementById('notificationList');
+
+        if (!badge || !list) return;
+
+        if (data.unread_count > 0) {
+            badge.style.display = 'flex';
+            badge.textContent = data.unread_count;
+        } else {
+            badge.style.display = 'none';
+            badge.textContent = '';
+        }
+
+        if (!data.notifications.length) {
+            list.innerHTML = `
+                <div class="notification-empty">
+                    Chưa có thông báo nào.
+                </div>
+            `;
+            return;
+        }
+
+        list.innerHTML = data.notifications.map(notification => `
+            <form action="${notification.url}" method="POST">
+                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                <input type="hidden" name="_method" value="PATCH">
+
+                <button type="submit"
+                        class="notification-item ${notification.is_read ? '' : 'unread'}">
+                    <span>${notification.title ?? 'Thông báo mới'}</span>
+                    <small>${notification.message ?? ''}</small>
+                    <small>${notification.created_at ?? ''}</small>
+                </button>
+            </form>
+        `).join('');
+    }
+
+    function pollNotifications() {
+        fetch('{{ route('notifications.poll') }}', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            renderNotifications(data);
+        })
+        .catch(error => {
+            console.error('Notification polling error:', error);
+        });
+    }
+
+    pollNotifications();
+    setInterval(pollNotifications, 3000);
 </script>

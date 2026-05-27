@@ -39,6 +39,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
+    Route::get('/notifications/poll', [NotificationController::class, 'poll'])
+        ->name('notifications.poll');
+
     Route::get('/notifications', [NotificationController::class, 'index'])
         ->name('notifications.index');
 
