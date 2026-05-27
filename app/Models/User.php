@@ -48,4 +48,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(ContactMessage::class);
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(\App\Models\Notification::class);
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->hasMany(\App\Models\Notification::class)->where('is_read', false);
+    }
 }

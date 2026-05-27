@@ -19,6 +19,7 @@ use App\Http\Controllers\Host\ContactMessageController as HostContactMessageCont
 use App\Http\Controllers\Guest\ProfileController;
 use App\Http\Controllers\Host\UserController;
 use App\Http\Controllers\Host\PaymentMethodController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -37,6 +38,15 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
+    Route::get('/notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index');
+
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
+        ->name('notifications.read');
+
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
+        ->name('notifications.readAll');
 
     Route::middleware('guest.role')->group(function () {
         Route::get('/my-bookings', [GuestBookingController::class, 'index'])
