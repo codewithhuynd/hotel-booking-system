@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingCancellation;
 use App\Models\Payment;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +50,7 @@ class BookingController extends Controller
         }
 
         DB::transaction(function () use ($booking) {
+
             $booking->update([
                 'status' => 'awaiting_deposit',
             ]);
@@ -63,12 +65,25 @@ class BookingController extends Controller
                     'deposit_amount' => $booking->deposit_amount,
                     'payment_method' => 'banking',
                     'status' => 'unpaid',
-                    'deposit_deadline' => now()->addHours(config('hotel.deposit_deadline_hours', 24)),
+                    'deposit_deadline' => now()->addHours(
+                        config('hotel.deposit_deadline_hours', 24)
+                    ),
                 ]
             );
+
+            Notification::create([
+                'user_id' => $booking->user_id,
+                'booking_id' => $booking->id,
+                'type' => 'booking_confirmed',
+                'title' => 'Đơn đặt phòng đã được xác nhận',
+                'message' => 'Host đã xác nhận đơn đặt phòng của bạn. Vui lòng tiến hành đặt cọc.',
+            ]);
         });
 
-        return back()->with('success', 'Đã xác nhận booking. Chờ khách đặt cọc.');
+        return back()->with(
+            'success',
+            'Đã xác nhận booking. Chờ khách đặt cọc.'
+        );
     }
 
     public function checkIn(Booking $booking)
@@ -91,7 +106,18 @@ class BookingController extends Controller
             'status' => 'occupied',
         ]);
 
-        return back()->with('success', 'Guest checked in successfully.');
+        Notification::create([
+            'user_id' => $booking->user_id,
+            'booking_id' => $booking->id,
+            'type' => 'booking_checked_in',
+            'title' => 'Check-in đã được xác nhận',
+            'message' => 'Host đã xác nhận check-in cho booking của bạn.',
+        ]);
+
+        return back()->with(
+            'success',
+            'Guest checked in successfully.'
+        );
     }
 
     public function checkOut(Booking $booking)
@@ -131,7 +157,18 @@ class BookingController extends Controller
             );
         }
 
-        return back()->with('success', 'Check-out thành công. Đã tạo payment cuối nếu còn dư.');
+        Notification::create([
+            'user_id' => $booking->user_id,
+            'booking_id' => $booking->id,
+            'type' => 'booking_checked_out',
+            'title' => 'Check-out thành công',
+            'message' => 'Host đã xác nhận bạn check-out thành công.',
+        ]);
+
+        return back()->with(
+            'success',
+            'Check-out thành công. Đã tạo payment cuối nếu còn dư.'
+        );
     }
 
     public function cancel(Request $request, Booking $booking)
@@ -165,6 +202,14 @@ class BookingController extends Controller
 
             $booking->update([
                 'status' => 'cancelled',
+            ]);
+
+            Notification::create([
+                'user_id' => $booking->user_id,
+                'booking_id' => $booking->id,
+                'type' => 'booking_cancelled',
+                'title' => 'Booking đã bị hủy',
+                'message' => 'Host đã hủy booking của bạn.',
             ]);
 
             if ($booking->room) {
@@ -227,5 +272,13 @@ class BookingController extends Controller
         });
 
         return back()->with('success', 'Đã hoàn tiền thành công.');
+
+        Notification::create([
+            'user_id' => $booking->user_id,
+            'booking_id' => $booking->id,
+            'type' => 'refund_completed',
+            'title' => 'Đã hoàn tiền',
+            'message' => 'Host đã hoàn tiền booking cho bạn.',
+        ]);
     }
 }

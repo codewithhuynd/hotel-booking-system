@@ -75,9 +75,7 @@
             <div>
                 <label style="display: block; font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px;">Status</label>
                 <select name="status" style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; color: #333; background-color: white;">
-                    <option value="available" {{ $room->status == 'available' ? 'selected' : '' }}>Available</option>
                     <option value="maintenance" {{ $room->status == 'maintenance' ? 'selected' : '' }}>Maintenance</option>
-                    <option value="occupied" {{ $room->status == 'occupied' ? 'selected' : '' }}>Occupied</option>
                     <option value="cleaning" {{ $room->status == 'cleaning' ? 'selected' : '' }}>Cleaning</option>
                 </select>
             </div>

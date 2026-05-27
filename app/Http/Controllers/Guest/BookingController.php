@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingCancellation;
 use App\Models\Room;
+use App\Models\User;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,8 +72,7 @@ class BookingController extends Controller
         $totalPrice = $roomPrice * $days;
         $depositAmount = $totalPrice * 0.3;
 
-        Booking::create([
-            'booking_code' => 'BK-' . strtoupper(Str::random(8)),
+        $booking = Booking::create([
             'user_id' => Auth::id(),
             'room_id' => $room->id,
             'check_in_date' => $validated['check_in_date'],
@@ -79,14 +80,27 @@ class BookingController extends Controller
             'guest_count' => $validated['guest_count'],
             'contact_name' => $validated['contact_name'],
             'contact_phone' => $validated['contact_phone'],
-            'contact_email' => $validated['contact_email'],
+            'contact_email' => $validated['contact_email'] ?? null,
+            'note' => $validated['note'] ?? null,
             'room_price' => $roomPrice,
             'total_price' => $totalPrice,
             'deposit_amount' => $depositAmount,
-            'note' => $validated['note'],
             'status' => 'pending',
-            'booked_at' => now(),
+            'booking_code' => strtoupper(Str::random(10)),
         ]);
+
+        $hosts = User::where('role', 'host')->get();
+
+        foreach ($hosts as $host) {
+            Notification::create([
+                'user_id' => $host->id,
+                'booking_id' => $booking->id,
+                'type' => 'guest_created_booking',
+                'title' => 'Có đơn đặt phòng mới',
+                'message' => Auth::user()->name . ' vừa đặt phòng. Vui lòng kiểm tra và xác nhận.',
+                'is_read' => false,
+            ]);
+        }
 
         return redirect()
             ->route('guest.bookings.index')

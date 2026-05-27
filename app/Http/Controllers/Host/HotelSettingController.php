@@ -22,6 +22,10 @@ class HotelSettingController extends Controller
                 'working_hours' => 'Hỗ trợ khách hàng 24/7',
                 'facebook_link' => '#',
                 'google_map_link' => '#',
+                'hotel_address' => '123 Nguyễn Huệ, Quận 1, TP.HCM',
+
+                'google_map_embed' => '<iframe src="..."></iframe>',
+
             ]
         );
 
@@ -39,8 +43,13 @@ class HotelSettingController extends Controller
                 'email' => 'support@hotelbooking.com',
                 'address' => 'TP. Hồ Chí Minh, Việt Nam',
                 'working_hours' => 'Hỗ trợ khách hàng 24/7',
+
                 'facebook_link' => '#',
                 'google_map_link' => '#',
+
+                'hotel_address' => '123 Nguyễn Huệ, Quận 1, TP.HCM',
+
+                'google_map_embed' => '<iframe src=""></iframe>',
             ]
         );
 
@@ -62,6 +71,9 @@ class HotelSettingController extends Controller
             'working_hours' => ['nullable', 'string', 'max:255'],
             'facebook_link' => ['nullable', 'url', 'max:255'],
             'google_map_link' => ['nullable', 'url', 'max:255'],
+            'hotel_address' => ['nullable', 'string', 'max:255'],
+
+            'google_map_embed' => ['nullable', 'string'],
         ]);
 
         if ($request->hasFile('hero_image')) {

@@ -18,5 +18,8 @@ class HotelSetting extends Model
 
         'facebook_link',
         'google_map_link',
+
+        'hotel_address',
+        'google_map_embed',
     ];
 }

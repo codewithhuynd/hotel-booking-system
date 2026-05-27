@@ -13,7 +13,17 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $query = Room::with('images');
-        $hotelSetting = HotelSetting::first();
+        $hotelSetting = HotelSetting::firstOrCreate(
+            [],
+            [
+                'hero_title' => 'Tìm khách sạn phù hợp cho bạn',
+                'hero_description' => 'Đặt phòng nhanh chóng, dễ dàng và tiện lợi.',
+
+                'hotel_address' => '123 Nguyễn Huệ, Quận 1, TP.HCM',
+
+                'google_map_embed' => '<iframe src=""></iframe>',
+            ]
+        );
 
         $aboutSections = AboutSection::latest()->get();
 
@@ -94,16 +104,18 @@ class HomeController extends Controller
         } else {
             $query->latest();
         }
-
+        $roomCount = Room::count();
         $rooms = $query
             ->take(6)
             ->get();
+
 
         return view('home', compact(
             'rooms',
             'hotelSetting',
             'aboutSections',
-            'services'
+            'services',
+            'roomCount'
         ));
     }
 }

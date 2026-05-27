@@ -21,7 +21,8 @@ use App\Http\Controllers\Host\ContactMessageController as HostContactMessageCont
 use App\Http\Controllers\Guest\ProfileController;
 use App\Http\Controllers\Host\UserController;
 use App\Http\Controllers\Host\PaymentMethodController;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;                // ← giữ lại từ DN-fix-bug
+use App\Http\Controllers\NotificationController;   // ← thêm từ notification
 
 // ---------------------------------------------------------------------
 // PUBLIC ROUTES
@@ -77,6 +78,15 @@ Route::delete('/email/verify/cancel', function (Request $request) {
 // ---------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
+    Route::get('/notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index');
+
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
+        ->name('notifications.read');
+
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
+        ->name('notifications.readAll');
 
     // GUEST + VERIFIED
     Route::middleware(['guest.role', 'verified'])->group(function () {
