@@ -87,6 +87,7 @@ class BookingController extends Controller
             'deposit_amount' => $depositAmount,
             'status' => 'pending',
             'booking_code' => strtoupper(Str::random(10)),
+            'booked_at' => now(),
         ]);
 
         $hosts = User::where('role', 'host')->get();
