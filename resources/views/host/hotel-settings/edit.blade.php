@@ -13,6 +13,7 @@
         padding: 20px;
         color: #1e293b;
     }
+
     .edit-settings-container h1 {
         font-size: 1.75rem;
         font-weight: 700;
@@ -34,6 +35,7 @@
     .form-section {
         margin-bottom: 2rem;
     }
+
     .form-section h2 {
         font-size: 1.1rem;
         font-weight: 600;
@@ -52,11 +54,13 @@
         grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
         gap: 1.25rem;
     }
+
     .form-group {
         display: flex;
         flex-direction: column;
         gap: 0.4rem;
     }
+
     .form-group.full-width {
         grid-column: 1 / -1;
     }
@@ -67,6 +71,7 @@
         font-weight: 600;
         color: #475569;
     }
+
     .form-group input[type="text"],
     .form-group input[type="email"],
     .form-group input[type="url"],
@@ -82,6 +87,7 @@
         box-sizing: border-box;
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
+
     .form-group input:focus,
     .form-group textarea:focus {
         outline: none;
@@ -103,10 +109,12 @@
         flex-direction: column;
         gap: 0.5rem;
     }
+
     .file-input-custom {
         font-size: 0.9rem;
         color: #475569;
     }
+
     .file-input-custom::-webkit-file-upload-button {
         background: #f1f5f9;
         border: 1px solid #cbd5e1;
@@ -118,9 +126,11 @@
         margin-right: 10px;
         transition: background 0.15s ease;
     }
+
     .file-input-custom::-webkit-file-upload-button:hover {
         background: #e2e8f0;
     }
+
     .current-image-preview {
         display: flex;
         align-items: center;
@@ -132,6 +142,7 @@
         border-radius: 8px;
         max-width: max-content;
     }
+
     .current-image-preview img {
         width: 80px;
         height: 50px;
@@ -155,9 +166,11 @@
         align-items: center;
         justify-content: center;
     }
+
     .btn-submit:hover {
         background: #15803d;
     }
+
     .btn-submit:active {
         transform: scale(0.98);
     }
@@ -175,24 +188,22 @@
             <!-- PHẦN 1: CẤU HÌNH BANNER CHÍNH (HERO) -->
             <div class="form-section">
                 <h2>Hero Section</h2>
-                
+
                 <div class="form-grid" style="grid-template-columns: 1fr;">
                     <div class="form-group">
                         <label>Hero Title</label>
-                        <input 
-                            type="text" 
-                            name="hero_title" 
-                            value="{{ old('hero_title', $setting->hero_title) }}"
-                        >
+                        <input
+                            type="text"
+                            name="hero_title"
+                            value="{{ old('hero_title', $setting->hero_title) }}">
                         @error('hero_title') <p class="error-message">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="form-group">
                         <label>Hero Description</label>
-                        <textarea 
-                            name="hero_description" 
-                            rows="4"
-                        >{{ old('hero_description', $setting->hero_description) }}</textarea>
+                        <textarea
+                            name="hero_description"
+                            rows="4">{{ old('hero_description', $setting->hero_description) }}</textarea>
                         @error('hero_description') <p class="error-message">{{ $message }}</p> @enderror
                     </div>
 
@@ -200,15 +211,15 @@
                         <label>Hero Image</label>
                         <div class="file-upload-wrapper">
                             <input type="file" name="hero_image" class="file-input-custom">
-                            
+
                             @if($setting->hero_image)
-                                <div class="current-image-preview">
-                                    <img src="{{ asset('storage/' . $setting->hero_image) }}" alt="Current Hero Image">
-                                    <div style="font-size: 0.85rem; color: #64748b;">
-                                        <span style="display:block; font-weight: 500; color: #334155;">Current:</span>
-                                        <span style="font-family: monospace; font-size: 0.8rem;">{{ $setting->hero_image }}</span>
-                                    </div>
+                            <div class="current-image-preview">
+                                <img src="{{ asset('storage/' . $setting->hero_image) }}" alt="Current Hero Image">
+                                <div style="font-size: 0.85rem; color: #64748b;">
+                                    <span style="display:block; font-weight: 500; color: #334155;">Current:</span>
+                                    <span style="font-family: monospace; font-size: 0.8rem;">{{ $setting->hero_image }}</span>
                                 </div>
+                            </div>
                             @endif
                         </div>
                         @error('hero_image') <p class="error-message">{{ $message }}</p> @enderror
@@ -219,60 +230,75 @@
             <!-- PHẦN 2: THÔNG TIN LIÊN HỆ -->
             <div class="form-section">
                 <h2>Contact Details</h2>
-                
+
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Hotline</label>
-                        <input 
-                            type="text" 
-                            name="hotline" 
-                            value="{{ old('hotline', $setting->hotline) }}"
-                        >
+                        <input
+                            type="text"
+                            name="hotline"
+                            value="{{ old('hotline', $setting->hotline) }}">
                     </div>
 
                     <div class="form-group">
                         <label>Email</label>
-                        <input 
-                            type="email" 
-                            name="email" 
-                            value="{{ old('email', $setting->email) }}"
-                        >
+                        <input
+                            type="email"
+                            name="email"
+                            value="{{ old('email', $setting->email) }}">
                     </div>
 
                     <div class="form-group">
                         <label>Working Hours</label>
-                        <input 
-                            type="text" 
-                            name="working_hours" 
-                            value="{{ old('working_hours', $setting->working_hours) }}"
-                        >
+                        <input
+                            type="text"
+                            name="working_hours"
+                            value="{{ old('working_hours', $setting->working_hours) }}">
                     </div>
 
                     <div class="form-group full-width">
                         <label>Address</label>
-                        <input 
-                            type="text" 
-                            name="address" 
-                            value="{{ old('address', $setting->address) }}"
-                        >
+                        <input
+                            type="text"
+                            name="address"
+                            value="{{ old('address', $setting->address) }}">
                     </div>
 
                     <div class="form-group">
                         <label>Facebook Link</label>
-                        <input 
-                            type="url" 
-                            name="facebook_link" 
-                            value="{{ old('facebook_link', $setting->facebook_link) }}"
-                        >
+                        <input
+                            type="url"
+                            name="facebook_link"
+                            value="{{ old('facebook_link', $setting->facebook_link) }}">
                     </div>
 
                     <div class="form-group">
                         <label>Google Map Link</label>
-                        <input 
-                            type="url" 
-                            name="google_map_link" 
-                            value="{{ old('google_map_link', $setting->google_map_link) }}"
-                        >
+                        <input
+                            type="url"
+                            name="google_map_link"
+                            value="{{ old('google_map_link', $setting->google_map_link) }}">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Hotel Address</label>
+
+                        <input
+                            type="text"
+                            name="hotel_address"
+                            value="{{ old('hotel_address', $setting->hotel_address) }}">
+                    </div>
+                    <div class="form-group full-width">
+
+                        <label>Google Map Embed</label>
+
+                        <textarea
+                            name="google_map_embed"
+                            rows="5">{{ old('google_map_embed', $setting->google_map_embed) }}</textarea>
+
+                        <small style="color:#64748b">
+                            Dán iframe embed từ Google Maps
+                        </small>
+
                     </div>
                 </div>
             </div>

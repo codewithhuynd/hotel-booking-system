@@ -41,15 +41,8 @@
                    style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; color: #333; font-family: sans-serif;">
         </div>
 
-        <!-- Ô chọn Role -->
-        <div style="margin-bottom: 28px;">
-            <label style="display: block; font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px;">Role</label>
-            <select name="role" 
-                    style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; color: #333; background-color: white;">
-                <option value="guest" @selected($user->role=='guest')>Guest</option>
-                <option value="host" @selected($user->role=='host')>Host</option>
-            </select>
-        </div>
+     
+     
 
         <!-- Nút bấm Action -->
         <div style="display: flex; gap: 12px; align-items: center;">

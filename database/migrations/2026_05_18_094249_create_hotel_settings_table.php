@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('hotel_settings', function (Blueprint $table) {
+
             $table->id();
 
             // HERO
@@ -22,11 +23,18 @@ return new class extends Migration
             // CONTACT
             $table->string('hotline')->nullable();
             $table->string('email')->nullable();
+
             $table->string('address')->nullable();
+
+            $table->string('hotel_address')->nullable();
+
             $table->string('working_hours')->nullable();
 
             $table->string('facebook_link')->nullable();
+
             $table->string('google_map_link')->nullable();
+
+            $table->text('google_map_embed')->nullable();
 
             $table->timestamps();
         });
