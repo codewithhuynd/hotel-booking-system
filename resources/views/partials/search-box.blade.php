@@ -3,35 +3,41 @@
 
     <div class="search-head">
 
-        <h2>
-            Tìm phòng phù hợp
-        </h2>
+        <div>
+            <span class="search-subtitle">
+                Tìm kiếm nhanh
+            </span>
+
+            <h2>
+                Tìm phòng phù hợp
+            </h2>
+        </div>
 
     </div>
 
-    <form
-        method="GET"
-        action="{{ route('home') }}">
+    <form method="GET" action="{{ route('home') }}">
 
         <div class="search-grid">
 
+            <!-- Keyword -->
             <div class="field">
-
                 <label>
+                    <i class="fa-solid fa-bed"></i>
                     Tên phòng
                 </label>
 
                 <input
                     type="text"
                     name="keyword"
-                    placeholder="Tên phòng..."
+                    placeholder="Ví dụ: Deluxe Room..."
                     value="{{ request('keyword') }}">
-
             </div>
 
+            <!-- Price -->
             <div class="field">
 
                 <label>
+                    <i class="fa-solid fa-money-bill-wave"></i>
                     Giá phòng
                 </label>
 
@@ -63,9 +69,11 @@
 
             </div>
 
+            <!-- Capacity -->
             <div class="field">
 
                 <label>
+                    <i class="fa-solid fa-user-group"></i>
                     Sức chứa
                 </label>
 
@@ -97,9 +105,11 @@
 
             </div>
 
+            <!-- Status -->
             <div class="field">
 
                 <label>
+                    <i class="fa-solid fa-circle-check"></i>
                     Trạng thái
                 </label>
 
@@ -119,9 +129,11 @@
 
             </div>
 
+            <!-- Sort Price -->
             <div class="field">
 
                 <label>
+                    <i class="fa-solid fa-arrow-up-wide-short"></i>
                     Sắp xếp giá
                 </label>
 
@@ -147,9 +159,11 @@
 
             </div>
 
+            <!-- Sort Time -->
             <div class="field">
 
                 <label>
+                    <i class="fa-solid fa-clock"></i>
                     Sắp xếp
                 </label>
 
@@ -171,17 +185,18 @@
 
             </div>
 
-            <div class="field">
+            <!-- Button -->
+            <div class="field search-btn-wrap">
 
-                <label>
-                    &nbsp;
-                </label>
+                <label>&nbsp;</label>
 
                 <button
                     type="submit"
-                    class="btn btn-dark"
-                    style="width:100%;">
+                    class="search-btn">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
                     Tìm kiếm
+
                 </button>
 
             </div>

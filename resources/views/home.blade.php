@@ -20,8 +20,6 @@ use Illuminate\Support\Facades\Auth;
 
         @include('partials.search-box')
 
-        @include('partials.host-welcome')
-
         @include('partials.rooms-section')
 
         @include('partials.about-section')

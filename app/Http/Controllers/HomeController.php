@@ -104,16 +104,18 @@ class HomeController extends Controller
         } else {
             $query->latest();
         }
-
+        $roomCount = Room::count();
         $rooms = $query
             ->take(6)
             ->get();
+
 
         return view('home', compact(
             'rooms',
             'hotelSetting',
             'aboutSections',
-            'services'
+            'services',
+            'roomCount'
         ));
     }
 }

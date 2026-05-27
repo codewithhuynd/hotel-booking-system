@@ -1,9 +1,13 @@
 <!-- SERVICES -->
-<section id="services" style="padding:0 0 100px;">
+<section id="services" class="services-section">
 
     <div class="section-title">
 
         <div>
+
+            <span class="section-badge service-badge">
+                HOTEL SERVICES
+            </span>
 
             <h2>
                 Our Services
@@ -17,11 +21,30 @@
 
     </div>
 
-    <div class="info-strip">
+    <div class="services-grid">
 
         @foreach($services as $service)
 
-        <div class="info-card">
+        <div class="service-card">
+
+            <div class="service-icon">
+
+                @php
+                    $icons = [
+                        'fa-solid fa-wifi',
+                        'fa-solid fa-water-ladder',
+                        'fa-solid fa-utensils',
+                        'fa-solid fa-spa',
+                        'fa-solid fa-dumbbell',
+                        'fa-solid fa-car-side',
+                        'fa-solid fa-bell-concierge',
+                        'fa-solid fa-mug-hot',
+                    ];
+                @endphp
+
+                <i class="{{ $icons[$loop->index % count($icons)] }}"></i>
+
+            </div>
 
             <h4>
                 {{ $service->title }}

@@ -1,9 +1,13 @@
 <!-- ABOUT -->
-<section id="about" style="padding:0 0 100px;">
+<section id="about" class="about-section">
 
     <div class="section-title">
 
         <div>
+
+            <span class="section-badge">
+                ABOUT HOTEL
+            </span>
 
             <h2>
                 About Our Hotel
@@ -23,6 +27,20 @@
         @foreach($aboutSections as $about)
 
         <div class="info-card">
+
+            <div class="info-icon">
+                @if($loop->index == 0)
+                    <i class="fa-solid fa-hotel"></i>
+                @elseif($loop->index == 1)
+                    <i class="fa-solid fa-spa"></i>
+                @elseif($loop->index == 2)
+                    <i class="fa-solid fa-wifi"></i>
+                @elseif($loop->index == 3)
+                    <i class="fa-solid fa-utensils"></i>
+                @else
+                    <i class="fa-solid fa-star"></i>
+                @endif
+            </div>
 
             <h4>
                 {{ $about->title }}

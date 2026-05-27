@@ -60,40 +60,16 @@
 
                 </div>
 
-                <!-- RATING -->
-                <div class="hero-rating">
 
-                    <div class="rating-stars">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-
-                    <span>
-                        4.9/5 đánh giá từ hơn 2000 khách hàng
-                    </span>
-
-                </div>
 
                 <!-- STATS -->
                 <div class="hero-stats">
 
                     <div class="stat-chip">
-                        <strong>100+</strong>
+                        <strong>{{ $roomCount }}+</strong>
                         <span>Phòng cao cấp</span>
                     </div>
 
-                    <div class="stat-chip">
-                        <strong>24/7</strong>
-                        <span>Hỗ trợ khách hàng</span>
-                    </div>
-
-                    <div class="stat-chip">
-                        <strong>5000+</strong>
-                        <span>Khách hài lòng</span>
-                    </div>
 
                 </div>
 
@@ -207,7 +183,7 @@
             <i class="fa-solid fa-xmark"></i>
         </button>
 
-    
+
         <div class="map-frame">
 
             {!! $hotelSetting->google_map_embed !!}
