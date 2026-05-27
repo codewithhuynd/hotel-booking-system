@@ -72,6 +72,14 @@ class AuthController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | SEND VERIFICATION EMAIL
+        |--------------------------------------------------------------------------
+        */
+
+        $user->sendEmailVerificationNotification();
+
+        /*
+        |--------------------------------------------------------------------------
         | AUTO LOGIN
         |--------------------------------------------------------------------------
         */
@@ -86,7 +94,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('home');
+        return redirect()->route('verification.notice');
     }
 
     /*
@@ -142,7 +150,11 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->route('home');
+            if (! Auth::user()->hasVerifiedEmail()) {
+                return redirect()->route('verification.notice');
+            }
+
+            return redirect()->intended(route('home'));
         }
 
         /*

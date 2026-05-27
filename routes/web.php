@@ -19,6 +19,7 @@ use App\Http\Controllers\Host\ContactMessageController as HostContactMessageCont
 use App\Http\Controllers\Guest\ProfileController;
 use App\Http\Controllers\Host\UserController;
 use App\Http\Controllers\Host\PaymentMethodController;
+use App\Http\Controllers\Auth\EmailVerificationController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -36,11 +37,23 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', [EmailVerificationController::class, 'notice'])
+        ->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+        ->middleware(['signed'])
+        ->name('verification.verify');
+
+    Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
+        ->middleware(['throttle:6,1'])
+        ->name('verification.send');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::middleware('guest.role')->group(function () {
-        Route::get('/my-bookings', [GuestBookingController::class, 'index'])
-            ->name('guest.bookings.index');
+    Route::middleware('verified')->group(function () {
+        Route::middleware('guest.role')->group(function () {
+            Route::get('/my-bookings', [GuestBookingController::class, 'index'])
+                ->name('guest.bookings.index');
 
         Route::get('/rooms/{room}/book', [GuestBookingController::class, 'create'])
             ->name('guest.bookings.create');
@@ -70,7 +83,7 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])
             ->name('profile.change-password');
-    });
+        });
 
     Route::middleware('host')
         ->prefix('host')
@@ -148,4 +161,5 @@ Route::middleware('auth')->group(function () {
                 PaymentMethodController::class
             )->except(['show']);
         });
+    });
 });
