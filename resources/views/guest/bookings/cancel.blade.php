@@ -122,6 +122,8 @@
 </head>
 <body>
 
+@include('partials.toast-notification')
+
 <div class="box">
 
     <h1>Hủy đặt phòng</h1>

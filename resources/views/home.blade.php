@@ -7,6 +7,8 @@
 
 <body>
 
+    @include('partials.toast-notification')
+
     @include('partials.navbar')
 
     @include('partials.hero')

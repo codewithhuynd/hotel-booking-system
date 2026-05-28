@@ -54,6 +54,8 @@
 </head>
 <body class="font-sans bg-luxury-dark text-gray-200 min-h-screen flex items-center justify-center overflow-x-hidden">
 
+    @include('partials.toast-notification')
+
     <div class="w-full min-h-screen flex flex-col md:flex-row shadow-2xl overflow-hidden">
         
         <!-- Bên trái: Hình ảnh sảnh đón tiếp sang trọng và Lời chào (Ẩn trên mobile nhỏ) -->

@@ -31,6 +31,8 @@
 
 <body class="bg-slate-50 font-sans text-slate-700 min-h-screen">
 
+    @include('partials.toast-notification')
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <!-- TOPBAR -->

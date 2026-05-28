@@ -607,6 +607,8 @@
 
 <body>
 
+    @include('partials.toast-notification')
+
     <!-- NAVBAR -->
 
     <nav class="navbar">

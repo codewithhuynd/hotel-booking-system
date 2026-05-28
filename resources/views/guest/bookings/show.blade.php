@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 <body class="min-h-screen bg-slate-100 text-slate-800">
+
+@include('partials.toast-notification')
+
 <div class="mx-auto max-w-5xl px-4 py-8">
     <div class="mb-6 flex items-center justify-between gap-4">
         <div>
