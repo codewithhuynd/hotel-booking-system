@@ -11,7 +11,7 @@
 <div class="mx-auto max-w-5xl px-4 py-8">
     <div class="mb-6 flex items-center justify-between gap-4">
         <div>
-            <p class="text-sm uppercase tracking-[0.25em] text-emerald-600">Booking của bạn</p>
+            <p class="text-sm uppercase tracking-[0.25em] text-emerald-600">Đơn đặt phòng của bạn</p>
             <h1 class="text-3xl font-semibold text-slate-900">{{ $booking->booking_code }}</h1>
         </div>
         <a href="{{ route('guest.bookings.index') }}" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Quay lại</a>
@@ -22,7 +22,7 @@
             <h2 class="mb-4 text-xl font-semibold text-slate-900">Thông tin đặt phòng</h2>
             <dl class="grid gap-4 text-sm md:grid-cols-2">
                 <div><dt class="text-slate-500">Phòng</dt><dd class="font-semibold text-slate-900">{{ $booking->room->room_name ?? '—' }}</dd></div>
-                <div><dt class="text-slate-500">Trạng thái</dt><dd class="font-semibold text-slate-900">{{ ucfirst(str_replace('_', ' ', $booking->status)) }}</dd></div>
+                <div><dt class="text-slate-500">Trạng thái</dt><dd class="font-semibold text-slate-900">{{ $booking->displayStatusLabel() }}</dd></div>
                 <div><dt class="text-slate-500">Ngày nhận</dt><dd class="font-semibold text-slate-900">{{ $booking->check_in_date?->format('d/m/Y') }}</dd></div>
                 <div><dt class="text-slate-500">Ngày trả</dt><dd class="font-semibold text-slate-900">{{ $booking->check_out_date?->format('d/m/Y') }}</dd></div>
                 <div><dt class="text-slate-500">Số khách</dt><dd class="font-semibold text-slate-900">{{ $booking->guest_count }}</dd></div>

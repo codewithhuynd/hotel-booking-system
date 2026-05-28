@@ -210,7 +210,7 @@
     <!-- Thanh điều hướng chân trang -->
     <div class="form-footer-nav">
         <a href="{{ route('host.dashboard') }}" class="form-link">
-            ← Về Host Dashboard
+            ← Về bảng điều khiển
         </a>
         <span class="nav-divider">·</span>
         <a href="{{ route('home') }}" class="form-link">

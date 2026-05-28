@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         */
 
         User::create([
-            'full_name' => 'Hotel Host',
+            'full_name' => 'Chủ khách sạn',
             'email' => 'host@gmail.com',
             'password' => Hash::make('12345678'),
             'phone' => '0123456789',

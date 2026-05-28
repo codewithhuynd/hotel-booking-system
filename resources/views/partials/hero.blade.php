@@ -35,7 +35,7 @@
 
                     <div class="location-item">
                         <i class="fa-solid fa-water"></i>
-                        <span>View biển cực đẹp</span>
+                        <span>Cảnh biển cực đẹp</span>
                     </div>
 
                 </div>
@@ -146,7 +146,7 @@
                             </div>
 
                             <div>
-                                <strong>Wifi miễn phí</strong>
+                                <strong>Wi-Fi miễn phí</strong>
 
                                 <span>Internet tốc độ cao toàn khách sạn</span>
                             </div>

@@ -654,7 +654,7 @@
 
             <div class="logo-text">
                 <strong>Dolphins</strong>
-                <span>Luxury Resort</span>
+                <span>Khu nghỉ dưỡng cao cấp</span>
             </div>
 
         </a>
@@ -688,7 +688,7 @@
 
                 <i class="fa-solid fa-calendar-check"></i>
 
-                Booking của tôi
+                Đơn đặt phòng của tôi
 
             </a>
 
@@ -787,7 +787,7 @@
                                 </span>
 
                                 <strong class="text-emerald-600">
-                                    {{ ucfirst($room->status) }}
+                                    {{ $room->displayStatusLabel() }}
                                 </strong>
 
                             </div>
@@ -799,7 +799,7 @@
                                 </span>
 
                                 <strong class="text-slate-800">
-                                    Luxury Resort
+                                    Khu nghỉ dưỡng cao cấp
                                 </strong>
 
                             </div>

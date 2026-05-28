@@ -627,7 +627,7 @@
 
             <div class="logo-text">
                 <strong>Dolphins</strong>
-                <span>Luxury Resort</span>
+                <span>Khu nghỉ dưỡng cao cấp</span>
             </div>
 
         </a>
@@ -715,7 +715,7 @@
 
                     <div class="room-badge">
                         <i class="fa-solid fa-star"></i>
-                        Luxury Premium Room
+                        Phòng hạng cao cấp
                     </div>
 
                     <h1 class="slider-title font-serif-luxury">
@@ -787,7 +787,7 @@
                         </div>
 
                         <div class="info-value">
-                            {{ ucfirst($room->status) }}
+                            {{ $room->displayStatusLabel() }}
                         </div>
 
                     </div>

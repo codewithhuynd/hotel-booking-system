@@ -1126,7 +1126,7 @@
                         <input
                             type="text"
                             name="keyword"
-                            placeholder="Ví dụ: Deluxe Room..."
+                            placeholder="Ví dụ: Phòng cao cấp..."
                             value="{{ request('keyword') }}">
 
                     </div>
@@ -1355,7 +1355,7 @@
                             </span>
 
                             <span class="text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-500/20 text-emerald-400 bg-emerald-500/10">
-                                {{ ucfirst($room->status) }}
+                                {{ $room->displayStatusLabel() }}
                             </span>
 
                         </div>

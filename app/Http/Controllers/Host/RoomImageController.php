@@ -39,7 +39,7 @@ class RoomImageController extends Controller
 
         return back()->with(
             'success',
-            'Images uploaded successfully.'
+            'Đã tải ảnh lên thành công.'
         );
     }
 
@@ -59,7 +59,7 @@ class RoomImageController extends Controller
 
         return back()->with(
             'success',
-            'Image deleted successfully.'
+            'Đã xóa ảnh thành công.'
         );
     }
 
@@ -84,7 +84,7 @@ class RoomImageController extends Controller
 
         return back()->with(
             'success',
-            'Main image updated.'
+            'Đã cập nhật ảnh đại diện.'
         );
     }
 }

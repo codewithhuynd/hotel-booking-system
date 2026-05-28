@@ -78,7 +78,7 @@ class PaymentMethodController extends Controller
 
         return redirect()
             ->route('host.payment-methods.index')
-            ->with('success', 'Payment method created successfully.');
+            ->with('success', 'Đã tạo phương thức thanh toán thành công.');
     }
 
     /*
@@ -146,7 +146,7 @@ class PaymentMethodController extends Controller
 
         return redirect()
             ->route('host.payment-methods.index')
-            ->with('success', 'Payment method updated successfully.');
+            ->with('success', 'Đã cập nhật phương thức thanh toán thành công.');
     }
 
     /*
@@ -167,7 +167,7 @@ class PaymentMethodController extends Controller
 
         return back()->with(
             'success',
-            'Payment method deleted successfully.'
+            'Đã xóa phương thức thanh toán thành công.'
         );
     }
 }

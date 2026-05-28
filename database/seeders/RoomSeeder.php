@@ -11,8 +11,8 @@ class RoomSeeder extends Seeder
     {
         Room::create([
             'room_code' => 'A101',
-            'room_name' => 'Standard Room',
-            'description' => 'Standard room for 2 guests',
+            'room_name' => 'Phòng tiêu chuẩn',
+            'description' => 'Phòng tiêu chuẩn cho 2 khách',
             'price' => 500000,
             'capacity' => 2,
             'status' => 'available',
@@ -20,8 +20,8 @@ class RoomSeeder extends Seeder
 
         Room::create([
             'room_code' => 'B201',
-            'room_name' => 'Deluxe Room',
-            'description' => 'Deluxe room with balcony',
+            'room_name' => 'Phòng cao cấp',
+            'description' => 'Phòng cao cấp có ban công',
             'price' => 800000,
             'capacity' => 4,
             'status' => 'available',
@@ -29,8 +29,8 @@ class RoomSeeder extends Seeder
 
         Room::create([
             'room_code' => 'VIP301',
-            'room_name' => 'VIP Suite',
-            'description' => 'Luxury VIP suite',
+            'room_name' => 'Suite VIP',
+            'description' => 'Suite VIP sang trọng',
             'price' => 1500000,
             'capacity' => 6,
             'status' => 'available',

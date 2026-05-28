@@ -185,7 +185,7 @@
                 <input type="text"
                        name="room_name"
                        value="{{ old('room_name') }}"
-                       placeholder="Ví dụ: Deluxe Suite"
+                       placeholder="Ví dụ: Suite cao cấp"
                        style="
                             width: 100%;
                             padding: 14px 16px;

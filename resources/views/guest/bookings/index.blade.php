@@ -892,7 +892,7 @@
                         @endphp
 
                         <span class="text-xs font-bold px-3.5 py-1.5 rounded-xl border {{ $bStatusColor }}">
-                            {{ ucfirst(str_replace('_', ' ', $booking->status)) }}
+                            {{ $booking->displayStatusLabel() }}
                         </span>
 
                     </div>

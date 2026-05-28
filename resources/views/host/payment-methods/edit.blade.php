@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Edit Payment Method')
+@section('title', 'Sửa phương thức thanh toán')
 
 @section('content')
 
@@ -155,7 +155,7 @@
 
 <div class="form-container">
 
-    <h1>Edit Payment Method</h1>
+    <h1>Sửa phương thức thanh toán</h1>
 
     <div class="form-card">
         <form
@@ -169,7 +169,7 @@
             <div class="form-grid">
                 <!-- Name -->
                 <div class="form-group">
-                    <label for="name">Method Name</label>
+                    <label for="name">Tên phương thức</label>
                     <input
                         type="text"
                         name="name"
@@ -181,7 +181,7 @@
 
                 <!-- Type -->
                 <div class="form-group">
-                    <label for="type">Payment Type</label>
+                    <label for="type">Loại thanh toán</label>
                     <input
                         type="text"
                         name="type"
@@ -193,7 +193,7 @@
 
                 <!-- Bank Name -->
                 <div class="form-group">
-                    <label for="bank_name">Bank Name</label>
+                    <label for="bank_name">Tên ngân hàng</label>
                     <input
                         type="text"
                         name="bank_name"
@@ -205,7 +205,7 @@
 
                 <!-- Account Name -->
                 <div class="form-group">
-                    <label for="account_name">Account Name</label>
+                    <label for="account_name">Chủ tài khoản</label>
                     <input
                         type="text"
                         name="account_name"
@@ -217,7 +217,7 @@
 
                 <!-- Account Number -->
                 <div class="form-group">
-                    <label for="account_number">Account Number</label>
+                    <label for="account_number">Số tài khoản</label>
                     <input
                         type="text"
                         name="account_number"
@@ -229,7 +229,7 @@
 
                 <!-- Phone Number -->
                 <div class="form-group">
-                    <label for="phone_number">Phone Number</label>
+                    <label for="phone_number">Số điện thoại</label>
                     <input
                         type="text"
                         name="phone_number"
@@ -241,7 +241,7 @@
 
                 <!-- Description -->
                 <div class="form-group full-width">
-                    <label for="description">Description</label>
+                    <label for="description">Mô tả</label>
                     <textarea 
                         name="description" 
                         id="description" 
@@ -251,22 +251,22 @@
 
                 <!-- QR Image Section -->
                 <div class="form-group full-width">
-                    <label>QR Code Image</label>
+                    <label>Ảnh mã QR</label>
                     <div class="qr-management">
                         @if($paymentMethod->qr_image)
                             <div class="qr-current">
-                                <span>Current QR</span>
+                                <span>QR hiện tại</span>
                                 <img
                                     src="{{ asset('storage/' . $paymentMethod->qr_image) }}"
                                     class="qr-img"
-                                    alt="Current QR Code"
+                                    alt="Mã QR hiện tại"
                                 >
                             </div>
                         @endif
                         
                         <div class="qr-upload-box">
                             <span style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.5rem; font-weight: 500;">
-                                @if($paymentMethod->qr_image) Upload new to replace @else Choose QR image file @endif
+                                @if($paymentMethod->qr_image) Tải ảnh mới để thay thế @else Chọn file ảnh QR @endif
                             </span>
                             <input
                                 type="file"
@@ -285,7 +285,7 @@
                             name="is_active"
                             {{ $paymentMethod->is_active ? 'checked' : '' }}
                         >
-                        Active this payment method
+                        Kích hoạt phương thức này
                     </label>
                 </div>
             </div>
@@ -293,7 +293,7 @@
             <!-- Form Actions -->
             <div class="form-actions">
                 <button type="submit" class="btn-submit">
-                    Update Method
+                    Cập nhật
                 </button>
             </div>
 

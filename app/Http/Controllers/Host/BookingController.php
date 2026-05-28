@@ -45,7 +45,7 @@ class BookingController extends Controller
     public function confirm(Booking $booking)
     {
         if ($booking->status !== 'pending') {
-            return back()->with('error', 'Booking không hợp lệ.');
+            return back()->with('error', 'Đơn đặt phòng không hợp lệ.');
         }
 
         DB::transaction(function () use ($booking) {
@@ -68,19 +68,19 @@ class BookingController extends Controller
             );
         });
 
-        notifyUser($booking->user, 'Booking đã được xác nhận', 'Host đã xác nhận booking #' . $booking->booking_code . '. Vui lòng thanh toán cọc.', 'success', [
+        notifyUser($booking->user, 'Đơn đã được xác nhận', 'Chủ khách sạn đã xác nhận đơn #' . $booking->booking_code . '. Vui lòng thanh toán cọc.', 'success', [
             'booking_id' => $booking->id,
             'booking_code' => $booking->booking_code,
             'url' => route('admin.bookings.show', ['booking' => $booking->id]),
         ]);
 
-        return back()->with('success', 'Đã xác nhận booking. Chờ khách đặt cọc.');
+        return back()->with('success', 'Đã xác nhận đơn đặt phòng. Chờ khách đặt cọc.');
     }
 
     public function checkIn(Booking $booking)
     {
         if ($booking->status !== 'confirmed') {
-            return back()->with('error', 'Booking chưa được xác nhận.');
+            return back()->with('error', 'Đơn đặt phòng chưa được xác nhận.');
         }
 
         $depositPaid = $booking->depositPayment?->status === 'paid';
@@ -97,13 +97,13 @@ class BookingController extends Controller
             'status' => 'occupied',
         ]);
 
-        return back()->with('success', 'Guest checked in successfully.');
+        return back()->with('success', 'Đã nhận phòng cho khách thành công.');
     }
 
     public function checkOut(Booking $booking)
     {
         if ($booking->status !== 'checked_in') {
-            return back()->with('error', 'Booking chưa check-in.');
+            return back()->with('error', 'Đơn đặt phòng chưa nhận phòng.');
         }
 
         $booking->update([
@@ -137,7 +137,7 @@ class BookingController extends Controller
             );
         }
 
-        return back()->with('success', 'Check-out thành công. Đã tạo payment cuối nếu còn dư.');
+        return back()->with('success', 'Trả phòng thành công. Đã tạo thanh toán cuối nếu còn số tiền phải thu.');
     }
 
     public function cancel(Request $request, Booking $booking)
@@ -148,7 +148,7 @@ class BookingController extends Controller
             'completed',
             'cancelled',
         ], true)) {
-            return back()->with('error', 'Không thể hủy booking ở trạng thái hiện tại.');
+            return back()->with('error', 'Không thể hủy đơn đặt phòng ở trạng thái hiện tại.');
         }
 
         $validated = $request->validate([
@@ -188,19 +188,19 @@ class BookingController extends Controller
             }
         });
 
-        notifyUser($booking->user, 'Booking đã bị hủy', 'Host đã hủy booking #' . $booking->booking_code . '. Vui lòng kiểm tra lý do.', 'warning', [
+        notifyUser($booking->user, 'Đơn đã bị hủy', 'Chủ khách sạn đã hủy đơn #' . $booking->booking_code . '. Vui lòng kiểm tra lý do.', 'warning', [
             'booking_id' => $booking->id,
             'booking_code' => $booking->booking_code,
             'url' => route('admin.bookings.show', ['booking' => $booking->id]),
         ]);
 
-        return back()->with('success', 'Đã hủy booking.');
+        return back()->with('success', 'Đã hủy đơn đặt phòng.');
     }
 
     public function refund(Request $request, BookingCancellation $cancellation)
     {
         if ($cancellation->refund_completed) {
-            return back()->with('error', 'Refund đã được xử lý rồi.');
+            return back()->with('error', 'Đã xử lý hoàn tiền rồi.');
         }
 
         if (

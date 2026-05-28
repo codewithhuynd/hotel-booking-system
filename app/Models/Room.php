@@ -39,4 +39,15 @@ class Room extends Model
         return $this->hasOne(RoomImage::class)
             ->where('is_main', true);
     }
+
+    public function displayStatusLabel(): string
+    {
+        return match ($this->status) {
+            'available' => 'Còn trống',
+            'occupied' => 'Đang sử dụng',
+            'cleaning' => 'Đang dọn dẹp',
+            'maintenance' => 'Bảo trì',
+            default => 'Không xác định',
+        };
+    }
 }

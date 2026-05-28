@@ -50,7 +50,7 @@
                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
 
-                Quay lại bookings
+                Quay lại đơn đặt phòng
             </a>
 
             <div class="font-serif text-sm tracking-[0.2em] font-bold">
@@ -78,7 +78,7 @@
                         <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
 
                             <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-                                {{ strtoupper($payment->type) }}
+                                {{ $payment->displayTypeLabel() }}
                             </span>
 
                             @if($payment->deposit_deadline)

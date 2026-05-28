@@ -29,7 +29,7 @@
                 <input
                     type="text"
                     name="keyword"
-                    placeholder="Ví dụ: Deluxe Room..."
+                    placeholder="Ví dụ: Phòng cao cấp..."
                     value="{{ request('keyword') }}">
             </div>
 
