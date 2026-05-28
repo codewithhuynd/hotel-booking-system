@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Host;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
+use App\Models\Notification;
 use App\Services\DepositPaymentService;
 use Illuminate\Http\Request;
 
@@ -97,6 +98,30 @@ class PaymentController extends Controller
                 'status' => 'completed',
             ]);
         }
+
+        $payment->load('booking.user');
+
+        $paymentTitle = $payment->isDeposit()
+            ? 'Tiền cọc đã được xác nhận'
+            : 'Thanh toán còn lại đã được xác nhận';
+
+        $paymentMessage = $payment->isDeposit()
+            ? 'Host đã xác nhận thanh toán tiền cọc cho booking #' . $payment->booking->booking_code . '.'
+            : 'Host đã xác nhận thanh toán số tiền còn lại cho booking #' . $payment->booking->booking_code . '.';
+
+        $notificationType = $payment->isDeposit()
+            ? 'host_confirmed_deposit'
+            : 'host_confirmed_final_payment';
+
+        Notification::create([
+            'user_id' => $payment->booking->user_id,
+            'booking_id' => $payment->booking_id,
+            'payment_id' => $payment->id,
+            'type' => $notificationType,
+            'title' => $paymentTitle,
+            'message' => $paymentMessage,
+            'is_read' => false,
+        ]);
 
         return back()->with('success', 'Payment confirmed successfully.');
     }

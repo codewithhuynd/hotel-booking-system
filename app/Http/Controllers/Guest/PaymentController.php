@@ -117,6 +117,18 @@ class PaymentController extends Controller
             'status' => 'pending',
         ]);
 
+        $paymentTitle = $payment->type === 'deposit'
+            ? 'Khách đã hoàn tất chuyển tiền cọc'
+            : 'Khách đã hoàn tất thanh toán tiền còn lại';
+
+        $paymentMessage = $payment->type === 'deposit'
+            ? Auth::user()->name . ' đã tải minh chứng chuyển tiền cọc. Vui lòng kiểm tra và xác nhận.'
+            : Auth::user()->name . ' đã tải minh chứng thanh toán tiền còn lại. Vui lòng kiểm tra và xác nhận.';
+
+        $notificationType = $payment->type === 'deposit'
+            ? 'guest_uploaded_deposit'
+            : 'guest_uploaded_final_payment';
+
         $hosts = User::where('role', 'host')->get();
 
         foreach ($hosts as $host) {
@@ -124,9 +136,9 @@ class PaymentController extends Controller
                 'user_id' => $host->id,
                 'booking_id' => $payment->booking_id,
                 'payment_id' => $payment->id,
-                'type' => 'guest_uploaded_deposit',
-                'title' => 'Khách đã hoàn tất chuyển cọc',
-                'message' => Auth::user()->name . ' đã tải minh chứng chuyển cọc. Vui lòng kiểm tra và xác nhận thanh toán.',
+                'type' => $notificationType,
+                'title' => $paymentTitle,
+                'message' => $paymentMessage,
                 'is_read' => false,
             ]);
         }

@@ -1980,7 +1980,7 @@ img {
 }
 
 .notification-dropdown.show {
-    display: block;
+    display: block !important;
 }
 
 .notification-header {

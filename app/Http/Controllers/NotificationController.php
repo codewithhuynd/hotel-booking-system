@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
@@ -17,6 +18,34 @@ class NotificationController extends Controller
         return view('notifications.index', compact('notifications'));
     }
 
+    public function poll()
+    {
+        $user = Auth::user();
+
+        $notifications = $user->notifications()
+            ->orderByDesc('id')
+            ->take(8)
+            ->get();
+
+        $unreadCount = $user->notifications()
+            ->where('is_read', false)
+            ->count();
+
+        return response()->json([
+            'unread_count' => $unreadCount,
+            'notifications' => $notifications->map(function ($notification) {
+                return [
+                    'id' => $notification->id,
+                    'title' => $notification->title ?? 'Thông báo mới',
+                    'message' => $notification->message ?? '',
+                    'is_read' => (bool) $notification->is_read,
+                    'url' => route('notifications.read', $notification->id),
+                    'created_at' => optional($notification->created_at)->format('H:i d/m/Y'),
+                ];
+            })->values(),
+        ])->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    }
+
     public function markAsRead(Notification $notification)
     {
         if ($notification->user_id !== Auth::id()) {
@@ -29,31 +58,15 @@ class NotificationController extends Controller
 
         $user = Auth::user();
 
-        /*
-        |--------------------------------------------------------------------------
-        | HOST CLICK NOTIFICATION
-        |--------------------------------------------------------------------------
-        */
         if ($user->role === 'host') {
-
             if ($notification->booking_id) {
                 return redirect()->route('host.bookings.show', $notification->booking_id);
-            }
-
-            if ($notification->type === 'payment_uploaded' && $notification->payment_id) {
-                return redirect()->route('host.payments.show', $notification->payment_id);
             }
 
             return redirect()->route('host.bookings.index');
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | GUEST CLICK NOTIFICATION
-        |--------------------------------------------------------------------------
-        */
         if ($user->role === 'guest') {
-
             if ($notification->booking_id) {
                 return redirect()->route('guest.bookings.index');
             }
@@ -80,11 +93,11 @@ class NotificationController extends Controller
         return back();
     }
 
-    public function poll()
+    public function dropdown()
     {
         $notifications = Auth::user()
             ->notifications()
-            ->latest()
+            ->orderByDesc('id')
             ->take(8)
             ->get();
 
@@ -95,17 +108,7 @@ class NotificationController extends Controller
 
         return response()->json([
             'unread_count' => $unreadCount,
-
-            'notifications' => $notifications->map(function ($notification) {
-                return [
-                    'id' => $notification->id,
-                    'title' => $notification->title,
-                    'message' => $notification->message,
-                    'is_read' => $notification->is_read,
-                    'url' => route('notifications.read', $notification->id),
-                    'created_at' => $notification->created_at->diffForHumans(),
-                ];
-            }),
+            'html' => view('partials.notification-list', compact('notifications'))->render(),
         ]);
     }
 }
