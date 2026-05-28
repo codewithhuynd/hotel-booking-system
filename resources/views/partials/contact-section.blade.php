@@ -132,7 +132,13 @@
                 Chúng tôi sẽ phản hồi bạn trong thời gian sớm nhất.
             </p>
 
-            @unless(Auth::check() && Auth::user()->role === 'host')
+            @if(session('success'))
+                <div style="margin-bottom: 14px; padding: 10px 12px; border-radius: 10px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 14px; font-weight: 500;">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @unless(auth()->check() && auth()->user()->role === 'host')
 
             <form method="POST"
                 action="{{ route('contact-messages.store') }}">

@@ -167,6 +167,11 @@ Route::middleware('auth')->group(function () {
                     [HostContactMessageController::class, 'reply']
                 )->name('contact-messages.reply');
 
+                Route::post(
+                    '/contact-messages/{contactMessage}/send-reply',
+                    [HostContactMessageController::class, 'sendReply']
+                )->name('contact-messages.send-reply');
+
                 Route::resource('users', UserController::class)
                     ->only(['index', 'show', 'edit', 'update', 'destroy']);
                 Route::resource(

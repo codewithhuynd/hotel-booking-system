@@ -28,6 +28,9 @@ class ContactMessageController extends Controller
             'status' => 'unread',
         ]);
 
-        return back()->with('success', 'Tin nhắn đã được gửi thành công.');
+        return redirect()
+            ->route('home')
+            ->withFragment('contact')
+            ->with('success', 'Tin nhắn đã được gửi thành công.');
     }
 }

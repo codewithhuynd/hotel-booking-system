@@ -196,19 +196,38 @@
         @endif
 
         <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #f1f5f9;">
-            <form method="POST" action="{{ route('host.contact-messages.reply', $contactMessage) }}">
-                @csrf
+            <div class="content-section" style="margin-bottom: 1rem;">
+                <div class="content-title">Gửi phản hồi qua email</div>
+                <p style="font-size: 0.92rem; color: #475569; margin-bottom: 0.75rem;">
+                    Nhập nội dung phản hồi để gửi trực tiếp tới email khách: <strong>{{ $contactMessage->email }}</strong>
+                </p>
 
-                @if($contactMessage->status !== 'replied')
-                    <button type="submit" class="btn-action-primary">
-                        Đánh dấu đã phản hồi
-                    </button>
-                @else
-                    <button type="button" class="btn-action-disabled" disabled>
-                        Đã phản hồi
-                    </button>
-                @endif
-            </form>
+                <form method="POST" action="{{ route('host.contact-messages.send-reply', $contactMessage) }}">
+                    @csrf
+
+                    <textarea name="reply_message" rows="5" placeholder="Nhập nội dung phản hồi cho khách..." style="width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px 14px; font-size: 0.95rem; color: #0f172a; background: #fff; resize: vertical;">{{ old('reply_message', $contactMessage->reply_message ?? '') }}</textarea>
+
+                    @error('reply_message')
+                        <p style="color: #dc2626; font-size: 0.9rem; margin-top: 0.5rem;">{{ $message }}</p>
+                    @enderror
+
+                    <div style="display: flex; gap: 10px; margin-top: 1rem; flex-wrap: wrap;">
+                        <button type="submit" class="btn-action-primary">
+                            Gửi phản hồi
+                        </button>
+
+                        @if($contactMessage->status !== 'replied')
+                            <button type="submit" formaction="{{ route('host.contact-messages.reply', $contactMessage) }}" class="btn-action-primary" style="background: #0f766e;">
+                                Đánh dấu đã phản hồi
+                            </button>
+                        @else
+                            <button type="button" class="btn-action-disabled" disabled>
+                                Đã phản hồi
+                            </button>
+                        @endif
+                    </div>
+                </form>
+            </div>
         </div>
 
     </div>
