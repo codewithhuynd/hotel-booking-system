@@ -71,15 +71,15 @@ class PaymentController extends Controller
         ]);
 
         if ($payment->isPaid()) {
-            return back()->with('error', 'Payment đã được xác nhận rồi.');
+            return back()->with('error', 'Thanh toán đã được xác nhận rồi.');
         }
 
         if ($payment->isDeposit() && $payment->booking->status !== 'awaiting_deposit') {
-            return back()->with('error', 'Booking chưa sẵn sàng cho deposit.');
+            return back()->with('error', 'Đơn đặt phòng chưa sẵn sàng để đặt cọc.');
         }
 
         if ($payment->isFinal() && $payment->booking->status !== 'checked_out') {
-            return back()->with('error', 'Booking chưa checkout để xác nhận final payment.');
+            return back()->with('error', 'Đơn chưa trả phòng để xác nhận thanh toán cuối.');
         }
 
         $payment->loadMissing(['booking.user', 'booking.room']);
@@ -110,12 +110,12 @@ class PaymentController extends Controller
             // Keep payment confirmation logic intact even if mail delivery fails.
         }
 
-        notifyUser($payment->booking->user, 'Thanh toán đã được xác nhận', 'Payment #' . $payment->transaction_code . ' đã được xác nhận.', 'success', [
+        notifyUser($payment->booking->user, 'Thanh toán đã được xác nhận', 'Thanh toán #' . $payment->transaction_code . ' đã được xác nhận.', 'success', [
             'payment_id' => $payment->id,
             'booking_id' => $payment->booking_id,
             'url' => route('admin.payments.show', ['payment' => $payment->id]),
         ]);
 
-        return back()->with('success', 'Payment confirmed successfully.');
+        return back()->with('success', 'Đã xác nhận thanh toán thành công.');
     }
 }

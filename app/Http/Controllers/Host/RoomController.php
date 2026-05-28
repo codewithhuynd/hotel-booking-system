@@ -56,7 +56,7 @@ class RoomController extends Controller
         Room::create($validated);
 
         return redirect()->route('host.rooms.index')
-            ->with('success', 'Room created successfully');
+            ->with('success', 'Đã tạo phòng thành công.');
     }
 
     /*
@@ -107,14 +107,14 @@ class RoomController extends Controller
                 ->exists();
             if ($upcomingBooking) {
                 // cảnh báo
-                Session::flash('warning', 'Phòng này có đặt phòng trong tương lai, hãy chắc chắn bạn muốn đặt trạng thái occupied.');
+                Session::flash('warning', 'Phòng này có đặt phòng trong tương lai, hãy chắc chắn bạn muốn đặt trạng thái đang sử dụng.');
             }
         }
 
         $room->update($validated);
 
         return redirect()->route('host.rooms.index')
-            ->with('success', 'Room updated successfully');
+            ->with('success', 'Đã cập nhật phòng thành công.');
     }
 
     /*
@@ -140,6 +140,6 @@ class RoomController extends Controller
         $room->delete();
 
         return redirect()->route('host.rooms.index')
-            ->with('success', 'Room deleted successfully');
+            ->with('success', 'Đã xóa phòng thành công.');
     }
 }

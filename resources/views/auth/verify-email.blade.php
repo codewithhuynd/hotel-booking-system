@@ -7,9 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 <body class="min-h-screen bg-gray-950 text-gray-100 flex items-center justify-center px-4">
+    @include('partials.toast-notification')
     <div class="w-full max-w-3xl bg-[#111318] rounded-3xl shadow-2xl overflow-hidden border border-gray-800">
         <div class="grid grid-cols-1 lg:grid-cols-2">
             <div class="hidden lg:block bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=80&w=1200');"></div>

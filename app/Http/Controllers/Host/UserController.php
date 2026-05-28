@@ -49,7 +49,7 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('host.users.index')
-            ->with('success', 'Cập nhật user thành công');
+            ->with('success', 'Đã cập nhật người dùng thành công.');
     }
 
     public function destroy(User $user)
@@ -64,6 +64,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return back()->with('success', 'Xoá user thành công');
+        return back()->with('success', 'Đã xóa người dùng thành công.');
     }
 }

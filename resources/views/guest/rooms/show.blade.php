@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -611,6 +610,7 @@ html
             }
         }
     </style>
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 
 <body>
@@ -627,7 +627,7 @@ html
 
             <div class="logo-text">
                 <strong>Dolphins</strong>
-                <span>Luxury Resort</span>
+                <span>Khu nghỉ dưỡng cao cấp</span>
             </div>
 
         </a>
@@ -715,7 +715,7 @@ html
 
                     <div class="room-badge">
                         <i class="fa-solid fa-star"></i>
-                        Luxury Premium Room
+                        Phòng hạng cao cấp
                     </div>
 
                     <h1 class="slider-title font-serif-luxury">
@@ -787,7 +787,7 @@ html
                         </div>
 
                         <div class="info-value">
-                            {{ ucfirst($room->status) }}
+                            {{ $room->displayStatusLabel() }}
                         </div>
 
                     </div>

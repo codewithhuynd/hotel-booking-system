@@ -43,15 +43,18 @@
         }
     </script>
     <style>
-        /* Hiệu ứng focus mượt mà và chuyển động tinh tế */
-        .luxury-input:focus ~ label,
-        .luxury-input:not(:placeholder-shown) ~ label {
-            transform: translateY(-1.25rem) scale(0.85);
-            color: #C5A880;
-        }
-    </style>
+    /* Hiệu ứng focus mượt mà và chuyển động tinh tế */
+    .luxury-input:focus ~ label,
+    .luxury-input:not(:placeholder-shown) ~ label {
+        transform: translateY(-1.25rem) scale(0.85);
+        color: #C5A880;
+    }
+</style>
+<link rel="stylesheet" href="/css/heading-font.css">
 </head>
 <body class="font-sans bg-luxury-dark text-gray-200 min-h-screen flex items-center justify-center overflow-x-hidden">
+
+    @include('partials.toast-notification')
 
     <div class="w-full min-h-screen flex flex-col md:flex-row shadow-2xl overflow-hidden">
         
@@ -65,7 +68,7 @@
             <div class="absolute inset-0 bg-gradient-to-t from-luxury-dark via-luxury-dark/60 to-transparent"></div>
             
             <!-- Nội dung thương hiệu phía trên hình nền -->
-            <div class="relative z-10 p-12 lg:p-20 flex flex-col justify-between h-full w-full max-w-2xl">
+            <div class="relative z-10 px-10 py-12 lg:px-16 lg:py-20 flex flex-col justify-between h-full w-full max-w-3xl">
                 <!-- Logo / Tên khách sạn phía trên -->
                 <div class="flex items-center space-x-3">
                     <span class="font-serif text-2xl tracking-[0.2em] text-gold-400 font-semibold">THE GRAND ELITE</span>
@@ -74,9 +77,8 @@
                 <!-- Câu chào thương hiệu ở giữa/dưới -->
                 <div class="space-y-6 mb-10">
                     <div class="w-16 h-[2px] bg-gold-400"></div>
-                    <h2 class="font-serif text-4xl lg:text-5xl leading-tight text-white font-light">
-                        Nơi giao thoa giữa <br>
-                        <span class="italic text-gold-300 font-normal">Sự Đẳng Cấp</span> & <span class="font-normal">Sự Riêng Tư</span>
+                    <h2 class="font-serif text-4xl lg:text-5xl xl:text-[3.25rem] leading-snug text-white font-light text-balance max-w-2xl pr-4">
+                        Nơi giao thoa giữa <p> <span class="italic text-gold-300 font-normal">Sự Đẳng Cấp</span> & <span class="font-normal">Sự Riêng Tư</span>
                     </h2>
                     <p class="text-gray-300 text-sm max-w-md tracking-wide leading-relaxed font-light">
                         Chào mừng Quý khách trở lại. Hãy đăng nhập để tiếp tục tận hưởng những dịch vụ đặc quyền cao cấp và cá nhân hóa tối đa dành riêng cho bạn.

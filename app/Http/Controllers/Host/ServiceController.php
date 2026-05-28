@@ -31,7 +31,7 @@ class ServiceController extends Controller
 
         return redirect()
             ->route('host.services.index')
-            ->with('success', 'Service đã được tạo.');
+            ->with('success', 'Đã tạo dịch vụ thành công.');
     }
 
     public function edit(Service $service)
@@ -50,13 +50,13 @@ class ServiceController extends Controller
 
         return redirect()
             ->route('host.services.index')
-            ->with('success', 'Service đã được cập nhật.');
+            ->with('success', 'Đã cập nhật dịch vụ thành công.');
     }
 
     public function destroy(Service $service)
     {
         $service->delete();
 
-        return back()->with('success', 'Service đã được xóa.');
+        return back()->with('success', 'Đã xóa dịch vụ thành công.');
     }
 }

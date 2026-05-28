@@ -62,4 +62,18 @@ class Booking extends Model
     {
         return $this->hasOne(BookingCancellation::class);
     }
+
+    public function displayStatusLabel(): string
+    {
+        return match ($this->status) {
+            'pending' => 'Chờ xác nhận',
+            'awaiting_deposit' => 'Chờ đặt cọc',
+            'confirmed' => 'Đã xác nhận',
+            'checked_in' => 'Đang lưu trú',
+            'checked_out' => 'Đã trả phòng',
+            'completed' => 'Hoàn tất',
+            'cancelled' => 'Đã hủy',
+            default => 'Không xác định',
+        };
+    }
 }

@@ -31,7 +31,7 @@ class AboutSectionController extends Controller
 
         return redirect()
             ->route('host.about-sections.index')
-            ->with('success', 'About section đã được tạo.');
+            ->with('success', 'Đã tạo mục giới thiệu thành công.');
     }
 
     public function edit(AboutSection $about_section)
@@ -50,13 +50,13 @@ class AboutSectionController extends Controller
 
         return redirect()
             ->route('host.about-sections.index')
-            ->with('success', 'About section đã được cập nhật.');
+            ->with('success', 'Đã cập nhật mục giới thiệu thành công.');
     }
 
     public function destroy(AboutSection $about_section)
     {
         $about_section->delete();
 
-        return back()->with('success', 'About section đã được xóa.');
+        return back()->with('success', 'Đã xóa mục giới thiệu thành công.');
     }
 }

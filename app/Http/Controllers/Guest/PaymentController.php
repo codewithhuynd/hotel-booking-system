@@ -62,7 +62,7 @@ class PaymentController extends Controller
         if ($payment->isPaid()) {
             return back()->with(
                 'error',
-                'Payment đã được xác nhận.'
+                'Thanh toán đã được xác nhận.'
             );
         }
 
@@ -127,7 +127,7 @@ class PaymentController extends Controller
             'status' => $status,
         ]);
 
-        notifyRole('host', 'Minh chứng thanh toán mới', 'Khách ' . Auth::user()->full_name . ' đã gửi minh chứng cho ' . $payment->displayTypeLabel() . ' payment #' . $payment->transaction_code . '.', 'info', [
+        notifyRole('host', 'Minh chứng thanh toán mới', 'Khách ' . Auth::user()->full_name . ' đã gửi minh chứng cho ' . $payment->displayTypeLabel() . ' #' . $payment->transaction_code . '.', 'info', [
             'payment_id' => $payment->id,
             'booking_id' => $payment->booking_id,
             'url' => route('host.payments.index'),

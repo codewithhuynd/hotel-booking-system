@@ -1,0 +1,203 @@
+/* Local `@font-face` configuration for the new Heading Font (Be Vietnam Pro) */
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-SemiBoldItalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-BoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-ExtraBoldItalic.ttf') format('truetype');
+    font-weight: 800;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-BlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-ThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Heading_Font';
+    src: url('/Heading_Font/BeVietnamPro-ExtraLightItalic.ttf') format('truetype');
+    font-weight: 200;
+    font-style: italic;
+}
+
+/* Alias/Override Google Fonts referenced in current files so we don't break existing styled layouts */
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/Heading_Font/BeVietnamPro-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/Heading_Font/BeVietnamPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/Heading_Font/BeVietnamPro-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/Heading_Font/BeVietnamPro-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/Heading_Font/BeVietnamPro-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/Heading_Font/BeVietnamPro-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('/Heading_Font/BeVietnamPro-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('/Heading_Font/BeVietnamPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('/Heading_Font/BeVietnamPro-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('/Heading_Font/BeVietnamPro-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('/Heading_Font/BeVietnamPro-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('/Heading_Font/BeVietnamPro-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* Centralized heading font application */
+h1, h2, h3, h4, h5, h6,
+.logo, .logo-text, .logo span,
+.font-serif-luxury, .font-serif, .serif,
+.slider-title, .search-title,
+.welcome-title, .card-header h3,
+[class*="font-serif"], [class*="serif"] {
+    font-family: 'Heading_Font', 'Playfair Display', 'Cormorant Garamond', sans-serif !important;
+}
+
+/* Balanced wrapping for display-sized headings site-wide */
+h1, h2,
+.search-title,
+.slider-title,
+.welcome-title {
+    text-wrap: balance;
+    word-break: normal;
+}

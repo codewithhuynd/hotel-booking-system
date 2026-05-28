@@ -232,7 +232,7 @@
 
                     <td>
                         <span class="badge">
-                            {{ strtoupper($payment->payment_method) }}
+                            {{ $payment->displayPaymentMethodLabel() }}
                         </span>
                     </td>
 

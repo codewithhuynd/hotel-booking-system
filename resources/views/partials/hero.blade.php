@@ -35,7 +35,7 @@
 
                     <div class="location-item">
                         <i class="fa-solid fa-water"></i>
-                        <span>View biển cực đẹp</span>
+                        <span>Cảnh biển cực đẹp</span>
                     </div>
 
                 </div>
@@ -88,9 +88,7 @@
                         <div>
                             <h3>Điểm nổi bật</h3>
 
-                            <p>
-                                Những giá trị giúp khách hàng tin tưởng
-                            </p>
+                            <p>Những giá trị giúp khách hàng tin tưởng</p>
                         </div>
 
 
@@ -108,9 +106,7 @@
                             <div>
                                 <strong>Đặt phòng siêu nhanh</strong>
 
-                                <span>
-                                    Tìm và đặt phòng chỉ trong vài giây
-                                </span>
+                                <span>Tìm và đặt phòng chỉ trong vài giây</span>
                             </div>
 
                         </div>
@@ -124,9 +120,7 @@
                             <div>
                                 <strong>Ảnh phòng thực tế</strong>
 
-                                <span>
-                                    Hình ảnh rõ nét và chân thực
-                                </span>
+                                <span>Hình ảnh rõ nét và chân thực</span>
                             </div>
 
                         </div>
@@ -140,9 +134,7 @@
                             <div>
                                 <strong>Giá minh bạch</strong>
 
-                                <span>
-                                    Không phát sinh chi phí ẩn
-                                </span>
+                                <span>Không phát sinh chi phí ẩn</span>
                             </div>
 
                         </div>
@@ -154,11 +146,9 @@
                             </div>
 
                             <div>
-                                <strong>Wifi miễn phí</strong>
+                                <strong>Wi-Fi miễn phí</strong>
 
-                                <span>
-                                    Internet tốc độ cao toàn khách sạn
-                                </span>
+                                <span>Internet tốc độ cao toàn khách sạn</span>
                             </div>
 
                         </div>

@@ -17,4 +17,15 @@ class PaymentMethod extends Model
         'description',
         'is_active',
     ];
+
+    public function displayTypeLabel(): string
+    {
+        return match ($this->type) {
+            'bank_transfer' => 'Chuyển khoản ngân hàng',
+            'momo' => 'Ví MoMo',
+            'vnpay' => 'VNPay',
+            'cash' => 'Tiền mặt',
+            default => $this->type ?? 'Không xác định',
+        };
+    }
 }

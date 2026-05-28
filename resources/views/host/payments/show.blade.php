@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Payment Detail')
+@section('title', 'Chi tiết thanh toán')
 
 @section('content')
 
@@ -169,7 +169,7 @@
 
 <div class="payment-detail-container">
 
-    <h1>Payment Detail</h1>
+    <h1>Chi tiết thanh toán</h1>
     <p style="color:#64748b; margin-top: 0; margin-bottom: 1.5rem; font-size: 0.95rem;">
         Quản lý và phê duyệt thông tin giao dịch của khách hàng.
     </p>
@@ -187,7 +187,7 @@
         
         <div class="grid">
             <div class="field">
-                <label>Payment ID</label>
+                <label>Mã thanh toán</label>
                 <div class="value"><strong>#{{ $payment->id }}</strong></div>
             </div>
 
@@ -235,7 +235,7 @@
                 <label>Phương thức</label>
                 <div class="value">
                     <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem;">
-                        {{ strtoupper($payment->payment_method) }}
+                        {{ $payment->displayPaymentMethodLabel() }}
                     </code>
                 </div>
             </div>
@@ -263,13 +263,13 @@
         @if($payment->proof_image)
             <div class="proof-wrapper">
                 <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
-                    Hình ảnh minh chứng (Proof Image)
+                    Hình ảnh minh chứng
                 </label>
                 <a href="{{ asset('storage/' . $payment->proof_image) }}" target="_blank" title="Click để xem ảnh lớn">
                     <img
                         src="{{ asset('storage/' . $payment->proof_image) }}"
                         class="proof-image"
-                        alt="Proof image"
+                        alt="Ảnh minh chứng"
                     >
                 </a>
             </div>

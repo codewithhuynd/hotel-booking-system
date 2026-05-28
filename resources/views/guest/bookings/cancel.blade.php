@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hủy booking</title>
+    <title>Hủy đơn đặt phòng</title>
     <style>
         /* Thiết lập cơ bản */
         * {
@@ -118,8 +118,11 @@
             background: #b91c1c; /* Đỏ đậm hơn khi rê chuột vào */
         }
     </style>
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 <body>
+
+@include('partials.toast-notification')
 
 <div class="box">
 
@@ -127,7 +130,7 @@
 
     <div class="info-group">
         <p><strong>Phòng:</strong> {{ $booking->room->room_name }}</p>
-        <p><strong>Booking code:</strong> {{ $booking->booking_code }}</p>
+        <p><strong>Mã đặt phòng:</strong> {{ $booking->booking_code }}</p>
     </div>
 
     @if($errors->any())
@@ -150,10 +153,10 @@
 
         @if($needsRefund)
             <div class="muted">
-                Bạn đã chuyển cọc. Vui lòng nhập thông tin tài khoản để nhận refund.
+                Bạn đã chuyển cọc. Vui lòng nhập thông tin tài khoản để nhận hoàn tiền.
             </div>
 
-            <label>Ngân hàng nhận refund</label>
+            <label>Ngân hàng nhận hoàn tiền</label>
             <input type="text" name="bank_name" value="{{ old('bank_name') }}" placeholder="Ví dụ: Vietcombank, Techcombank..." required>
 
             <label>Số tài khoản</label>
@@ -163,8 +166,8 @@
             <input type="text" name="bank_account_name" value="{{ old('bank_account_name') }}" placeholder="Ví dụ: NGUYEN VAN A" required>
         @endif
 
-        <button type="submit" onclick="return confirm('Bạn chắc chắn muốn hủy booking này?')">
-            Xác nhận hủy booking
+        <button type="submit" onclick="return confirm('Bạn chắc chắn muốn hủy đơn đặt phòng này?')">
+            Xác nhận hủy đơn
         </button>
     </form>
 

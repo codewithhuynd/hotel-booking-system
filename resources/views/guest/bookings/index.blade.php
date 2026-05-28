@@ -602,9 +602,12 @@
                     #f87171);
         }
     </style>
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 
 <body>
+
+    @include('partials.toast-notification')
 
     <!-- NAVBAR -->
 
@@ -891,7 +894,7 @@
                         @endphp
 
                         <span class="text-xs font-bold px-3.5 py-1.5 rounded-xl border {{ $bStatusColor }}">
-                            {{ ucfirst(str_replace('_', ' ', $booking->status)) }}
+                            {{ $booking->displayStatusLabel() }}
                         </span>
 
                     </div>

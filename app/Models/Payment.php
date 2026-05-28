@@ -92,23 +92,34 @@ class Payment extends Model
     public function displayTypeLabel(): string
     {
         return match ($this->type) {
-            'deposit' => 'Deposit',
-            'final' => 'Final',
-            default => 'Unknown',
+            'deposit' => 'Tiền cọc',
+            'final' => 'Thanh toán cuối',
+            default => 'Không xác định',
         };
     }
 
     public function displayStatusLabel(): string
     {
         return match ($this->status) {
-            'unpaid' => 'Waiting Deposit',
-            'pending' => 'Pending',
-            'pending_cash' => 'Pending Cash',
-            'cash_on_arrival' => 'Cash on Arrival',
-            'paid' => 'Paid',
-            'expired' => 'Expired',
-            'refunded' => 'Refunded',
-            default => 'Unknown',
+            'unpaid' => 'Chờ đặt cọc',
+            'pending' => 'Đang chờ xử lý',
+            'pending_cash' => 'Chờ xác nhận tiền mặt',
+            'cash_on_arrival' => 'Thanh toán khi nhận phòng',
+            'paid' => 'Đã thanh toán',
+            'expired' => 'Đã hết hạn',
+            'refunded' => 'Đã hoàn tiền',
+            default => 'Không xác định',
+        };
+    }
+
+    public function displayPaymentMethodLabel(): string
+    {
+        return match ($this->payment_method) {
+            'banking', 'bank_transfer' => 'Chuyển khoản',
+            'cash' => 'Tiền mặt',
+            'momo' => 'MoMo',
+            'vnpay' => 'VNPay',
+            default => $this->payment_method ? ucfirst($this->payment_method) : 'Không xác định',
         };
     }
 }

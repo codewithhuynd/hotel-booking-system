@@ -106,7 +106,7 @@ class BookingController extends Controller
             'booked_at' => now(),
         ]);
 
-        notifyRole('host', 'Yêu cầu đặt phòng mới', 'Khách ' . Auth::user()->full_name . ' vừa tạo booking #' . $booking->booking_code . '.', 'info', [
+        notifyRole('host', 'Yêu cầu đặt phòng mới', 'Khách ' . Auth::user()->full_name . ' vừa tạo đơn #' . $booking->booking_code . '.', 'info', [
             'booking_id' => $booking->id,
             'booking_code' => $booking->booking_code,
             'url' => route('host.bookings.index'),
@@ -114,7 +114,7 @@ class BookingController extends Controller
 
         return redirect()
             ->route('guest.bookings.index')
-            ->with('success', 'Đặt phòng thành công. Vui lòng chờ host xác nhận.');
+            ->with('success', 'Đặt phòng thành công. Vui lòng chờ quản trị viên xác nhận.');
     }
 
     public function showCancelForm(Booking $booking)
@@ -126,7 +126,7 @@ class BookingController extends Controller
         if (in_array($booking->status, ['checked_in', 'checked_out', 'completed', 'cancelled'], true)) {
             return redirect()
                 ->route('guest.bookings.index')
-                ->with('error', 'Booking này không thể hủy.');
+                ->with('error', 'Đơn đặt phòng này không thể hủy.');
         }
 
         $booking->load(['room', 'depositPayment', 'finalPayment', 'cancellation']);
@@ -143,7 +143,7 @@ class BookingController extends Controller
         if (in_array($booking->status, ['checked_in', 'checked_out', 'completed', 'cancelled'], true)) {
             return redirect()
                 ->route('guest.bookings.index')
-                ->with('error', 'Booking này không thể hủy.');
+                ->with('error', 'Đơn đặt phòng này không thể hủy.');
         }
 
         $hasTransferredDeposit =
@@ -195,7 +195,7 @@ class BookingController extends Controller
             }
         });
 
-        notifyRole('host', 'Booking bị hủy', 'Khách ' . Auth::user()->full_name . ' đã hủy booking #' . $booking->booking_code . '.', 'warning', [
+        notifyRole('host', 'Đơn bị hủy', 'Khách ' . Auth::user()->full_name . ' đã hủy đơn #' . $booking->booking_code . '.', 'warning', [
             'booking_id' => $booking->id,
             'booking_code' => $booking->booking_code,
             'url' => route('host.bookings.index'),
@@ -213,7 +213,7 @@ class BookingController extends Controller
         }
 
         if (!$booking->cancellation) {
-            return back()->with('error', 'Booking chưa có thông tin hủy.');
+            return back()->with('error', 'Đơn đặt phòng chưa có thông tin hủy.');
         }
 
         if ($booking->cancellation->refund_completed) {
@@ -221,7 +221,7 @@ class BookingController extends Controller
         }
 
         if ($booking->cancellation->cancelled_by_type !== 'host') {
-            return back()->with('error', 'Chỉ booking bị host hủy mới cần bổ sung thông tin refund.');
+            return back()->with('error', 'Chỉ đơn bị chủ khách sạn hủy mới cần bổ sung thông tin hoàn tiền.');
         }
 
         $hasTransferredDeposit =
@@ -245,6 +245,6 @@ class BookingController extends Controller
             'refund_info_submitted_at' => now(),
         ]);
 
-        return back()->with('success', 'Đã cập nhật thông tin nhận refund.');
+        return back()->with('success', 'Đã cập nhật thông tin nhận hoàn tiền.');
     }
 }

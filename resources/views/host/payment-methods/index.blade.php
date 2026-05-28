@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Payment Methods')
+@section('title', 'Phương thức thanh toán')
 
 @section('content')
 
@@ -107,7 +107,7 @@
         font-style: italic;
     }
 
-    /* Badge trạng thái Active / Inactive */
+    /* Badge trạng thái */
     .badge {
         display: inline-flex;
         padding: 4px 10px;
@@ -163,9 +163,9 @@
 <div class="payment-container">
 
     <div class="page-header">
-        <h1>Payment Methods</h1>
+        <h1>Phương thức thanh toán</h1>
         <a href="{{ route('host.payment-methods.create') }}" class="btn-create">
-            Create Payment Method
+            Thêm phương thức
         </a>
     </div>
 
@@ -174,11 +174,11 @@
             <thead>
                 <tr>
                     <th class="col-id">ID</th>
-                    <th class="col-name">Name</th>
-                    <th>Type</th>
+                    <th class="col-name">Tên</th>
+                    <th>Loại</th>
                     <th class="col-qr" style="text-align: center;">QR</th>
-                    <th class="col-status">Status</th>
-                    <th class="col-actions">Actions</th>
+                    <th class="col-status">Trạng thái</th>
+                    <th class="col-actions">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -186,29 +186,29 @@
                     <tr>
                         <td class="col-id">#{{ $method->id }}</td>
                         <td class="col-name">{{ $method->name }}</td>
-                        <td class="col-type">{{ $method->type }}</td>
+                        <td class="col-type">{{ $method->displayTypeLabel() }}</td>
                         <td class="col-qr">
                             @if($method->qr_image)
                                 <img 
                                     src="{{ asset('storage/' . $method->qr_image) }}" 
                                     class="qr-preview"
-                                    alt="QR Code"
+                                    alt="Mã QR"
                                 >
                             @else
-                                <span class="no-qr">No QR</span>
+                                <span class="no-qr">Chưa có QR</span>
                             @endif
                         </td>
                         <td class="col-status">
                             @if($method->is_active)
-                                <span class="badge badge-active">Active</span>
+                                <span class="badge badge-active">Đang bật</span>
                             @else
-                                <span class="badge badge-inactive">Inactive</span>
+                                <span class="badge badge-inactive">Đã tắt</span>
                             @endif
                         </td>
                         <td class="col-actions">
                             <div class="action-group">
                                 <a href="{{ route('host.payment-methods.edit', $method) }}" class="btn-edit">
-                                    Edit
+                                    Sửa
                                 </a>
 
                                 <form 
@@ -222,9 +222,9 @@
                                     <button 
                                         type="submit" 
                                         class="btn-delete"
-                                        onclick="return confirm('Delete?')"
+                                        onclick="return confirm('Bạn có chắc muốn xóa mục này?')"
                                     >
-                                        Delete
+                                        Xóa
                                     </button>
                                 </form>
                             </div>

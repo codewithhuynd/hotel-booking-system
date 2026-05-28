@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Chi tiết booking')
+@section('title', 'Chi tiết đơn đặt phòng')
 
 @section('content')
 
@@ -263,9 +263,9 @@
 
 <div class="booking-detail">
 
-    <a href="{{ route('host.bookings.index') }}" class="back-link">← Danh sách booking</a>
+    <a href="{{ route('host.bookings.index') }}" class="back-link">← Danh sách đơn đặt phòng</a>
 
-    <h1>Chi tiết booking</h1>
+    <h1>Chi tiết đơn đặt phòng</h1>
     <p style="color:#64748b; margin-top: 0; margin-bottom:1.5rem; font-size: 0.95rem;">
         Mã: <strong style="color: #0f172a;">{{ $booking->booking_code ?? '—' }}</strong>
         <span style="color: #cbd5e1; margin: 0 6px;">·</span> ID: #{{ $booking->id }}
@@ -283,7 +283,7 @@
         <h2>Tổng quan</h2>
         <div class="grid">
             <div class="field">
-                <label>Mã booking</label>
+                <label>Mã đặt phòng</label>
                 <div class="value">{{ $booking->booking_code ?? '—' }}</div>
             </div>
             <div class="field">
@@ -414,7 +414,7 @@
     </div>
 
     <div class="card">
-        <h2>Giá booking</h2>
+        <h2>Giá đặt phòng</h2>
         <div class="grid">
             <div class="field">
                 <label>Giá tại thời điểm đặt</label>
@@ -438,12 +438,12 @@
             @foreach($booking->payments as $payment)
                 <div style="border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:16px; background-color:#f8fafc;">
                     <h3 style="margin-top:0; margin-bottom:12px; font-size:0.85rem; letter-spacing:0.05em; color:#64748b;">
-                        {{ strtoupper($payment->type) }} PAYMENT
+                        {{ $payment->displayTypeLabel() }}
                     </h3>
 
                     <div class="grid">
                         <div class="field">
-                            <label>ID payment</label>
+                            <label>Mã thanh toán</label>
                             <div class="value">#{{ $payment->id }}</div>
                         </div>
                         <div class="field">
@@ -475,7 +475,7 @@
                             </div>
                         </div>
                         <div class="field">
-                            <label>Proof image</label>
+                            <label>Ảnh minh chứng</label>
                             <div class="value">
                                 @if($payment->proof_image)
                                     <a href="{{ asset('storage/' . $payment->proof_image) }}" target="_blank" class="proof-link">Xem ảnh</a>
@@ -510,7 +510,7 @@
                     <div class="field">
                         <label>Người hủy</label>
                         <div class="value">
-                            {{ $booking->cancellation->cancelled_by_type === 'host' ? 'Host' : 'Guest' }}
+                            {{ $booking->cancellation->cancelled_by_type === 'host' ? 'Chủ khách sạn' : 'Khách' }}
                         </div>
                     </div>
 
@@ -528,16 +528,16 @@
 
                     @if($booking->cancellation->cancelled_by_type === 'host' && !$booking->cancellation->bank_name && $hasRefundableDeposit)
                         <div class="field" style="grid-column: 1 / -1;">
-                            <label>Trạng thái refund</label>
+                            <label>Trạng thái hoàn tiền</label>
                             <div class="value">
-                                <span style="color:#b45309; font-weight:500;">Chờ guest nhập thông tin ngân hàng</span>
+                                <span style="color:#b45309; font-weight:500;">Chờ khách nhập thông tin ngân hàng</span>
                             </div>
                         </div>
                     @endif
 
                     @if($hasRefundBankInfo)
                         <div class="field">
-                            <label>Ngân hàng refund</label>
+                            <label>Ngân hàng nhận hoàn tiền</label>
                             <div class="value">{{ $booking->cancellation->bank_name ?? '—' }}</div>
                         </div>
 
@@ -552,14 +552,14 @@
                         </div>
 
                         <div class="field">
-                            <label>Guest gửi bank info lúc</label>
+                            <label>Khách gửi thông tin ngân hàng lúc</label>
                             <div class="value">
                                 {{ $booking->cancellation->refund_info_submitted_at?->format('d/m/Y H:i') ?? '—' }}
                             </div>
                         </div>
 
                         <div class="field">
-                            <label>Refund status</label>
+                            <label>Trạng thái hoàn tiền</label>
                             <div class="value">
                                 <span class="status-badge {{ $booking->cancellation->refund_completed ? 'completed' : 'pending' }}">
                                     {{ $booking->cancellation->refund_completed ? 'Đã hoàn tiền' : 'Chờ hoàn tiền' }}
@@ -598,7 +598,7 @@
 
     @if($canRefund)
         <div class="card">
-            <h2>Hoàn tiền cho booking bị hủy</h2>
+            <h2>Hoàn tiền cho đơn bị hủy</h2>
 
             <form
                 method="POST"
@@ -642,7 +642,7 @@
         </div>
     @elseif($booking->status === 'cancelled' && $booking->cancellation && $hasRefundableDeposit && !$hasRefundBankInfo)
         <div class="card">
-            <h2>Chờ khách bổ sung thông tin refund</h2>
+            <h2>Chờ khách bổ sung thông tin hoàn tiền</h2>
             <div class="alert-warning" style="margin-bottom:0;">
                 Khách chưa gửi thông tin ngân hàng. Khi khách nhập xong, nút hoàn tiền sẽ xuất hiện ở đây.
             </div>
@@ -655,21 +655,21 @@
             @if($booking->status === 'pending')
                 <form method="POST" action="{{ route('host.bookings.confirm', $booking) }}">
                     @csrf
-                    <button type="submit" class="btn-confirm">Xác nhận booking</button>
+                    <button type="submit" class="btn-confirm">Xác nhận đơn</button>
                 </form>
             @endif
 
             @if($booking->status === 'confirmed')
                 <form method="POST" action="{{ route('host.bookings.check-in', $booking) }}">
                     @csrf
-                    <button type="submit" class="btn-checkin">Check-in</button>
+                    <button type="submit" class="btn-checkin">Nhận phòng</button>
                 </form>
             @endif
 
             @if($booking->status === 'checked_in')
                 <form method="POST" action="{{ route('host.bookings.check-out', $booking) }}">
                     @csrf
-                    <button type="submit" class="btn-checkout">Check-out</button>
+                    <button type="submit" class="btn-checkout">Trả phòng</button>
                 </form>
             @endif
 
@@ -681,7 +681,7 @@
                         <textarea
                             name="reason"
                             required
-                            placeholder="Nhập lý do hủy booking..."
+                            placeholder="Nhập lý do hủy đơn..."
                             style="
                                 width:100%;
                                 min-height:100px;
@@ -694,9 +694,9 @@
                     <button
                         type="submit"
                         class="btn-cancel"
-                        onclick="return confirm('Xác nhận hủy booking này?')"
+                        onclick="return confirm('Xác nhận hủy đơn này?')"
                     >
-                        Hủy booking
+                        Hủy đơn
                     </button>
                 </form>
             @endif

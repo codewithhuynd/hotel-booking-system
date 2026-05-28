@@ -94,6 +94,6 @@ class HotelSettingController extends Controller
 
         return redirect()
             ->route('host.hotel-settings.index')
-            ->with('success', 'Hotel settings đã được cập nhật.');
+            ->with('success', 'Đã cập nhật cài đặt khách sạn thành công.');
     }
 }

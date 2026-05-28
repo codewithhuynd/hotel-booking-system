@@ -322,6 +322,8 @@
 
 <body>
 
+    @include('partials.toast-notification')
+
     <div class="container">
 
         <!-- SIDEBAR -->

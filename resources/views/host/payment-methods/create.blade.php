@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Create Payment Method')
+@section('title', 'Thêm phương thức thanh toán')
 
 @section('content')
 
@@ -134,7 +134,7 @@
 
 <div class="form-container">
 
-    <h1>Create Payment Method</h1>
+    <h1>Thêm phương thức thanh toán</h1>
 
     <div class="form-card">
         <form
@@ -147,89 +147,89 @@
             <div class="form-grid">
                 <!-- Name -->
                 <div class="form-group">
-                    <label for="name">Method Name</label>
+                    <label for="name">Tên phương thức</label>
                     <input
                         type="text"
                         name="name"
                         id="name"
                         class="form-control"
-                        placeholder="Name"
+                        placeholder="Tên hiển thị"
                     >
                 </div>
 
                 <!-- Type -->
                 <div class="form-group">
-                    <label for="type">Payment Type</label>
+                    <label for="type">Loại thanh toán</label>
                     <select name="type" id="type" class="form-control">
-                        <option value="bank_transfer">Bank Transfer</option>
-                        <option value="momo">MoMo</option>
+                        <option value="bank_transfer">Chuyển khoản ngân hàng</option>
+                        <option value="momo">Ví MoMo</option>
                         <option value="vnpay">VNPay</option>
-                        <option value="cash">Cash</option>
+                        <option value="cash">Tiền mặt</option>
                     </select>
                 </div>
 
                 <!-- Bank Name -->
                 <div class="form-group">
-                    <label for="bank_name">Bank Name</label>
+                    <label for="bank_name">Tên ngân hàng</label>
                     <input
                         type="text"
                         name="bank_name"
                         id="bank_name"
                         class="form-control"
-                        placeholder="Bank Name"
+                        placeholder="Tên ngân hàng"
                     >
                 </div>
 
                 <!-- Account Name -->
                 <div class="form-group">
-                    <label for="account_name">Account Name</label>
+                    <label for="account_name">Chủ tài khoản</label>
                     <input
                         type="text"
                         name="account_name"
                         id="account_name"
                         class="form-control"
-                        placeholder="Account Name"
+                        placeholder="Chủ tài khoản"
                     >
                 </div>
 
                 <!-- Account Number -->
                 <div class="form-group">
-                    <label for="account_number">Account Number</label>
+                    <label for="account_number">Số tài khoản</label>
                     <input
                         type="text"
                         name="account_number"
                         id="account_number"
                         class="form-control"
-                        placeholder="Account Number"
+                        placeholder="Số tài khoản"
                     >
                 </div>
 
                 <!-- Phone Number -->
                 <div class="form-group">
-                    <label for="phone_number">Phone Number</label>
+                    <label for="phone_number">Số điện thoại</label>
                     <input
                         type="text"
                         name="phone_number"
                         id="phone_number"
                         class="form-control"
-                        placeholder="Phone Number"
+                        placeholder="Số điện thoại"
                     >
                 </div>
 
                 <!-- Description -->
                 <div class="form-group full-width">
-                    <label for="description">Description</label>
+                    <label for="description">Mô tả</label>
                     <textarea
                         name="description"
                         id="description"
                         class="form-control"
-                        placeholder="Description"
+                        placeholder="Mô tả thêm"
                     ></textarea>
                 </div>
 
                 <!-- QR Image -->
                 <div class="form-group full-width">
-                    <label for="qr_image">QR Code Image</label>
+                    <label for="qr_image">Ảnh mã QR</label>
                     <div class="qr-upload-zone">
                         <input
                             type="file"
@@ -248,7 +248,7 @@
                             name="is_active"
                             checked
                         >
-                        Active this payment method immediately
+                        Kích hoạt phương thức này ngay
                     </label>
                 </div>
             </div>
@@ -256,7 +256,7 @@
             <!-- Form Actions -->
             <div class="form-actions">
                 <button type="submit" class="btn-submit">
-                    Create Method
+                    Tạo phương thức
                 </button>
             </div>
 

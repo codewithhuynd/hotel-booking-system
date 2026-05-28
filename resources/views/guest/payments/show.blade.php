@@ -26,9 +26,12 @@
             }
         }
     </script>
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 
 <body class="bg-slate-50 font-sans text-slate-700 min-h-screen">
+
+    @include('partials.toast-notification')
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -49,7 +52,7 @@
                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
 
-                Quay lại bookings
+                Quay lại đơn đặt phòng
             </a>
 
             <div class="font-serif text-sm tracking-[0.2em] font-bold">
@@ -77,7 +80,7 @@
                         <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
 
                             <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-                                {{ strtoupper($payment->type) }}
+                                {{ $payment->displayTypeLabel() }}
                             </span>
 
                             @if($payment->deposit_deadline)

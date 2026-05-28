@@ -191,10 +191,7 @@
 
                 <i class="fa-solid fa-shield-halved"></i>
 
-                <p>
-                    Bạn đang là quản trị viên,
-                    hãy dùng trang quản lý để xem tin nhắn.
-                </p>
+                <p>Bạn đang là quản trị viên, hãy dùng trang quản lý để xem tin nhắn.</p>
 
             </div>
 
