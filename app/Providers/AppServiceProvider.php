@@ -15,7 +15,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $hotelSetting = HotelSetting::first();
+        try {
+            $hotelSetting = HotelSetting::query()->first();
+        } catch (\Throwable $e) {
+            $hotelSetting = null;
+        }
 
         View::share('hotelSetting', $hotelSetting);
     }

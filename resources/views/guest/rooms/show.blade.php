@@ -189,5 +189,6 @@ function changeSlide(step){
 setInterval(()=>changeSlide(1), 6000);
 </script>
 
+    @include('partials.notification-modal')
 </body>
 </html>

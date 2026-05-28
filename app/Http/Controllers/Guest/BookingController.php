@@ -68,9 +68,10 @@ class BookingController extends Controller
 
         $roomPrice = $room->price;
         $totalPrice = $roomPrice * $days;
-        $depositAmount = $totalPrice * 0.3;
+        $depositPercent = (float) getSetting('deposit_percent', 30);
+        $depositAmount = $totalPrice * $depositPercent / 100;
 
-        Booking::create([
+        $booking = Booking::create([
             'booking_code' => 'BK-' . strtoupper(Str::random(8)),
             'user_id' => Auth::id(),
             'room_id' => $room->id,
@@ -86,6 +87,12 @@ class BookingController extends Controller
             'note' => $validated['note'],
             'status' => 'pending',
             'booked_at' => now(),
+        ]);
+
+        notifyRole('host', 'Yêu cầu đặt phòng mới', 'Khách ' . Auth::user()->full_name . ' vừa tạo booking #' . $booking->booking_code . '.', 'info', [
+            'booking_id' => $booking->id,
+            'booking_code' => $booking->booking_code,
+            'url' => route('host.bookings.index'),
         ]);
 
         return redirect()
@@ -170,6 +177,12 @@ class BookingController extends Controller
                 }
             }
         });
+
+        notifyRole('host', 'Booking bị hủy', 'Khách ' . Auth::user()->full_name . ' đã hủy booking #' . $booking->booking_code . '.', 'warning', [
+            'booking_id' => $booking->id,
+            'booking_code' => $booking->booking_code,
+            'url' => route('host.bookings.index'),
+        ]);
 
         return redirect()
             ->route('guest.bookings.index')

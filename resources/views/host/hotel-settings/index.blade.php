@@ -196,6 +196,12 @@
             <h2>Contact Details</h2>
             <div class="grid">
                 <div class="field">
+                    <label>Deposit Percentage</label>
+                    <div class="value" style="font-weight: 600; color: #0f172a;">{{ number_format((float) ($setting->deposit_percent ?? 30), 0) }}%</div>
+                    <div class="value" style="color: #475569; font-size: 0.9rem;">Remaining payment: {{ 100 - ((float) ($setting->deposit_percent ?? 30)) }}%</div>
+                </div>
+
+                <div class="field">
                     <label>Hotline</label>
                     <div class="value" style="font-weight: 600;">{{ $setting->hotline }}</div>
                 </div>

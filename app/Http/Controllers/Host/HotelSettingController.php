@@ -14,6 +14,7 @@ class HotelSettingController extends Controller
         $setting = HotelSetting::firstOrCreate(
             [],
             [
+                'deposit_percent' => 30,
                 'hero_title' => 'Tìm khách sạn phù hợp cho bạn',
                 'hero_description' => 'Đặt phòng nhanh chóng, dễ dàng và tiện lợi.',
                 'hotline' => '+84 123 456 789',
@@ -37,6 +38,7 @@ class HotelSettingController extends Controller
         $setting = HotelSetting::firstOrCreate(
             [],
             [
+                'deposit_percent' => 30,
                 'hero_title' => 'Tìm khách sạn phù hợp cho bạn',
                 'hero_description' => 'Đặt phòng nhanh chóng, dễ dàng và tiện lợi.',
                 'hotline' => '+84 123 456 789',
@@ -61,6 +63,7 @@ class HotelSettingController extends Controller
         $setting = HotelSetting::firstOrCreate([]);
 
         $validated = $request->validate([
+            'deposit_percent' => ['required', 'numeric', 'between:1,99'],
             'hero_title' => ['required', 'string', 'max:255'],
             'hero_description' => ['required', 'string'],
             'hero_image' => ['nullable', 'image', 'max:4096'],

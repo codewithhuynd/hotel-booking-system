@@ -64,7 +64,22 @@
 
             @else
 
-            @if(Auth::user()->role === 'host')
+            @php
+                $user = auth()->user();
+                $unreadNotifications = $user ? $user->unreadNotifications()->latest()->limit(5)->get() : collect();
+                $unreadCount = $unreadNotifications->count();
+                $latestNotification = $unreadNotifications->first();
+            @endphp
+
+            <a href="{{ route('notifications.index') }}" class="relative inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">
+                <i class="fa-solid fa-bell"></i>
+                <span>Thông báo</span>
+                @if($unreadCount > 0)
+                    <span class="absolute -top-1 -right-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] text-white">{{ $unreadCount }}</span>
+                @endif
+            </a>
+
+            @if($user->role === 'host')
 
             <a
                 href="{{ route('host.dashboard') }}"
@@ -77,12 +92,12 @@
             <div class="user-dropdown">
 
                 <button class="user-btn">
-                    {{ Auth::user()->full_name }} ▼
+                    {{ $user->full_name }} ▼
                 </button>
 
                 <div class="dropdown-menu">
 
-                    @if(Auth::user()->role === 'guest')
+                    @if($user->role === 'guest')
 
                     <a
                         href="{{ route('guest.bookings.index') }}"

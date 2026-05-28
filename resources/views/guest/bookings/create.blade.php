@@ -370,6 +370,7 @@
     });
 </script>
 
+    @include('partials.notification-modal')
 </body>
 
 </html>

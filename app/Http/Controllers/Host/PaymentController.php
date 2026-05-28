@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Host;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PaymentConfirmedMail;
 use App\Models\Payment;
 use App\Services\DepositPaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -80,6 +82,8 @@ class PaymentController extends Controller
             return back()->with('error', 'Booking chưa checkout để xác nhận final payment.');
         }
 
+        $payment->loadMissing(['booking.user', 'booking.room']);
+
         $payment->update([
             'status' => 'paid',
             'paid_at' => now(),
@@ -97,6 +101,20 @@ class PaymentController extends Controller
                 'status' => 'completed',
             ]);
         }
+
+        try {
+            if (! empty($payment->booking->user?->email)) {
+                Mail::to($payment->booking->user->email)->send(new PaymentConfirmedMail($payment));
+            }
+        } catch (\Throwable $e) {
+            // Keep payment confirmation logic intact even if mail delivery fails.
+        }
+
+        notifyUser($payment->booking->user, 'Thanh toán đã được xác nhận', 'Payment #' . $payment->transaction_code . ' đã được xác nhận.', 'success', [
+            'payment_id' => $payment->id,
+            'booking_id' => $payment->booking_id,
+            'url' => route('guest.bookings.index'),
+        ]);
 
         return back()->with('success', 'Payment confirmed successfully.');
     }

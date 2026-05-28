@@ -20,6 +20,7 @@ use App\Http\Controllers\Guest\ProfileController;
 use App\Http\Controllers\Host\UserController;
 use App\Http\Controllers\Host\PaymentMethodController;
 use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -49,6 +50,11 @@ Route::middleware('auth')->group(function () {
         ->name('verification.send');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
 
     Route::middleware('verified')->group(function () {
         Route::middleware('guest.role')->group(function () {

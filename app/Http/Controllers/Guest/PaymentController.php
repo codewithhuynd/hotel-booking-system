@@ -115,6 +115,12 @@ class PaymentController extends Controller
             'status' => 'pending',
         ]);
 
+        notifyRole('host', 'Minh chứng thanh toán mới', 'Khách ' . Auth::user()->full_name . ' đã gửi minh chứng cho ' . $payment->displayTypeLabel() . ' payment #' . $payment->transaction_code . '.', 'info', [
+            'payment_id' => $payment->id,
+            'booking_id' => $payment->booking_id,
+            'url' => route('host.payments.index'),
+        ]);
+
         return redirect()
             ->route('guest.bookings.index')
             ->with(

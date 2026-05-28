@@ -189,8 +189,15 @@
             <div class="form-section">
                 <h2>Hero Section</h2>
 
-                <div class="form-grid" style="grid-template-columns: 1fr;">
+                <div class="form-grid">
                     <div class="form-group">
+                        <label>Deposit Percentage (%)</label>
+                        <input type="number" name="deposit_percent" min="1" max="99" value="{{ old('deposit_percent', $setting->deposit_percent ?? 30) }}" required>
+                        <small style="color:#64748b">Tỷ lệ cọc áp dụng cho đặt phòng. Remaining payment sẽ là 100% - deposit.</small>
+                        @error('deposit_percent') <p class="error-message">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="form-group full-width">
                         <label>Hero Title</label>
                         <input
                             type="text"
