@@ -29,38 +29,48 @@
                     <th style="padding: 12px 16px; font-weight: 600; color: #555; text-align: right;">Action</th>
                 </tr>
             </thead>
+
             <tbody>
                 @forelse($bookings as $booking)
                 <tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 12px 16px; color: #777;">
                         {{ $booking->id }}
                     </td>
+
                     <td style="padding: 12px 16px; font-weight: 500;">
                         {{ $booking->booking_code }}
                     </td>
+
                     <td style="padding: 12px 16px; color: #555;">
                         {{ $booking->user->full_name }}
                     </td>
+
                     <td style="padding: 12px 16px; color: #555;">
                         {{ $booking->room->room_name }}
                     </td>
+
                     <td style="padding: 12px 16px; color: #555;">
                         {{ $booking->check_in_date }}
                     </td>
+
                     <td style="padding: 12px 16px; color: #555;">
                         {{ $booking->check_out_date }}
                     </td>
+
                     <td style="padding: 12px 16px;">
                         <span style="background: #f1f3f4; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">
                             {{ strtoupper($booking->status) }}
                         </span>
                     </td>
+
                     <td style="padding: 12px 16px; text-align: right; white-space: nowrap;">
-                        <a href="{{ route('host.bookings.show', $booking) }}" style="color: #1a73e8; text-decoration: none; font-weight: 500;">
+                        <a href="{{ route('host.bookings.show', $booking) }}"
+                           style="color: #1a73e8; text-decoration: none; font-weight: 500; display: inline-block; white-space: nowrap;">
                             View
                         </a>
                     </td>
                 </tr>
+
                 @empty
                 <tr>
                     <td colspan="8" style="padding: 12px 16px; color: #777; text-align: center;">

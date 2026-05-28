@@ -1,91 +1,424 @@
 @extends('host.layouts.app')
 
-@section('title', 'Create Room')
+@section('title', 'Thêm phòng mới')
 
 @section('content')
 
-<div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 700px;">
-    
-    <!-- Tiêu đề và nút quay lại -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1 style="font-size: 24px; font-weight: 600; margin: 0;">Create Room</h1>
-        <a href="{{ route('host.rooms.index') }}" style="color: #1a73e8; text-decoration: none; font-weight: 500; font-size: 14px;">
-            ← Back to List
+<div style="font-family: 'Segoe UI', sans-serif; padding: 24px; color: #0f172a; max-width: 850px; margin: 0 auto;">
+
+    <!-- HEADER -->
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        gap: 16px;
+    ">
+
+        <div>
+
+            <p style="
+                font-size: 13px;
+                color: #64748b;
+                margin-bottom: 6px;
+            ">
+                Quản lý hệ thống phòng khách sạn
+            </p>
+
+            <h1 style="
+                font-size: 32px;
+                font-weight: 700;
+                margin: 0;
+                color: #0f172a;
+            ">
+                Thêm phòng mới
+            </h1>
+
+        </div>
+
+        <a href="{{ route('host.rooms.index') }}"
+           style="
+                color: #2563eb;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                background: #eff6ff;
+                padding: 12px 16px;
+                border-radius: 14px;
+                transition: .2s;
+           ">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại danh sách
+
         </a>
+
     </div>
 
-    <!-- Khung hiển thị lỗi (Validation) -->
+    <!-- ERROR MESSAGE -->
     @if($errors->any())
-        <div style="background-color: #fce8e6; color: #c5221f; padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 14px;">
-            <ul style="margin: 0; padding-left: 20px;">
+
+        <div style="
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 18px 20px;
+            border-radius: 18px;
+            margin-bottom: 24px;
+            font-size: 14px;
+        ">
+
+            <div style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 700;
+                margin-bottom: 10px;
+            ">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                Vui lòng kiểm tra lại thông tin
+
+            </div>
+
+            <ul style="
+                margin: 0;
+                padding-left: 22px;
+                line-height: 1.8;
+            ">
+
                 @foreach($errors->all() as $error)
+
                     <li>{{ $error }}</li>
+
                 @endforeach
+
             </ul>
+
         </div>
+
     @endif
 
-    <!-- Form nhập thông tin -->
-    <form method="POST" action="{{ route('host.rooms.store') }}"
-          style="background: white; padding: 28px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <!-- FORM -->
+    <form method="POST"
+          action="{{ route('host.rooms.store') }}"
+          style="
+                background: white;
+                border-radius: 28px;
+                padding: 34px;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 12px 40px rgba(15,23,42,0.06);
+          ">
+
         @csrf
 
-        <!-- Mã phòng & Tên phòng -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+        <!-- ROOM CODE & NAME -->
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        ">
+
+            <!-- ROOM CODE -->
             <div>
-                <label style="display: block; font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px;">Room Code</label>
-                <input type="text" name="room_code" value="{{ old('room_code') }}" placeholder="e.g. R-101"
-                       style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; color: #333;">
+
+                <label style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #334155;
+                    margin-bottom: 10px;
+                ">
+
+                    <i class="fa-solid fa-hashtag" style="color:#2563eb;"></i>
+
+                    Mã phòng
+
+                </label>
+
+                <input type="text"
+                       name="room_code"
+                       value="{{ old('room_code') }}"
+                       placeholder="Ví dụ: R-101"
+                       style="
+                            width: 100%;
+                            padding: 14px 16px;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 16px;
+                            font-size: 14px;
+                            box-sizing: border-box;
+                            color: #0f172a;
+                            outline: none;
+                            transition: .2s;
+                       ">
+
             </div>
+
+            <!-- ROOM NAME -->
             <div>
-                <label style="display: block; font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px;">Room Name</label>
-                <input type="text" name="room_name" value="{{ old('room_name') }}" placeholder="e.g. Deluxe Suite"
-                       style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; color: #333;">
+
+                <label style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #334155;
+                    margin-bottom: 10px;
+                ">
+
+                    <i class="fa-solid fa-bed" style="color:#0f172a;"></i>
+
+                    Tên phòng
+
+                </label>
+
+                <input type="text"
+                       name="room_name"
+                       value="{{ old('room_name') }}"
+                       placeholder="Ví dụ: Deluxe Suite"
+                       style="
+                            width: 100%;
+                            padding: 14px 16px;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 16px;
+                            font-size: 14px;
+                            box-sizing: border-box;
+                            color: #0f172a;
+                            outline: none;
+                            transition: .2s;
+                       ">
+
             </div>
+
         </div>
 
-        <!-- Mô tả phòng -->
-        <div style="margin-bottom: 20px;">
-            <label style="display: block; font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px;">Description</label>
-            <textarea name="description" placeholder="Enter room details, view, bed type..."
-                      style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; color: #333; min-height: 100px; font-family: sans-serif; resize: vertical;">{{ old('description') }}</textarea>
+        <!-- DESCRIPTION -->
+        <div style="margin-bottom: 24px;">
+
+            <label style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+                font-weight: 700;
+                color: #334155;
+                margin-bottom: 10px;
+            ">
+
+                <i class="fa-solid fa-align-left" style="color:#7c3aed;"></i>
+
+                Mô tả phòng
+
+            </label>
+
+            <textarea
+                name="description"
+                placeholder="Nhập mô tả chi tiết về phòng, hướng nhìn, loại giường, tiện nghi..."
+                style="
+                    width: 100%;
+                    min-height: 140px;
+                    padding: 16px;
+                    border: 1px solid #cbd5e1;
+                    border-radius: 18px;
+                    font-size: 14px;
+                    color: #0f172a;
+                    resize: vertical;
+                    font-family: 'Segoe UI', sans-serif;
+                    outline: none;
+                    box-sizing: border-box;
+                ">{{ old('description') }}</textarea>
+
         </div>
 
-        <!-- Giá, Sức chứa & Trạng thái -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; margin-bottom: 28px;">
+        <!-- PRICE / CAPACITY / STATUS -->
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        ">
+
+            <!-- PRICE -->
             <div>
-                <label style="display: block; font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px;">Price (VND)</label>
-                <input type="number" name="price" value="{{ old('price') }}" placeholder="Price"
-                       style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; color: #333;">
+
+                <label style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #334155;
+                    margin-bottom: 10px;
+                ">
+
+                    <i class="fa-solid fa-money-bill-wave" style="color:#059669;"></i>
+
+                    Giá phòng (VNĐ)
+
+                </label>
+
+                <input type="number"
+                       name="price"
+                       value="{{ old('price') }}"
+                       placeholder="Nhập giá phòng"
+                       style="
+                            width: 100%;
+                            padding: 14px 16px;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 16px;
+                            font-size: 14px;
+                            box-sizing: border-box;
+                            color: #0f172a;
+                            outline: none;
+                       ">
+
             </div>
+
+            <!-- CAPACITY -->
             <div>
-                <label style="display: block; font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px;">Capacity</label>
-                <input type="number" name="capacity" value="{{ old('capacity') }}" placeholder="Guests"
-                       style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; color: #333;">
+
+                <label style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #334155;
+                    margin-bottom: 10px;
+                ">
+
+                    <i class="fa-solid fa-users" style="color:#ea580c;"></i>
+
+                    Sức chứa
+
+                </label>
+
+                <input type="number"
+                       name="capacity"
+                       value="{{ old('capacity') }}"
+                       placeholder="Số lượng khách"
+                       style="
+                            width: 100%;
+                            padding: 14px 16px;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 16px;
+                            font-size: 14px;
+                            box-sizing: border-box;
+                            color: #0f172a;
+                            outline: none;
+                       ">
+
             </div>
+
+            <!-- STATUS -->
             <div>
-                <label style="display: block; font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px;">Status</label>
-                <select name="status" 
-                        style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; color: #333; background-color: white; height: 38px;">
-                    <option value="available">Available</option>
-                    <option value="booked">Booked</option>
-                    <option value="occupied">Occupied</option>
-                    <option value="cleaning">Cleaning</option>
+
+                <label style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #334155;
+                    margin-bottom: 10px;
+                ">
+
+                    <i class="fa-solid fa-circle-check" style="color:#2563eb;"></i>
+
+                    Trạng thái
+
+                </label>
+
+                <select name="status"
+                        style="
+                            width: 100%;
+                            padding: 14px 16px;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 16px;
+                            font-size: 14px;
+                            color: #0f172a;
+                            background: white;
+                            outline: none;
+                            height: 52px;
+                        ">
+
+                    <option value="available">Sẵn sàng</option>
+
+                    <option value="booked">Đã đặt</option>
+
+                    <option value="occupied">Đang sử dụng</option>
+
+                    <option value="cleaning">Đang dọn dẹp</option>
+
                 </select>
+
             </div>
+
         </div>
 
-        <!-- Nút xử lý -->
-        <div style="display: flex; gap: 12px; align-items: center;">
-            <button type="submit" 
-                    style="background: #1a73e8; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer;">
-                Create Room
+        <!-- ACTION BUTTON -->
+        <div style="
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+        ">
+
+            <button type="submit"
+                    style="
+                        background: linear-gradient(135deg,#2563eb,#1d4ed8);
+                        color: white;
+                        border: none;
+                        padding: 14px 24px;
+                        border-radius: 16px;
+                        font-size: 14px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        box-shadow: 0 10px 25px rgba(37,99,235,0.25);
+                    ">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Tạo phòng mới
+
             </button>
-            <a href="{{ route('host.rooms.index') }}" 
-               style="color: #5f6368; text-decoration: none; font-size: 14px; font-weight: 500; padding: 9px 16px; border-radius: 6px; border: 1px solid #dadce0; background: white;">
-                Cancel
+
+            <a href="{{ route('host.rooms.index') }}"
+               style="
+                    text-decoration: none;
+                    color: #475569;
+                    font-size: 14px;
+                    font-weight: 600;
+                    padding: 14px 18px;
+                    border-radius: 16px;
+                    border: 1px solid #cbd5e1;
+                    background: white;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+               ">
+
+                <i class="fa-solid fa-xmark"></i>
+
+                Hủy bỏ
+
             </a>
+
         </div>
+
     </form>
 
 </div>
