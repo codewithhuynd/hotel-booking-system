@@ -113,7 +113,7 @@ class PaymentController extends Controller
         notifyUser($payment->booking->user, 'Thanh toán đã được xác nhận', 'Payment #' . $payment->transaction_code . ' đã được xác nhận.', 'success', [
             'payment_id' => $payment->id,
             'booking_id' => $payment->booking_id,
-            'url' => route('guest.bookings.index'),
+            'url' => route('admin.payments.show', ['payment' => $payment->id]),
         ]);
 
         return back()->with('success', 'Payment confirmed successfully.');

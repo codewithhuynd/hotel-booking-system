@@ -1,4 +1,4 @@
-<!-- CONTACT -->
+<!-- LIÊN HỆ -->
 <section id="contact" class="contact-section">
 
     <div class="section-title">
@@ -6,11 +6,11 @@
         <div>
 
             <span class="section-badge contact-badge">
-                CONTACT US
+                LIÊN HỆ VỚI CHÚNG TÔI
             </span>
 
             <h2>
-                Contact Us
+                Liên Hệ
             </h2>
 
             <p>
@@ -23,7 +23,7 @@
 
     <div class="contact-grid">
 
-        <!-- LEFT INFO -->
+        <!-- THÔNG TIN LIÊN HỆ -->
         <div class="contact-info-wrapper">
 
             <div class="contact-card">
@@ -59,7 +59,7 @@
                 </div>
 
                 <div>
-                    <h4>Address</h4>
+                    <h4>Địa Chỉ</h4>
                     <p>{{ $hotelSetting->address }}</p>
                 </div>
 
@@ -72,7 +72,7 @@
                 </div>
 
                 <div>
-                    <h4>Working Hours</h4>
+                    <h4>Giờ Làm Việc</h4>
                     <p>{{ $hotelSetting->working_hours }}</p>
                 </div>
 
@@ -90,7 +90,7 @@
                     <a href="{{ $hotelSetting->facebook_link }}"
                         target="_blank"
                         class="contact-link">
-                        Visit Page
+                        Truy Cập Trang
                     </a>
                 </div>
 
@@ -105,7 +105,7 @@
                     </div>
 
                     <div>
-                        <h4>Google Map</h4>
+                        <h4>Bản Đồ Google</h4>
                         <p>Xem vị trí khách sạn trực tiếp</p>
                     </div>
 
@@ -121,11 +121,11 @@
 
         </div>
 
-        <!-- RIGHT FORM -->
+        <!-- FORM LIÊN HỆ -->
         <div class="contact-form-box">
 
             <h3>
-                Send Message
+                Gửi Tin Nhắn
             </h3>
 
             <p>
@@ -145,13 +145,13 @@
                     type="text"
                     name="name"
                     value="{{ old('name', Auth::user()->full_name) }}"
-                    placeholder="Your name">
+                    placeholder="Tên của bạn">
 
                 <input
                     type="email"
                     name="email"
                     value="{{ old('email', Auth::user()->email) }}"
-                    placeholder="Your email">
+                    placeholder="Email của bạn">
 
                 @else
 
@@ -159,19 +159,19 @@
                     type="text"
                     name="name"
                     value="{{ old('name') }}"
-                    placeholder="Your name">
+                    placeholder="Tên của bạn">
 
                 <input
                     type="email"
                     name="email"
                     value="{{ old('email') }}"
-                    placeholder="Your email">
+                    placeholder="Email của bạn">
 
                 @endauth
 
                 <textarea
                     name="message"
-                    placeholder="Your message">{{ old('message') }}</textarea>
+                    placeholder="Nội dung tin nhắn">{{ old('message') }}</textarea>
 
                 <button
                     type="submit"
@@ -179,7 +179,7 @@
 
                     <i class="fa-solid fa-paper-plane"></i>
 
-                    Send Message
+                    Gửi Tin Nhắn
 
                 </button>
 

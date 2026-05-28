@@ -268,16 +268,20 @@
                         @csrf
 
                         <!-- FILE -->
-                        <div>
+                        <div id="proof-image-section">
 
-                            <label class="block text-sm font-semibold mb-2">
+                            <label class="block text-sm font-semibold mb-2" id="proof-image-label">
                                 Ảnh bill chuyển khoản
                             </label>
 
+                            <p class="text-xs text-slate-500 mb-2" id="proof-image-hint">
+                                Bắt buộc khi chọn phương thức online. Không cần thiết với thanh toán tiền mặt.
+                            </p>
+
                             <input
+                                id="proof-image-input"
                                 type="file"
                                 name="proof_image"
-                                required
                                 class="w-full border rounded-xl p-3 bg-slate-50">
                         </div>
 
@@ -329,6 +333,14 @@
 
         const select = document.getElementById('payment-method-select');
 
+        const proofImageSection = document.getElementById('proof-image-section');
+
+        const proofImageInput = document.getElementById('proof-image-input');
+
+        const proofImageLabel = document.getElementById('proof-image-label');
+
+        const proofImageHint = document.getElementById('proof-image-hint');
+
         const methodName = document.getElementById('method-name');
 
         const accountNumber = document.getElementById('account-number');
@@ -349,6 +361,20 @@
 
             if (!method) return;
 
+            const isCashMethod = method.type === 'cash';
+
+            proofImageSection.classList.toggle('hidden', isCashMethod);
+
+            proofImageInput.required = !isCashMethod;
+
+            proofImageLabel.innerText = isCashMethod
+                ? 'Ảnh minh chứng (tùy chọn)'
+                : 'Ảnh bill chuyển khoản';
+
+            proofImageHint.innerText = isCashMethod
+                ? 'Bạn có thể bỏ qua ảnh minh chứng khi chọn thanh toán tiền mặt.'
+                : 'Bắt buộc khi chọn phương thức online.';
+
             methodName.innerText = method.name ?? '---';
 
             accountNumber.innerText = method.account_number ?? '---';
@@ -366,6 +392,8 @@
                 qrContainer.classList.add('hidden');
             }
         });
+
+        select.dispatchEvent(new Event('change'));
     </script>
 
     @include('partials.notification-modal')

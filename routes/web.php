@@ -37,6 +37,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
+Route::get('/profile/change-password/confirm/{token}', [ProfileController::class, 'confirmPasswordChange'])
+    ->name('profile.change-password.confirm');
+
 Route::middleware('auth')->group(function () {
     Route::get('/email/verify', [EmailVerificationController::class, 'notice'])
         ->name('verification.notice');
@@ -61,111 +64,126 @@ Route::middleware('auth')->group(function () {
             Route::get('/my-bookings', [GuestBookingController::class, 'index'])
                 ->name('guest.bookings.index');
 
-        Route::get('/rooms/{room}/book', [GuestBookingController::class, 'create'])
-            ->name('guest.bookings.create');
+            Route::get('/bookings/{booking}', [GuestBookingController::class, 'show'])
+                ->name('guest.bookings.show');
 
-        Route::post('/rooms/{room}/book', [GuestBookingController::class, 'store'])
-            ->name('guest.bookings.store');
+            Route::get('/rooms/{room}/book', [GuestBookingController::class, 'create'])
+                ->name('guest.bookings.create');
 
-        Route::get('/my-bookings/{booking}/cancel', [GuestBookingController::class, 'showCancelForm'])
-            ->name('guest.bookings.cancel-form');
+            Route::post('/rooms/{room}/book', [GuestBookingController::class, 'store'])
+                ->name('guest.bookings.store');
 
-        Route::post('/my-bookings/{booking}/cancel', [GuestBookingController::class, 'cancel'])
-            ->name('guest.bookings.cancel');
+            Route::get('/my-bookings/{booking}/cancel', [GuestBookingController::class, 'showCancelForm'])
+                ->name('guest.bookings.cancel-form');
 
-        Route::post('/my-bookings/{booking}/refund-bank', [GuestBookingController::class, 'submitRefundBank'])
-            ->name('guest.bookings.refund-bank');
+            Route::post('/my-bookings/{booking}/cancel', [GuestBookingController::class, 'cancel'])
+                ->name('guest.bookings.cancel');
 
-        Route::get('/payments/{payment}', [GuestPaymentController::class, 'show'])
-            ->name('guest.payments.show');
+            Route::post('/my-bookings/{booking}/refund-bank', [GuestBookingController::class, 'submitRefundBank'])
+                ->name('guest.bookings.refund-bank');
 
-        Route::post('/payments/{payment}/upload-proof', [GuestPaymentController::class, 'uploadProof'])
-            ->name('guest.payments.upload-proof');
-        Route::get('/profile', [ProfileController::class, 'edit'])
-            ->name('profile.edit');
+            Route::get('/payments/{payment}', [GuestPaymentController::class, 'show'])
+                ->name('guest.payments.show');
 
-        Route::post('/profile', [ProfileController::class, 'update'])
-            ->name('profile.update');
+            Route::post('/payments/{payment}/upload-proof', [GuestPaymentController::class, 'uploadProof'])
+                ->name('guest.payments.upload-proof');
 
-        Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])
-            ->name('profile.change-password');
+            Route::get('/profile', [ProfileController::class, 'edit'])
+                ->name('profile.edit');
+
+            Route::post('/profile', [ProfileController::class, 'update'])
+                ->name('profile.update');
+
+            Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])
+                ->name('profile.change-password');
         });
 
-    Route::middleware('host')
-        ->prefix('host')
-        ->name('host.')
-        ->group(function () {
-            Route::redirect('/', '/host/dashboard');
+        Route::middleware('host')
+            ->prefix('host')
+            ->name('host.')
+            ->group(function () {
+                Route::redirect('/', '/host/dashboard');
 
-            Route::get('/dashboard', function () {
-                return redirect()->route('host.bookings.index');
-            })->name('dashboard');
+                Route::get('/dashboard', function () {
+                    return redirect()->route('host.bookings.index');
+                })->name('dashboard');
 
-            Route::get('/register-host', [HostRegisterController::class, 'create'])
-                ->name('register-host.create');
+                Route::get('/register-host', [HostRegisterController::class, 'create'])
+                    ->name('register-host.create');
 
-            Route::post('/register-host', [HostRegisterController::class, 'store'])
-                ->name('register-host.store');
+                Route::post('/register-host', [HostRegisterController::class, 'store'])
+                    ->name('register-host.store');
 
-            Route::resource('rooms', RoomController::class);
+                Route::resource('rooms', RoomController::class);
 
-            Route::post('/rooms/{room}/images', [RoomImageController::class, 'store'])
-                ->name('rooms.images.store');
+                Route::post('/rooms/{room}/images', [RoomImageController::class, 'store'])
+                    ->name('rooms.images.store');
 
-            Route::delete('/room-images/{roomImage}', [RoomImageController::class, 'destroy'])
-                ->name('rooms.images.destroy');
+                Route::delete('/room-images/{roomImage}', [RoomImageController::class, 'destroy'])
+                    ->name('rooms.images.destroy');
 
-            Route::post('/room-images/{roomImage}/main', [RoomImageController::class, 'setMain'])
-                ->name('rooms.images.main');
+                Route::post('/room-images/{roomImage}/main', [RoomImageController::class, 'setMain'])
+                    ->name('rooms.images.main');
 
-            Route::resource('bookings', BookingController::class)->only(['index', 'show']);
+                Route::resource('bookings', BookingController::class)->only(['index', 'show']);
 
-            Route::post('/bookings/{booking}/confirm', [BookingController::class, 'confirm'])
-                ->name('bookings.confirm');
+                Route::post('/bookings/{booking}/confirm', [BookingController::class, 'confirm'])
+                    ->name('bookings.confirm');
 
-            Route::post('/bookings/{booking}/check-in', [BookingController::class, 'checkIn'])
-                ->name('bookings.check-in');
+                Route::post('/bookings/{booking}/check-in', [BookingController::class, 'checkIn'])
+                    ->name('bookings.check-in');
 
-            Route::post('/bookings/{booking}/check-out', [BookingController::class, 'checkOut'])
-                ->name('bookings.check-out');
+                Route::post('/bookings/{booking}/check-out', [BookingController::class, 'checkOut'])
+                    ->name('bookings.check-out');
 
-            Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])
-                ->name('bookings.cancel');
+                Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])
+                    ->name('bookings.cancel');
 
-            Route::resource('payments', PaymentController::class)->only(['index', 'show']);
+                Route::resource('payments', PaymentController::class)->only(['index', 'show']);
 
-            Route::post('/payments/{payment}/confirm', [PaymentController::class, 'confirm'])
-                ->name('payments.confirm');
+                Route::post('/payments/{payment}/confirm', [PaymentController::class, 'confirm'])
+                    ->name('payments.confirm');
 
-            Route::post('/booking-cancellations/{cancellation}/refund', [BookingController::class, 'refund'])
-                ->name('booking-cancellations.refund');
+                Route::post('/booking-cancellations/{cancellation}/refund', [BookingController::class, 'refund'])
+                    ->name('booking-cancellations.refund');
 
-            Route::get('/hotel-settings', [HotelSettingController::class, 'index'])
-                ->name('hotel-settings.index');
+                Route::get('/hotel-settings', [HotelSettingController::class, 'index'])
+                    ->name('hotel-settings.index');
 
-            Route::get('/hotel-settings/edit', [HotelSettingController::class, 'edit'])
-                ->name('hotel-settings.edit');
+                Route::get('/hotel-settings/edit', [HotelSettingController::class, 'edit'])
+                    ->name('hotel-settings.edit');
 
-            Route::put('/hotel-settings', [HotelSettingController::class, 'update'])
-                ->name('hotel-settings.update');
+                Route::put('/hotel-settings', [HotelSettingController::class, 'update'])
+                    ->name('hotel-settings.update');
 
-            Route::resource('about-sections', AboutSectionController::class)->except(['show']);
-            Route::resource('services', ServiceController::class)->except(['show']);
+                Route::resource('about-sections', AboutSectionController::class)->except(['show']);
+                Route::resource('services', ServiceController::class)->except(['show']);
 
-            Route::resource('contact-messages', HostContactMessageController::class)
-                ->only(['index', 'show', 'destroy']);
+                Route::resource('contact-messages', HostContactMessageController::class)
+                    ->only(['index', 'show', 'destroy']);
 
-            Route::post(
-                '/contact-messages/{contactMessage}/reply',
-                [HostContactMessageController::class, 'reply']
-            )->name('contact-messages.reply');
+                Route::post(
+                    '/contact-messages/{contactMessage}/reply',
+                    [HostContactMessageController::class, 'reply']
+                )->name('contact-messages.reply');
 
-            Route::resource('users', UserController::class)
-                ->only(['index', 'show', 'edit', 'update', 'destroy']);
-            Route::resource(
-                'payment-methods',
-                PaymentMethodController::class
-            )->except(['show']);
-        });
+                Route::resource('users', UserController::class)
+                    ->only(['index', 'show', 'edit', 'update', 'destroy']);
+                Route::resource(
+                    'payment-methods',
+                    PaymentMethodController::class
+                )->except(['show']);
+            });
+
+        Route::middleware('host')
+            ->prefix('admin')
+            ->name('admin.')
+            ->group(function () {
+                Route::get('/bookings/{booking}', [BookingController::class, 'show'])
+                    ->name('bookings.show');
+
+                Route::get('/payments/{payment}', [PaymentController::class, 'show'])
+                    ->name('payments.show');
+            });
     });
 });

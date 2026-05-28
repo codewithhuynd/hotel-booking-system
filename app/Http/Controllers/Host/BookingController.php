@@ -71,7 +71,7 @@ class BookingController extends Controller
         notifyUser($booking->user, 'Booking đã được xác nhận', 'Host đã xác nhận booking #' . $booking->booking_code . '. Vui lòng thanh toán cọc.', 'success', [
             'booking_id' => $booking->id,
             'booking_code' => $booking->booking_code,
-            'url' => route('guest.bookings.index'),
+            'url' => route('admin.bookings.show', ['booking' => $booking->id]),
         ]);
 
         return back()->with('success', 'Đã xác nhận booking. Chờ khách đặt cọc.');
@@ -191,7 +191,7 @@ class BookingController extends Controller
         notifyUser($booking->user, 'Booking đã bị hủy', 'Host đã hủy booking #' . $booking->booking_code . '. Vui lòng kiểm tra lý do.', 'warning', [
             'booking_id' => $booking->id,
             'booking_code' => $booking->booking_code,
-            'url' => route('guest.bookings.index'),
+            'url' => route('admin.bookings.show', ['booking' => $booking->id]),
         ]);
 
         return back()->with('success', 'Đã hủy booking.');

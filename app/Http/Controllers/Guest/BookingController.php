@@ -29,6 +29,23 @@ class BookingController extends Controller
         return view('guest.bookings.index', compact('bookings'));
     }
 
+    public function show(Booking $booking)
+    {
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $booking->load([
+            'room',
+            'depositPayment',
+            'finalPayment',
+            'payments',
+            'cancellation',
+        ]);
+
+        return view('guest.bookings.show', compact('booking'));
+    }
+
     public function create(Room $room)
     {
         return view('guest.bookings.create', compact('room'));

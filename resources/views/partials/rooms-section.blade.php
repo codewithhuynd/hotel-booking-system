@@ -3,7 +3,7 @@
 
     <div class="section-title">
         <div>
-            <h2>Rooms</h2>
+            <h2>Phòng</h2>
         </div>
         {{-- Chỉ hiện nút "Xem tất cả" nếu không có bộ lọc nào được áp dụng --}}
         @if (!request()->anyFilled(['keyword', 'price', 'capacity', 'status', 'sort_price', 'sort_time']))

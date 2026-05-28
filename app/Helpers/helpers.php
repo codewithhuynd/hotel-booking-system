@@ -41,7 +41,21 @@ if (! function_exists('notifyUser')) {
                 return;
             }
 
-            $user->notify(new SystemNotification($title, $message, $type, $data));
+            $notificationData = $data;
+
+            if (empty($notificationData['url'])) {
+                if (! empty($notificationData['booking_id'])) {
+                    $notificationData['url'] = $user->role === 'host'
+                        ? route('admin.bookings.show', ['booking' => $notificationData['booking_id']])
+                        : route('guest.bookings.show', ['booking' => $notificationData['booking_id']]);
+                } elseif (! empty($notificationData['payment_id'])) {
+                    $notificationData['url'] = $user->role === 'host'
+                        ? route('admin.payments.show', ['payment' => $notificationData['payment_id']])
+                        : route('guest.payments.show', ['payment' => $notificationData['payment_id']]);
+                }
+            }
+
+            $user->notify(new SystemNotification($title, $message, $type, $notificationData));
         } catch (\Throwable $e) {
             // Ignore notification failures so the main workflow keeps running.
         }

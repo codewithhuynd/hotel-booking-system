@@ -53,11 +53,9 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        DB::statement("
-            ALTER TABLE bookings
-            ADD CONSTRAINT check_dates
-            CHECK (check_out_date > check_in_date)
-        ");
+        if (! in_array(DB::getDriverName(), ['sqlite'], true)) {
+            DB::statement("\n            ALTER TABLE bookings\n            ADD CONSTRAINT check_dates\n            CHECK (check_out_date > check_in_date)\n        ");
+        }
     }
 
     public function down(): void

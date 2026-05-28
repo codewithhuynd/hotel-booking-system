@@ -1,4 +1,4 @@
-<!-- ABOUT -->
+<!-- GIỚI THIỆU -->
 <section id="about" class="about-section">
 
     <div class="section-title">
@@ -6,11 +6,11 @@
         <div>
 
             <span class="section-badge">
-                ABOUT HOTEL
+                GIỚI THIỆU KHÁCH SẠN
             </span>
 
             <h2>
-                About Our Hotel
+                Về Khách Sạn Của Chúng Tôi
             </h2>
 
             <p>

@@ -66,44 +66,56 @@ class PaymentController extends Controller
             );
         }
 
-        $request->validate([
-            'proof_image' => [
-                'required',
-                'image',
-                'max:2048',
-            ],
+        $paymentMethod = PaymentMethod::findOrFail(
+            $request->payment_method_id
+        );
 
+        $rules = [
             'payment_method_id' => [
                 'required',
                 'exists:payment_methods,id',
             ],
-        ]);
+        ];
+
+        if ($paymentMethod->type !== 'cash') {
+            $rules['proof_image'] = [
+                'required',
+                'image',
+                'max:2048',
+            ];
+        } else {
+            $rules['proof_image'] = [
+                'nullable',
+                'image',
+                'max:2048',
+            ];
+        }
+
+        $request->validate($rules);
 
         /*
         |--------------------------------------------------------------------------
-        | UPLOAD ẢNH MINH CHỨNG
+        | UPLOAD ẢNH MINH CHỨNG (chỉ khi có file)
         |--------------------------------------------------------------------------
         */
 
-        $path = $request
-            ->file('proof_image')
-            ->store('payment_proofs', 'public');
+        $path = null;
 
-        /*
-        |--------------------------------------------------------------------------
-        | LẤY PAYMENT METHOD
-        |--------------------------------------------------------------------------
-        */
-
-        $paymentMethod = PaymentMethod::findOrFail(
-            $request->payment_method_id
-        );
+        if ($request->hasFile('proof_image')) {
+            $path = $request
+                ->file('proof_image')
+                ->store('payment_proofs', 'public');
+        }
 
         /*
         |--------------------------------------------------------------------------
         | UPDATE PAYMENT
         |--------------------------------------------------------------------------
         */
+
+        $status = $paymentMethod->type === 'cash'
+            ? 'pending_cash'
+            : 'pending';
 
         $payment->update([
             'proof_image' => $path,
@@ -112,7 +124,7 @@ class PaymentController extends Controller
 
             'payment_method_id' => $paymentMethod->id,
 
-            'status' => 'pending',
+            'status' => $status,
         ]);
 
         notifyRole('host', 'Minh chứng thanh toán mới', 'Khách ' . Auth::user()->full_name . ' đã gửi minh chứng cho ' . $payment->displayTypeLabel() . ' payment #' . $payment->transaction_code . '.', 'info', [

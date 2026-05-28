@@ -60,8 +60,26 @@
         </div>
 
         <div class="ntf-footer">
+            @php
+                $notificationUrl = $latestNotification->data['url'] ?? null;
+                if (! $notificationUrl && auth()->check()) {
+                    if (! empty($latestNotification->data['booking_id'])) {
+                        $notificationUrl = auth()->user()->role === 'host'
+                            ? route('admin.bookings.show', ['booking' => $latestNotification->data['booking_id']])
+                            : route('guest.bookings.show', ['booking' => $latestNotification->data['booking_id']]);
+                    } elseif (! empty($latestNotification->data['payment_id'])) {
+                        $notificationUrl = auth()->user()->role === 'host'
+                            ? route('admin.payments.show', ['payment' => $latestNotification->data['payment_id']])
+                            : route('guest.payments.show', ['payment' => $latestNotification->data['payment_id']]);
+                    }
+                }
+            @endphp
             <a href="{{ route('notifications.index') }}" class="ntf-btn ntf-btn-secondary">Xem tất cả</a>
-            <button id="notification-confirm-btn" type="button" class="ntf-btn ntf-btn-primary">Đóng</button>
+            @if($notificationUrl)
+                <a id="notification-go-btn" href="{{ $notificationUrl }}" class="ntf-btn ntf-btn-primary">Đi đến thông báo</a>
+            @else
+                <button id="notification-confirm-btn" type="button" class="ntf-btn ntf-btn-primary">Đóng</button>
+            @endif
         </div>
     </div>
 </div>
@@ -104,6 +122,10 @@
 
         document.getElementById('notification-close-btn')?.addEventListener('click', handleClose);
         document.getElementById('notification-confirm-btn')?.addEventListener('click', handleClose);
+        document.getElementById('notification-go-btn')?.addEventListener('click', function () {
+            markAsRead();
+            closeNotificationModal();
+        });
 
         backdrop.addEventListener('click', function (event) {
             if (event.target === backdrop) {

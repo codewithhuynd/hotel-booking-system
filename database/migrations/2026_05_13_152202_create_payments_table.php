@@ -34,6 +34,8 @@ return new class extends Migration
             $table->enum('status', [
                 'unpaid',
                 'pending',
+                'pending_cash',
+                'cash_on_arrival',
                 'paid',
                 'expired',
                 'refunded',

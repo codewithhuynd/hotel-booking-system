@@ -1,4 +1,4 @@
-<!-- SERVICES -->
+<!-- DỊCH VỤ -->
 <section id="services" class="services-section">
 
     <div class="section-title">
@@ -6,11 +6,11 @@
         <div>
 
             <span class="section-badge service-badge">
-                HOTEL SERVICES
+                DỊCH VỤ KHÁCH SẠN
             </span>
 
             <h2>
-                Our Services
+                Dịch Vụ Của Chúng Tôi
             </h2>
 
             <p>

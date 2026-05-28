@@ -103,6 +103,8 @@ class Payment extends Model
         return match ($this->status) {
             'unpaid' => 'Waiting Deposit',
             'pending' => 'Pending',
+            'pending_cash' => 'Pending Cash',
+            'cash_on_arrival' => 'Cash on Arrival',
             'paid' => 'Paid',
             'expired' => 'Expired',
             'refunded' => 'Refunded',
