@@ -20,6 +20,38 @@
         line-height: 1.6;
     }
 
+    /* Large headings — balanced line breaks, use full available width */
+    .hero h1,
+    .section-title h2,
+    .search-head h2,
+    .contact-form-box h3,
+    .card-header h3,
+    .room-content h3 {
+        text-wrap: balance;
+        word-break: normal;
+        overflow-wrap: normal;
+        max-width: 100%;
+        line-height: 1.2;
+    }
+
+    /* Readable wrapping — keep lines breaking at word boundaries, not mid-sentence */
+    .section-title p,
+    .hero-description,
+    .info-card p,
+    .service-card p,
+    .contact-card p,
+    .card-item span,
+    .card-header p,
+    .room-content .meta p,
+    .contact-form-box p,
+    .host-message p,
+    .welcome-box p {
+        overflow-wrap: break-word;
+        word-break: normal;
+        text-wrap: pretty;
+        hyphens: auto;
+    }
+
     a {
         text-decoration: none;
         color: inherit;
@@ -372,20 +404,23 @@
         position: relative;
         z-index: 5;
         width: 100%;
-        max-width: 1280px;
+        max-width: 1360px;
         margin: auto;
-        padding: 150px 30px 90px;
+        padding: 150px 48px 90px;
     }
 
     .hero-grid {
         display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 50px;
+        grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.55fr);
+        gap: 40px;
         align-items: center;
     }
 
     .hero-content {
         animation: fadeUp 1s ease;
+        min-width: 0;
+        max-width: 100%;
+        padding-right: 12px;
     }
 
     .hero-kicker {
@@ -402,10 +437,12 @@
 
     .hero h1 {
         font-family: 'Playfair Display', serif;
-        font-size: clamp(50px, 6vw, 84px);
-        line-height: 1.05;
+        font-size: clamp(40px, 5.2vw, 72px);
+        line-height: 1.18;
         margin-bottom: 24px;
         font-weight: 800;
+        max-width: 100%;
+        padding-right: 0.25em;
         background: linear-gradient(to right, #ffffff, #d1fae5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -527,7 +564,7 @@
 
     .hero-card {
         position: relative;
-        padding: 32px;
+        padding: 28px 24px;
         border-radius: 30px;
         background: linear-gradient(135deg,
                 rgba(255, 255, 255, 0.12),
@@ -574,11 +611,16 @@
         gap: 16px;
     }
 
+    .card-item > div:last-child {
+        flex: 1;
+        min-width: 0;
+    }
+
     .card-item {
         display: flex;
         gap: 16px;
         align-items: flex-start;
-        padding: 18px;
+        padding: 16px 18px;
         border-radius: 22px;
         background: rgba(15, 23, 42, 0.45);
         border: 1px solid rgba(255, 255, 255, 0.06);
@@ -644,12 +686,17 @@
         background: #fff;
         color: #111827;
         border-radius: 28px;
-        padding: 35px;
+        padding: 36px 48px;
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
     }
 
     .search-head {
         margin-bottom: 25px;
+        padding-inline: 4px;
+    }
+
+    .search-head > div {
+        max-width: 100%;
     }
 
     .search-subtitle {
@@ -663,10 +710,12 @@
     }
 
     .search-head h2 {
-        font-size: 32px;
+        font-size: clamp(28px, 3.5vw, 36px);
         font-weight: 800;
         color: #111827;
         font-family: 'Playfair Display', serif;
+        line-height: 1.25;
+        max-width: 100%;
     }
 
     .search-grid {
@@ -764,16 +813,26 @@
         gap: 20px;
         margin-bottom: 34px;
         flex-wrap: wrap;
+        padding-inline: 4px;
+    }
+
+    .section-title > div {
+        flex: 1 1 auto;
+        min-width: min(100%, 280px);
+        max-width: 100%;
+        padding-right: 16px;
     }
 
     .section-title h2 {
         font-family: 'Playfair Display', serif;
-        font-size: clamp(32px, 4vw, 50px);
+        font-size: clamp(30px, 3.8vw, 48px);
+        line-height: 1.22;
         color: #fff;
+        max-width: 100%;
     }
 
     .section-title p {
-        max-width: 700px;
+        max-width: 760px;
         color: #cbd5e1;
     }
 
@@ -835,7 +894,7 @@
     }
 
     .room-content {
-        padding: 22px;
+        padding: 20px 18px;
     }
 
     .room-content h3 {
@@ -873,7 +932,7 @@
     .info-strip {
         margin-top: 36px;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 18px;
     }
 
@@ -883,7 +942,7 @@
                 rgba(255, 255, 255, 0.04));
         border: 1px solid rgba(255, 255, 255, 0.10);
         border-radius: 22px;
-        padding: 22px;
+        padding: 24px 20px;
         backdrop-filter: blur(10px);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
         transition: 0.3s ease;
@@ -1135,11 +1194,20 @@
         }
 
         .hero-inner {
-            padding: 170px 18px 80px;
+            padding: 170px 28px 80px;
         }
 
         .hero h1 {
-            font-size: 52px;
+            font-size: clamp(36px, 9vw, 52px);
+            line-height: 1.2;
+        }
+
+        .search-box {
+            padding: 28px 32px;
+        }
+
+        .container {
+            padding: 0 20px;
         }
 
         .hero-actions {
@@ -1165,7 +1233,7 @@
 
         .search-box {
             margin-top: -30px;
-            padding: 20px;
+            padding: 24px 28px;
         }
 
         .search-grid {
@@ -1192,9 +1260,9 @@
     }
 
     .container {
-        max-width: 1280px;
+        max-width: 1360px;
         margin: auto;
-        padding: 0 30px;
+        padding: 0 40px;
     }
 
     /* =========================
@@ -1233,7 +1301,7 @@
         display: grid;
 
         grid-template-columns:
-            repeat(auto-fit, minmax(260px, 1fr));
+            repeat(auto-fit, minmax(300px, 1fr));
 
         gap: 24px;
     }
@@ -1241,7 +1309,7 @@
     .info-card {
         position: relative;
 
-        padding: 32px 26px;
+        padding: 26px 20px;
 
         border-radius: 28px;
 
@@ -1375,7 +1443,7 @@
         }
 
         .info-card {
-            padding: 26px 22px;
+            padding: 24px 18px;
         }
 
     }
@@ -1400,7 +1468,7 @@
         display: grid;
 
         grid-template-columns:
-            repeat(auto-fit, minmax(280px, 1fr));
+            repeat(auto-fit, minmax(300px, 1fr));
 
         gap: 28px;
     }
@@ -1410,7 +1478,7 @@
 
         overflow: hidden;
 
-        padding: 34px 28px;
+        padding: 28px 20px;
 
         border-radius: 30px;
 
@@ -1577,12 +1645,17 @@
         gap: 22px;
     }
 
+    .contact-card > div:last-child {
+        flex: 1;
+        min-width: 0;
+    }
+
     .contact-card {
         display: flex;
         gap: 18px;
         align-items: flex-start;
 
-        padding: 26px;
+        padding: 22px 18px;
 
         border-radius: 28px;
 
@@ -1658,7 +1731,7 @@
     /* RIGHT FORM */
 
     .contact-form-box {
-        padding: 34px;
+        padding: 28px 24px;
 
         border-radius: 32px;
 
@@ -1798,11 +1871,11 @@
     @media (max-width: 768px) {
 
         .contact-form-box {
-            padding: 26px;
+            padding: 24px 18px;
         }
 
         .contact-card {
-            padding: 22px;
+            padding: 20px 16px;
         }
 
     }

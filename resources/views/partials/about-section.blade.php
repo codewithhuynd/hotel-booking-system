@@ -13,10 +13,7 @@
                 Về Khách Sạn Của Chúng Tôi
             </h2>
 
-            <p>
-                Trải nghiệm nghỉ dưỡng hiện đại, sang trọng và tiện nghi
-                dành cho khách du lịch, gia đình và doanh nhân.
-            </p>
+            <p>Trải nghiệm nghỉ dưỡng hiện đại, sang trọng và tiện nghi dành cho khách du lịch, gia đình và doanh nhân.</p>
 
         </div>
 

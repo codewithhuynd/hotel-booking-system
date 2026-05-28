@@ -192,3 +192,12 @@ h1, h2, h3, h4, h5, h6,
 [class*="font-serif"], [class*="serif"] {
     font-family: 'Heading_Font', 'Playfair Display', 'Cormorant Garamond', sans-serif !important;
 }
+
+/* Balanced wrapping for display-sized headings site-wide */
+h1, h2,
+.search-title,
+.slider-title,
+.welcome-title {
+    text-wrap: balance;
+    word-break: normal;
+}
