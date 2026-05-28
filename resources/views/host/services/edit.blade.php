@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Edit Service')
+@section('title', 'Chỉnh sửa dịch vụ')
 
 @section('content')
 
@@ -74,7 +74,7 @@
         font-weight: 500;
     }
 
-    /* Nút bấm Cập nhật gốc */
+    /* Nút bấm Cập nhật */
     .btn-update {
         padding: 12px 24px;
         background: #2563eb;
@@ -99,7 +99,7 @@
 
 <div class="edit-service-container">
 
-    <h1>Edit Service</h1>
+    <h1>Chỉnh sửa dịch vụ</h1>
 
     <div class="card">
         <form method="POST" action="{{ route('host.services.update', $service) }}">
@@ -107,7 +107,7 @@
             @method('PUT')
 
             <div class="form-group">
-                <label>Title</label>
+                <label>Tiêu đề</label>
                 <input 
                     type="text" 
                     name="title" 
@@ -117,7 +117,7 @@
             </div>
 
             <div class="form-group">
-                <label>Description</label>
+                <label>Mô tả</label>
                 <textarea 
                     name="description" 
                     rows="5"
@@ -128,7 +128,7 @@
             <!-- Khu vực nút Update duy nhất -->
             <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid #f1f5f9;">
                 <button type="submit" class="btn-update">
-                    Update
+                    Cập nhật
                 </button>
             </div>
         </form>

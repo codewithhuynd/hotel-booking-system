@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Add Service')
+@section('title', 'Thêm dịch vụ')
 
 @section('content')
 
@@ -74,7 +74,7 @@
         font-weight: 500;
     }
 
-    /* Nút bấm Lưu gốc duy nhất của bạn */
+    /* Nút bấm Lưu */
     .btn-save {
         padding: 12px 24px;
         background: #16a34a;
@@ -99,14 +99,14 @@
 
 <div class="add-service-container">
 
-    <h1>Add Service</h1>
+    <h1>Thêm dịch vụ</h1>
 
     <div class="card">
         <form method="POST" action="{{ route('host.services.store') }}">
             @csrf
 
             <div class="form-group">
-                <label>Title</label>
+                <label>Tiêu đề</label>
                 <input 
                     type="text" 
                     name="title" 
@@ -116,7 +116,7 @@
             </div>
 
             <div class="form-group">
-                <label>Description</label>
+                <label>Mô tả</label>
                 <textarea 
                     name="description" 
                     rows="5"
@@ -127,7 +127,7 @@
             <!-- Khu vực chứa nút bấm Save nguyên bản -->
             <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid #f1f5f9;">
                 <button type="submit" class="btn-save">
-                    Save
+                    Lưu
                 </button>
             </div>
         </form>

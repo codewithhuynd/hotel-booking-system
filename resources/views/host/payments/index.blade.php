@@ -1,141 +1,176 @@
 @extends('host.layouts.app')
 
-@section('title', 'Manage Payments')
+@section('title', 'Quản lý thanh toán')
 
 @section('content')
 
 <style>
-    /* Tổng thể & Typography */
-    .payments-container {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        max-width: 1200px;
+    .payments-container{
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        max-width: 1100px;
         margin: 0 auto;
         padding: 20px;
         color: #1e293b;
     }
-    .payments-container h1 {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: #0f172a;
-        margin-top: 0;
-        margin-bottom: 1.5rem;
+
+    .page-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:20px;
+        flex-wrap:wrap;
+        gap:12px;
     }
 
-    /* Khối thông báo hệ thống (Alerts) */
-    .payments-container .alert {
-        padding: 1rem;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-        font-size: 0.95rem;
-        font-weight: 500;
-        border-left: 4px solid transparent;
-    }
-    .payments-container .alert-success {
-        color: #15803d;
-        background: #f0fdf4;
-        border-left-color: #16a34a;
-    }
-    .payments-container .alert-error {
-        color: #b91c1c;
-        background: #fef2f2;
-        border-left-color: #dc2626;
-    }
-    .payments-container .alert-info {
-        color: #1d4ed8;
-        background: #eff6ff;
-        border-left-color: #3b82f6;
+    .page-header h1{
+        font-size:1.75rem;
+        font-weight:800;
+        margin:0;
+        color:#0f172a;
     }
 
-    /* Cấu trúc Bảng Hiện Đại */
-    .table-responsive {
-        width: 100%;
-        overflow-x: auto;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-    }
-    .custom-table {
-        width: 100%;
-        border-collapse: collapse;
-        text-align: left;
-        font-size: 0.95rem;
-    }
-    .custom-table th {
-        background-color: #f8fafc;
-        color: #64748b;
-        font-weight: 600;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 14px 16px;
-        border-bottom: 1px solid #e2e8f0;
-    }
-    .custom-table td {
-        padding: 14px 16px;
-        border-bottom: 1px solid #f1f5f9;
-        vertical-align: middle;
-        color: #334155;
-    }
-    .custom-table tr:last-child td {
-        border-bottom: none;
-    }
-    .custom-table tr:hover td {
-        background-color: #f8fafc;
+    .sub-text{
+        color:#64748b;
+        font-size:14px;
+        margin-top:6px;
     }
 
-    /* Các nhãn thông tin tinh chỉnh */
-    .payments-container .badge-type {
-        background-color: #f1f5f9;
-        color: #475569;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.85rem;
-        font-weight: 500;
-    }
-    .payments-container .code-text {
-        font-family: monospace;
-        background: #f8fafc;
-        padding: 2px 6px;
-        border-radius: 4px;
-        color: #0f172a;
-        font-weight: 500;
-    }
-    .payments-container .amount-text {
-        font-weight: 600;
-        color: #0f172a;
-    }
-    .payments-container .muted-text {
-        color: #94a3b8;
-        font-style: italic;
+    .card{
+        background:white;
+        border-radius:14px;
+        border:1px solid #e2e8f0;
+        box-shadow:0 10px 30px rgba(15,23,42,0.06);
+        padding:12px 16px;
+        min-width:180px;
     }
 
-    /* Nút hành động đơn lẻ */
-    .btn-view {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 8px 14px;
-        background-color: #2563eb;
-        color: white !important;
-        text-decoration: none;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        transition: background-color 0.15s ease, transform 0.1s ease;
+    .card-title{
+        font-size:12px;
+        color:#64748b;
     }
-    .btn-view:hover {
-        background-color: #1d4ed8;
+
+    .card-value{
+        font-size:22px;
+        font-weight:800;
+        color:#0f172a;
     }
-    .btn-view:active {
-        transform: scale(0.97);
+
+    .alert{
+        padding:12px 16px;
+        border-radius:10px;
+        margin-bottom:14px;
+        font-weight:600;
+        font-size:14px;
+    }
+
+    .alert-success{
+        background:#dcfce7;
+        color:#166534;
+    }
+
+    .alert-error{
+        background:#fee2e2;
+        color:#991b1b;
+    }
+
+    .alert-info{
+        background:#eff6ff;
+        color:#1d4ed8;
+    }
+
+    .table-wrapper{
+        background:white;
+        border-radius:16px;
+        border:1px solid #e2e8f0;
+        overflow:hidden;
+        box-shadow:0 10px 30px rgba(15,23,42,0.06);
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        table-layout:fixed;
+    }
+
+    thead th{
+        background:#1e293b; /* 🔵 xanh đậm giống trang trước */
+        color:white;
+        font-size:13px;
+        text-align:left;
+        padding:14px;
+        font-weight:700;
+    }
+
+    tbody td{
+        padding:14px;
+        border-bottom:1px solid #f1f5f9;
+        color:#334155;
+        font-size:14px;
+        vertical-align:middle;
+        word-break:break-word;
+    }
+
+    tbody tr:hover td{
+        background:#f8fafc;
+    }
+
+    .badge{
+        display:inline-block;
+        padding:6px 10px;
+        border-radius:999px;
+        font-size:12px;
+        font-weight:700;
+        background:#f1f5f9;
+        color:#475569;
+        white-space:nowrap;
+    }
+
+    .code{
+        font-family:monospace;
+        font-weight:700;
+        color:#0f172a;
+    }
+
+    .amount{
+        font-weight:800;
+        color:#0f172a;
+    }
+
+    .btn{
+        display:inline-block;
+        padding:8px 12px;
+        background:#2563eb;
+        color:white;
+        border-radius:10px;
+        font-weight:700;
+        font-size:13px;
+        text-decoration:none;
+        white-space:nowrap;
+    }
+
+    .right{
+        text-align:right;
     }
 </style>
 
 <div class="payments-container">
 
-    <h1>Manage Payments</h1>
+    <!-- HEADER -->
+    <div class="page-header">
 
+        <div>
+            <h1>Quản lý thanh toán</h1>
+            <div class="sub-text">Theo dõi tất cả giao dịch thanh toán trong hệ thống</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Tổng thanh toán</div>
+            <div class="card-value">{{ $payments->count() }}</div>
+        </div>
+
+    </div>
+
+    <!-- ALERT -->
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -146,90 +181,91 @@
 
     @if(!empty($expiredCount))
         <div class="alert alert-info">
-            <strong>{{ $expiredCount }}</strong> overdue deposit payment(s) expired.
+            {{ $expiredCount }} khoản đặt cọc quá hạn.
         </div>
     @endif
 
-    <div class="table-responsive">
-        <table class="custom-table">
+    <!-- TABLE -->
+    <div class="table-wrapper">
+
+        <table>
+
             <thead>
                 <tr>
-                    <th style="width: 80px;">ID</th>
-                    <th>Type</th>
-                    <th>Booking</th>
-                    <th>Guest</th>
-                    <th>Amount</th>
-                    <th>Method</th>
-                    <th>Status</th>
-                    <th>Deadline</th>
-                    <th style="width: 100px; text-align: center;">Action</th>
+                    <th style="width:60px;">ID</th>
+                    <th>Loại</th>
+                    <th>Mã đặt phòng</th>
+                    <th>Khách hàng</th>
+                    <th>Số tiền</th>
+                    <th>Phương thức</th>
+                    <th>Trạng thái</th>
+                    <th>Hạn thanh toán</th>
+                    <th class="right" style="width:90px;">Thao tác</th>
                 </tr>
             </thead>
+
             <tbody>
+
                 @forelse($payments as $payment)
-                    <tr>
-                        <td><strong>#{{ $payment->id }}</strong></td>
-                        
-                        <td>
-                            <span class="badge-type">
-                                {{ $payment->displayTypeLabel() }}
-                            </span>
-                        </td>
-                        
-                        <td>
-                            @if($payment->booking?->booking_code)
-                                <span class="code-text">{{ $payment->booking->booking_code }}</span>
-                            @else
-                                <span class="muted-text">—</span>
-                            @endif
-                        </td>
-                        
-                        <td>
-                            <span style="font-weight: 500; color: #0f172a;">
-                                {{ $payment->booking?->user?->full_name ?? '—' }}
-                            </span>
-                        </td>
-                        
-                        <td>
-                            <span class="amount-text">
-                                {{ number_format($payment->deposit_amount) }} VND
-                            </span>
-                        </td>
-                        
-                        <td>
-                            <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem;">
-                                {{ strtoupper($payment->payment_method) }}
-                            </code>
-                        </td>
-                        
-                        <td>
-                            {{-- Giữ nguyên phương thức hiển thị nhãn trạng thái từ Model của bạn --}}
-                            <span style="font-weight: 500;">
-                                {{ $payment->displayStatusLabel() }}
-                            </span>
-                        </td>
-                        
-                        <td>
-                            <span style="font-size: 0.9rem; color: #475569;">
-                                {{ $payment->deposit_deadline?->format('d/m/Y H:i') ?? '—' }}
-                            </span>
-                        </td>
-                        
-                        <td style="text-align: center;">
-                            <a href="{{ route('host.payments.show', $payment) }}" class="btn-view">
-                                View
-                            </a>
-                        </td>
-                    </tr>
+
+                <tr>
+
+                    <td><strong>#{{ $payment->id }}</strong></td>
+
+                    <td>
+                        <span class="badge">
+                            {{ $payment->displayTypeLabel() }}
+                        </span>
+                    </td>
+
+                    <td class="code">
+                        {{ $payment->booking?->booking_code ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $payment->booking?->user?->full_name ?? '—' }}
+                    </td>
+
+                    <td class="amount">
+                        {{ number_format($payment->deposit_amount) }} VNĐ
+                    </td>
+
+                    <td>
+                        <span class="badge">
+                            {{ strtoupper($payment->payment_method) }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ $payment->displayStatusLabel() }}
+                    </td>
+
+                    <td style="color:#64748b;">
+                        {{ $payment->deposit_deadline?->format('d/m/Y H:i') ?? '—' }}
+                    </td>
+
+                    <td class="right">
+                        <a href="{{ route('host.payments.show', $payment) }}" class="btn">
+                            Xem
+                        </a>
+                    </td>
+
+                </tr>
+
                 @empty
-                    <tr>
-                        <td colspan="9" style="text-align: center; color: #94a3b8; padding: 2rem 0; font-style: italic;">
-                            No payments found.
-                        </td>
-                    </tr>
+
+                <tr>
+                    <td colspan="9" style="text-align:center;padding:40px;color:#94a3b8;">
+                        Không có dữ liệu thanh toán.
+                    </td>
+                </tr>
+
                 @endforelse
+
             </tbody>
+
         </table>
+
     </div>
 
 </div>

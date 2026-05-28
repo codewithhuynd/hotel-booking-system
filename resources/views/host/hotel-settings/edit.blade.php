@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Edit Hotel Settings')
+@section('title', 'Chỉnh sửa cài đặt khách sạn')
 
 @section('content')
 
@@ -75,6 +75,7 @@
     .form-group input[type="text"],
     .form-group input[type="email"],
     .form-group input[type="url"],
+    .form-group input[type="number"],
     .form-group textarea {
         font-family: inherit;
         border: 1px solid #cbd5e1;
@@ -178,7 +179,7 @@
 
 <div class="edit-settings-container">
 
-    <h1>Edit Hotel Settings</h1>
+    <h1>Chỉnh sửa cài đặt khách sạn</h1>
 
     <div class="card">
         <form method="POST" action="{{ route('host.hotel-settings.update') }}" enctype="multipart/form-data">
@@ -187,18 +188,20 @@
 
             <!-- PHẦN 1: CẤU HÌNH BANNER CHÍNH (HERO) -->
             <div class="form-section">
-                <h2>Hero Section</h2>
+                <h2>Thiết lập Hero</h2>
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Deposit Percentage (%)</label>
+                        <label>Tỷ lệ đặt cọc (%)</label>
                         <input type="number" name="deposit_percent" min="1" max="99" value="{{ old('deposit_percent', $setting->deposit_percent ?? 30) }}" required>
-                        <small style="color:#64748b">Tỷ lệ cọc áp dụng cho đặt phòng. Remaining payment sẽ là 100% - deposit.</small>
+                        <small style="color:#64748b">
+                            Tỷ lệ tiền cọc áp dụng cho đặt phòng. Số tiền còn lại = 100% - tiền cọc.
+                        </small>
                         @error('deposit_percent') <p class="error-message">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Hero Title</label>
+                        <label>Tiêu đề Hero</label>
                         <input
                             type="text"
                             name="hero_title"
@@ -207,7 +210,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Hero Description</label>
+                        <label>Mô tả Hero</label>
                         <textarea
                             name="hero_description"
                             rows="4">{{ old('hero_description', $setting->hero_description) }}</textarea>
@@ -215,16 +218,20 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Hero Image</label>
+                        <label>Ảnh Hero</label>
                         <div class="file-upload-wrapper">
                             <input type="file" name="hero_image" class="file-input-custom">
 
                             @if($setting->hero_image)
                             <div class="current-image-preview">
-                                <img src="{{ asset('storage/' . $setting->hero_image) }}" alt="Current Hero Image">
+                                <img src="{{ asset('storage/' . $setting->hero_image) }}" alt="Ảnh Hero hiện tại">
                                 <div style="font-size: 0.85rem; color: #64748b;">
-                                    <span style="display:block; font-weight: 500; color: #334155;">Current:</span>
-                                    <span style="font-family: monospace; font-size: 0.8rem;">{{ $setting->hero_image }}</span>
+                                    <span style="display:block; font-weight: 500; color: #334155;">
+                                        Hiện tại:
+                                    </span>
+                                    <span style="font-family: monospace; font-size: 0.8rem;">
+                                        {{ $setting->hero_image }}
+                                    </span>
                                 </div>
                             </div>
                             @endif
@@ -236,76 +243,51 @@
 
             <!-- PHẦN 2: THÔNG TIN LIÊN HỆ -->
             <div class="form-section">
-                <h2>Contact Details</h2>
+                <h2>Thông tin liên hệ</h2>
 
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Hotline</label>
-                        <input
-                            type="text"
-                            name="hotline"
-                            value="{{ old('hotline', $setting->hotline) }}">
+                        <input type="text" name="hotline" value="{{ old('hotline', $setting->hotline) }}">
                     </div>
 
                     <div class="form-group">
                         <label>Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value="{{ old('email', $setting->email) }}">
+                        <input type="email" name="email" value="{{ old('email', $setting->email) }}">
                     </div>
 
                     <div class="form-group">
-                        <label>Working Hours</label>
-                        <input
-                            type="text"
-                            name="working_hours"
-                            value="{{ old('working_hours', $setting->working_hours) }}">
+                        <label>Giờ làm việc</label>
+                        <input type="text" name="working_hours" value="{{ old('working_hours', $setting->working_hours) }}">
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Address</label>
-                        <input
-                            type="text"
-                            name="address"
-                            value="{{ old('address', $setting->address) }}">
+                        <label>Địa chỉ</label>
+                        <input type="text" name="address" value="{{ old('address', $setting->address) }}">
                     </div>
 
                     <div class="form-group">
-                        <label>Facebook Link</label>
-                        <input
-                            type="url"
-                            name="facebook_link"
-                            value="{{ old('facebook_link', $setting->facebook_link) }}">
+                        <label>Facebook</label>
+                        <input type="url" name="facebook_link" value="{{ old('facebook_link', $setting->facebook_link) }}">
                     </div>
 
                     <div class="form-group">
-                        <label>Google Map Link</label>
-                        <input
-                            type="url"
-                            name="google_map_link"
-                            value="{{ old('google_map_link', $setting->google_map_link) }}">
+                        <label>Google Maps</label>
+                        <input type="url" name="google_map_link" value="{{ old('google_map_link', $setting->google_map_link) }}">
                     </div>
-                    <div class="form-group full-width">
-                        <label>Hotel Address</label>
 
-                        <input
-                            type="text"
-                            name="hotel_address"
-                            value="{{ old('hotel_address', $setting->hotel_address) }}">
+                    <div class="form-group full-width">
+                        <label>Địa chỉ khách sạn</label>
+                        <input type="text" name="hotel_address" value="{{ old('hotel_address', $setting->hotel_address) }}">
                     </div>
+
                     <div class="form-group full-width">
-
-                        <label>Google Map Embed</label>
-
-                        <textarea
-                            name="google_map_embed"
-                            rows="5">{{ old('google_map_embed', $setting->google_map_embed) }}</textarea>
+                        <label>Google Maps Embed</label>
+                        <textarea name="google_map_embed" rows="5">{{ old('google_map_embed', $setting->google_map_embed) }}</textarea>
 
                         <small style="color:#64748b">
-                            Dán iframe embed từ Google Maps
+                            Dán mã iframe Google Maps
                         </small>
-
                     </div>
                 </div>
             </div>
@@ -313,7 +295,7 @@
             <!-- NÚT BẤM LƯU GỐC DUY NHẤT -->
             <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #f1f5f9;">
                 <button type="submit" class="btn-submit">
-                    Save
+                    Lưu thay đổi
                 </button>
             </div>
         </form>

@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Contact Messages')
+@section('title', 'Tin nhắn liên hệ')
 
 @section('content')
 
@@ -13,7 +13,7 @@
         padding: 20px;
         color: #1e293b;
     }
-    
+
     /* Thanh tiêu đề chính */
     .page-header {
         margin-bottom: 1.5rem;
@@ -145,7 +145,7 @@
 <div class="messages-container">
 
     <div class="page-header">
-        <h1>Contact Messages</h1>
+        <h1>Tin nhắn liên hệ</h1>
     </div>
 
     @if(session('success'))
@@ -157,12 +157,12 @@
             <thead>
                 <tr>
                     <th class="col-id">ID</th>
-                    <th class="col-name">Name</th>
+                    <th class="col-name">Tên</th>
                     <th>Email</th>
-                    <th>User</th>
-                    <th class="col-status">Status</th>
-                    <th class="col-created">Created</th>
-                    <th class="col-actions">Action</th>
+                    <th>Người dùng</th>
+                    <th class="col-status">Trạng thái</th>
+                    <th class="col-created">Ngày tạo</th>
+                    <th class="col-actions">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -172,7 +172,7 @@
                         <td class="col-name">{{ $message->name }}</td>
                         <td>{{ $message->email }}</td>
                         <td style="color: #475569;">
-                            {{ $message->user ? $message->user->full_name : 'Public user' }}
+                            {{ $message->user ? $message->user->full_name : 'Người dùng khách' }}
                         </td>
                         <td class="col-status">
                             <span class="status-badge">
@@ -185,18 +185,18 @@
                         <td class="col-actions">
                             <div class="action-group">
                                 <a href="{{ route('host.contact-messages.show', $message) }}" class="btn-view">
-                                    View
+                                    Xem
                                 </a>
 
                                 <form method="POST" 
                                       action="{{ route('host.contact-messages.destroy', $message) }}" 
                                       style="display:inline;"
-                                      onsubmit="return confirm('Delete this message?')">
+                                      onsubmit="return confirm('Xóa tin nhắn này?')">
                                     @csrf
                                     @method('DELETE')
 
                                     <button type="submit" class="btn-delete">
-                                        Delete
+                                        Xóa
                                     </button>
                                 </form>
                             </div>
@@ -205,7 +205,7 @@
                 @empty
                     <tr>
                         <td colspan="7" class="empty-row">
-                            No messages.
+                            Không có tin nhắn nào.
                         </td>
                     </tr>
                 @endforelse

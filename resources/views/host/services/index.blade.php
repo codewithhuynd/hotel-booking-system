@@ -1,7 +1,6 @@
-
 @extends('host.layouts.app')
 
-@section('title', 'Manage Services')
+@section('title', 'Quản lý Dịch vụ')
 
 @section('content')
 
@@ -145,9 +144,9 @@
 <div class="services-container">
 
     <div class="page-header">
-        <h1>Manage Services</h1>
+        <h1>Quản lý Dịch vụ</h1>
         <a href="{{ route('host.services.create') }}" class="btn-create">
-            Add New
+            Thêm mới
         </a>
     </div>
 
@@ -160,9 +159,9 @@
             <thead>
                 <tr>
                     <th class="col-id">ID</th>
-                    <th class="col-title">Title</th>
-                    <th>Description</th>
-                    <th class="col-actions">Action</th>
+                    <th class="col-title">Tiêu đề</th>
+                    <th>Mô tả</th>
+                    <th class="col-actions">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -176,18 +175,18 @@
                         <td class="col-actions">
                             <div class="action-group">
                                 <a href="{{ route('host.services.edit', $service) }}" class="btn-edit">
-                                    Edit
+                                    Sửa
                                 </a>
 
                                 <form action="{{ route('host.services.destroy', $service) }}"
                                       method="POST"
                                       style="display:inline-block;"
-                                      onsubmit="return confirm('Delete this item?')">
+                                      onsubmit="return confirm('Xóa mục này?')">
                                     @csrf
                                     @method('DELETE')
 
                                     <button type="submit" class="btn-delete">
-                                        Delete
+                                        Xóa
                                     </button>
                                 </form>
                             </div>
@@ -196,7 +195,7 @@
                 @empty
                     <tr>
                         <td colspan="4" class="empty-row">
-                            No services found.
+                            Không tìm thấy dịch vụ nào.
                         </td>
                     </tr>
                 @endforelse

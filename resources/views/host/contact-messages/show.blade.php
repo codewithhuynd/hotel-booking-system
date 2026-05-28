@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Contact Message Detail')
+@section('title', 'Chi tiết tin nhắn liên hệ')
 
 @section('content')
 
@@ -144,17 +144,17 @@
 
 <div class="message-detail-container">
 
-    <h1>Contact Message Detail</h1>
+    <h1>Chi tiết tin nhắn liên hệ</h1>
 
     @if(session('success'))
         <div class="alert-success">{{ session('success') }}</div>
     @endif
 
     <div class="detail-card">
-        <!-- Khu vực thông tin Meta Grid -->
+
         <div class="meta-grid">
             <div class="meta-row">
-                <span class="meta-label">Name</span>
+                <span class="meta-label">Họ tên</span>
                 <span class="meta-value">{{ $contactMessage->name }}</span>
             </div>
             <div class="meta-row">
@@ -162,57 +162,55 @@
                 <span class="meta-value" style="color: #2563eb;">{{ $contactMessage->email }}</span>
             </div>
             <div class="meta-row">
-                <span class="meta-label">User</span>
+                <span class="meta-label">Người dùng</span>
                 <span class="meta-value">
-                    {{ $contactMessage->user ? $contactMessage->user->full_name : 'Public user' }}
+                    {{ $contactMessage->user ? $contactMessage->user->full_name : 'Người dùng ẩn danh' }}
                 </span>
             </div>
             <div class="meta-row">
-                <span class="meta-label">Created</span>
+                <span class="meta-label">Thời gian tạo</span>
                 <span class="meta-value">{{ $contactMessage->created_at->format('d/m/Y H:i') }}</span>
             </div>
             <div class="meta-row" style="grid-column: span 2;">
-                <span class="meta-label">Status</span>
+                <span class="meta-label">Trạng thái</span>
                 <span class="status-badge">
                     {{ strtoupper($contactMessage->status) }}
                 </span>
             </div>
         </div>
 
-        <!-- Khối hiển thị Nội dung tin nhắn gửi đến -->
         <div class="content-section">
-            <div class="content-title">Message</div>
+            <div class="content-title">Nội dung tin nhắn</div>
             <div class="message-box">
                 {{ $contactMessage->message }}
             </div>
         </div>
 
-        <!-- Khối hiển thị phản hồi gần nhất nếu có -->
         @if($contactMessage->reply_message)
             <div class="content-section" style="margin-top: 1.75rem;">
-                <div class="content-title">Last reply</div>
+                <div class="content-title">Phản hồi gần nhất</div>
                 <div class="reply-box">
                     {{ $contactMessage->reply_message }}
                 </div>
             </div>
         @endif
 
-        <!-- Form xử lý trạng thái tin nhắn gốc -->
         <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #f1f5f9;">
             <form method="POST" action="{{ route('host.contact-messages.reply', $contactMessage) }}">
                 @csrf
 
                 @if($contactMessage->status !== 'replied')
                     <button type="submit" class="btn-action-primary">
-                        Mark as Replied
+                        Đánh dấu đã phản hồi
                     </button>
                 @else
                     <button type="button" class="btn-action-disabled" disabled>
-                        Already Replied
+                        Đã phản hồi
                     </button>
                 @endif
             </form>
         </div>
+
     </div>
 
 </div>

@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Edit About Section')
+@section('title', 'Chỉnh sửa mục Giới thiệu')
 
 @section('content')
 
@@ -99,7 +99,7 @@
 
 <div class="edit-section-container">
 
-    <h1>Edit About Section</h1>
+    <h1>Chỉnh sửa mục Giới thiệu</h1>
 
     <div class="card">
         <form method="POST" action="{{ route('host.about-sections.update', $about_section) }}">
@@ -107,7 +107,7 @@
             @method('PUT')
 
             <div class="form-group">
-                <label>Title</label>
+                <label>Tiêu đề</label>
                 <input 
                     type="text" 
                     name="title" 
@@ -117,7 +117,7 @@
             </div>
 
             <div class="form-group">
-                <label>Description</label>
+                <label>Mô tả</label>
                 <textarea 
                     name="description" 
                     rows="5"
@@ -128,7 +128,7 @@
             <!-- Chỉ giữ duy nhất nút Update gốc -->
             <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid #f1f5f9;">
                 <button type="submit" class="btn-update">
-                    Update
+                    Cập nhật
                 </button>
             </div>
         </form>

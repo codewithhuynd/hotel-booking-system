@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Manage About Sections')
+@section('title', 'Quản lý mục Giới thiệu')
 
 @section('content')
 
@@ -144,9 +144,9 @@
 <div class="sections-container">
 
     <div class="page-header">
-        <h1>Manage About Sections</h1>
+        <h1>Quản lý mục Giới thiệu</h1>
         <a href="{{ route('host.about-sections.create') }}" class="btn-create">
-            Add New
+            Thêm mới
         </a>
     </div>
 
@@ -159,9 +159,9 @@
             <thead>
                 <tr>
                     <th class="col-id">ID</th>
-                    <th class="col-title">Title</th>
-                    <th>Description</th>
-                    <th class="col-actions">Action</th>
+                    <th class="col-title">Tiêu đề</th>
+                    <th>Mô tả</th>
+                    <th class="col-actions">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -175,18 +175,18 @@
                         <td class="col-actions">
                             <div class="action-group">
                                 <a href="{{ route('host.about-sections.edit', $section) }}" class="btn-edit">
-                                    Edit
+                                    Sửa
                                 </a>
 
                                 <form action="{{ route('host.about-sections.destroy', $section) }}"
                                       method="POST"
                                       style="display:inline-block;"
-                                      onsubmit="return confirm('Delete this item?')">
+                                      onsubmit="return confirm('Xóa mục này?')">
                                     @csrf
                                     @method('DELETE')
 
                                     <button type="submit" class="btn-delete">
-                                        Delete
+                                        Xóa
                                     </button>
                                 </form>
                             </div>
@@ -195,7 +195,7 @@
                 @empty
                     <tr>
                         <td colspan="4" class="empty-row">
-                            No about sections found.
+                            Không tìm thấy mục giới thiệu nào.
                         </td>
                     </tr>
                 @endforelse
