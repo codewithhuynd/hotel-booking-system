@@ -260,6 +260,15 @@ class BookingController extends Controller
                 'refund_completed_at' => now(),
             ]);
 
+            Notification::create([
+                'user_id' => $cancellation->booking->user_id,
+                'booking_id' => $cancellation->booking_id,
+                'type' => 'host_refunded_booking',
+                'title' => 'Host đã hoàn tiền',
+                'message' => 'Booking #' . $cancellation->booking->booking_code . ' đã được hoàn tiền thành công.',
+                'is_read' => false,
+            ]);
+
             $booking = $cancellation->booking;
 
             foreach ($booking->payments as $payment) {

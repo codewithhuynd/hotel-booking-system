@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
@@ -114,6 +116,20 @@ class PaymentController extends Controller
 
             'status' => 'pending',
         ]);
+
+        $hosts = User::where('role', 'host')->get();
+
+        foreach ($hosts as $host) {
+            Notification::create([
+                'user_id' => $host->id,
+                'booking_id' => $payment->booking_id,
+                'payment_id' => $payment->id,
+                'type' => 'guest_uploaded_deposit',
+                'title' => 'Khách đã hoàn tất chuyển cọc',
+                'message' => Auth::user()->name . ' đã tải minh chứng chuyển cọc. Vui lòng kiểm tra và xác nhận thanh toán.',
+                'is_read' => false,
+            ]);
+        }
 
         return redirect()
             ->route('guest.bookings.index')

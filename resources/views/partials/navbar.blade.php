@@ -87,9 +87,13 @@
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
 
-                    @if($unreadCount > 0)
-                        <span class="notification-badge">{{ $unreadCount }}</span>
-                    @endif
+                    <span class="notification-badge"
+                        id="notificationBadge"
+                        style="{{ $unreadCount > 0 ? 'display:flex;' : 'display:none;' }}">
+
+                        {{ $unreadCount }}
+
+                    </span>
                 </button>
 
                 <div class="notification-dropdown" id="notificationDropdown">
@@ -105,7 +109,7 @@
                         @endif
                     </div>
 
-                    <div class="notification-list">
+                    <div class="notification-list" id="notificationList">
                         @forelse($notifications as $notification)
                             <form action="{{ route('notifications.read', $notification) }}" method="POST">
                                 @csrf

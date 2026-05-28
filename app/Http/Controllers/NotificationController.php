@@ -64,13 +64,48 @@ class NotificationController extends Controller
         return redirect()->route('home');
     }
 
-    public function markAllAsRead()
+    public function markAllAsRead(Request $request)
     {
         Auth::user()
             ->notifications()
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
         return back();
+    }
+
+    public function poll()
+    {
+        $notifications = Auth::user()
+            ->notifications()
+            ->latest()
+            ->take(8)
+            ->get();
+
+        $unreadCount = Auth::user()
+            ->notifications()
+            ->where('is_read', false)
+            ->count();
+
+        return response()->json([
+            'unread_count' => $unreadCount,
+
+            'notifications' => $notifications->map(function ($notification) {
+                return [
+                    'id' => $notification->id,
+                    'title' => $notification->title,
+                    'message' => $notification->message,
+                    'is_read' => $notification->is_read,
+                    'url' => route('notifications.read', $notification->id),
+                    'created_at' => $notification->created_at->diffForHumans(),
+                ];
+            }),
+        ]);
     }
 }
