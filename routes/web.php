@@ -82,6 +82,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/poll', [NotificationController::class, 'poll'])
         ->name('notifications.poll');
 
+    Route::get('/notifications/dropdown', [NotificationController::class, 'dropdown'])
+        ->name('notifications.dropdown');
+
     Route::get('/notifications', [NotificationController::class, 'index'])
         ->name('notifications.index');
 
