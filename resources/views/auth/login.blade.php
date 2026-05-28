@@ -43,13 +43,14 @@
         }
     </script>
     <style>
-        /* Hiệu ứng focus mượt mà và chuyển động tinh tế */
-        .luxury-input:focus ~ label,
-        .luxury-input:not(:placeholder-shown) ~ label {
-            transform: translateY(-1.25rem) scale(0.85);
-            color: #C5A880;
-        }
-    </style>
+    /* Hiệu ứng focus mượt mà và chuyển động tinh tế */
+    .luxury-input:focus ~ label,
+    .luxury-input:not(:placeholder-shown) ~ label {
+        transform: translateY(-1.25rem) scale(0.85);
+        color: #C5A880;
+    }
+</style>
+<link rel="stylesheet" href="/css/heading-font.css">
 </head>
 <body class="font-sans bg-luxury-dark text-gray-200 min-h-screen flex items-center justify-center overflow-x-hidden">
 

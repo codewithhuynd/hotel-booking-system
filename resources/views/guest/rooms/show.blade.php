@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -611,6 +610,7 @@ html
             }
         }
     </style>
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 
 <body>

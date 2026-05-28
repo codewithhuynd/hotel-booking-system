@@ -26,6 +26,7 @@
             }
         }
     </script>
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 
 <body class="bg-slate-50 font-sans text-slate-700 min-h-screen">

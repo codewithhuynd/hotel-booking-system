@@ -118,6 +118,7 @@
             background: #b91c1c; /* Đỏ đậm hơn khi rê chuột vào */
         }
     </style>
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 <body>
 

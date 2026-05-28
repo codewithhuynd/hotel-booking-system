@@ -602,6 +602,7 @@
                     #f87171);
         }
     </style>
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 
 <body>

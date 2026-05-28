@@ -50,6 +50,7 @@
             color: #C5A880;
         }
     </style>
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
 <body class="font-sans bg-luxury-dark text-gray-200 min-h-screen flex items-center justify-center overflow-x-hidden">
 

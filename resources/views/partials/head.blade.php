@@ -17,4 +17,5 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     @include('partials.styles')
+    <link rel="stylesheet" href="/css/heading-font.css">
 </head>
