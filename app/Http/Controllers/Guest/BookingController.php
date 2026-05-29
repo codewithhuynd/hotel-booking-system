@@ -57,10 +57,36 @@ class BookingController extends Controller
             'check_in_date' => ['required', 'date', 'after_or_equal:today'],
             'check_out_date' => ['required', 'date', 'after:check_in_date'],
             'guest_count' => ['required', 'integer', 'min:1', 'max:' . $room->capacity],
-            'contact_name' => ['required', 'max:255'],
-            'contact_phone' => ['required', 'max:20'],
+            'contact_name' => ['required', 'string', 'max:255'],
+            'contact_phone' => ['required', 'string', 'max:20'],
             'contact_email' => ['nullable', 'email'],
-            'note' => ['nullable'],
+            'note' => ['nullable', 'string', 'max:1000'],
+        ], [
+            'check_in_date.required' => 'Vui lòng chọn ngày nhận phòng.',
+            'check_in_date.date' => 'Ngày nhận phòng không đúng định dạng.',
+            'check_in_date.after_or_equal' => 'Ngày nhận phòng không được trước ngày hôm nay.',
+
+            'check_out_date.required' => 'Vui lòng chọn ngày trả phòng.',
+            'check_out_date.date' => 'Ngày trả phòng không đúng định dạng.',
+            'check_out_date.after' => 'Ngày trả phòng phải sau ngày nhận phòng.',
+
+            'guest_count.required' => 'Vui lòng nhập số lượng khách.',
+            'guest_count.integer' => 'Số lượng khách phải là số nguyên.',
+            'guest_count.min' => 'Số lượng khách tối thiểu là 1.',
+            'guest_count.max' => 'Số lượng khách không được vượt quá sức chứa phòng (' . $room->capacity . ' khách).',
+
+            'contact_name.required' => 'Vui lòng nhập tên người liên hệ.',
+            'contact_name.string' => 'Tên người liên hệ không hợp lệ.',
+            'contact_name.max' => 'Tên người liên hệ không được vượt quá 255 ký tự.',
+
+            'contact_phone.required' => 'Vui lòng nhập số điện thoại liên hệ.',
+            'contact_phone.string' => 'Số điện thoại không hợp lệ.',
+            'contact_phone.max' => 'Số điện thoại không được vượt quá 20 ký tự.',
+
+            'contact_email.email' => 'Email liên hệ không đúng định dạng.',
+
+            'note.string' => 'Ghi chú không hợp lệ.',
+            'note.max' => 'Ghi chú không được vượt quá 1000 ký tự.',
         ]);
 
         $hasConflict = Booking::where('room_id', $room->id)

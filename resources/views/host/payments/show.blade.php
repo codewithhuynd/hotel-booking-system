@@ -169,7 +169,7 @@
 
 <div class="payment-detail-container">
 
-    <h1>Payment Detail</h1>
+    <h1>Chi tiết đơn thanh toán</h1>
     <p style="color:#64748b; margin-top: 0; margin-bottom: 1.5rem; font-size: 0.95rem;">
         Quản lý và phê duyệt thông tin giao dịch của khách hàng.
     </p>

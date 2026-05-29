@@ -856,23 +856,9 @@
 
                     @if($errors->any())
 
-                    <div class="mb-8 rounded-3xl border border-red-200 bg-red-50 p-5">
-
-                        <div class="flex items-center gap-2 text-red-600 font-bold mb-2">
-                            <i class="fa-solid fa-circle-exclamation"></i>
-                            Có lỗi xảy ra
-                        </div>
-
-                        <ul class="space-y-1 text-sm text-red-500">
-
-                            @foreach($errors->all() as $error)
-
-                            <li>• {{ $error }}</li>
-
-                            @endforeach
-
-                        </ul>
-
+                    <div class="mb-6 rounded-3xl border border-amber-200 bg-amber-50/80 p-4 text-sm text-amber-800">
+                        <i class="fa-solid fa-circle-info mr-2"></i>
+                        Vui lòng kiểm tra lại các thông tin bắt buộc bên dưới.
                     </div>
 
                     @endif
@@ -893,8 +879,16 @@
                                 <input type="date"
                                     id="check_in_date"
                                     name="check_in_date"
-                                    class="glass-input"
+                                    value="{{ old('check_in_date') }}"
+                                    class="glass-input @error('check_in_date') border-red-500 ring-1 ring-red-200 @enderror"
                                     required>
+
+                                @error('check_in_date')
+                                <p class="mt-2 text-sm text-red-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    {{ $message }}
+                                </p>
+                                @enderror
 
                             </div>
 
@@ -907,8 +901,16 @@
                                 <input type="date"
                                     id="check_out_date"
                                     name="check_out_date"
-                                    class="glass-input"
+                                    value="{{ old('check_out_date') }}"
+                                    class="glass-input @error('check_out_date') border-red-500 ring-1 ring-red-200 @enderror"
                                     required>
+
+                                @error('check_out_date')
+                                <p class="mt-2 text-sm text-red-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    {{ $message }}
+                                </p>
+                                @enderror
 
                             </div>
 
@@ -926,9 +928,17 @@
                                     name="guest_count"
                                     min="1"
                                     max="{{ $room->capacity }}"
+                                    value="{{ old('guest_count') }}"
                                     placeholder="Tối đa {{ $room->capacity }} khách"
-                                    class="glass-input"
+                                    class="glass-input @error('guest_count') border-red-500 ring-1 ring-red-200 @enderror"
                                     required>
+
+                                @error('guest_count')
+                                <p class="mt-2 text-sm text-red-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    {{ $message }}
+                                </p>
+                                @enderror
 
                             </div>
 
@@ -940,9 +950,16 @@
 
                                 <input type="text"
                                     name="contact_name"
-                                    value="{{ Auth::user()->full_name }}"
-                                    class="glass-input"
+                                    value="{{ old('contact_name', Auth::user()->full_name) }}"
+                                    class="glass-input @error('contact_name') border-red-500 ring-1 ring-red-200 @enderror"
                                     required>
+
+                                @error('contact_name')
+                                <p class="mt-2 text-sm text-red-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    {{ $message }}
+                                </p>
+                                @enderror
 
                             </div>
 
@@ -958,9 +975,17 @@
 
                                 <input type="text"
                                     name="contact_phone"
+                                    value="{{ old('contact_phone') }}"
                                     placeholder="Nhập số điện thoại"
-                                    class="glass-input"
+                                    class="glass-input @error('contact_phone') border-red-500 ring-1 ring-red-200 @enderror"
                                     required>
+
+                                @error('contact_phone')
+                                <p class="mt-2 text-sm text-red-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    {{ $message }}
+                                </p>
+                                @enderror
 
                             </div>
 
@@ -972,8 +997,15 @@
 
                                 <input type="email"
                                     name="contact_email"
-                                    value="{{ Auth::user()->email }}"
-                                    class="glass-input">
+                                    value="{{ old('contact_email', Auth::user()->email) }}"
+                                    class="glass-input @error('contact_email') border-red-500 ring-1 ring-red-200 @enderror">
+
+                                @error('contact_email')
+                                <p class="mt-2 text-sm text-red-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    {{ $message }}
+                                </p>
+                                @enderror
 
                             </div>
 
@@ -986,8 +1018,15 @@
                             </label>
 
                             <textarea name="note"
-                                class="glass-input"
-                                placeholder="Yêu cầu đặc biệt, giờ check-in, giường phụ..."></textarea>
+                                class="glass-input @error('note') border-red-500 ring-1 ring-red-200 @enderror"
+                                placeholder="Yêu cầu đặc biệt, giờ check-in, giường phụ...">{{ old('note') }}</textarea>
+
+                            @error('note')
+                            <p class="mt-2 text-sm text-red-500 flex items-center gap-1">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                {{ $message }}
+                            </p>
+                            @enderror
 
                         </div>
 

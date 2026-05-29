@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Thanh toán | Grand Elite Hotel</title>
+    <title>Thanh toán </title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -49,12 +49,10 @@
                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
 
-                Quay lại bookings
+                Quay lại Đơn đặt phòng của tôi
             </a>
 
-            <div class="font-serif text-sm tracking-[0.2em] font-bold">
-                THE GRAND ELITE
-            </div>
+       
         </div>
 
         @php
@@ -321,10 +319,6 @@
             </div>
         </div>
 
-        <!-- FOOTER -->
-        <div class="text-center text-xs text-slate-400 mt-16 tracking-widest uppercase">
-            © 2026 The Grand Elite Hotel
-        </div>
     </div>
 
     <!-- SCRIPT -->

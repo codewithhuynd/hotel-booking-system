@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Host;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class HostRegisterController extends Controller
@@ -22,13 +23,18 @@ class HostRegisterController extends Controller
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
 
-        User::create([
+        $user = User::create([
             'full_name' => $validated['full_name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => 'host',
         ]);
 
-        return redirect()->route('host.dashboard')->with('status', 'Đã tạo tài khoản host mới.');
+        $user->sendEmailVerificationNotification();
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('verification.notice');
     }
 }
