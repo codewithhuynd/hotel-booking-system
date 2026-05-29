@@ -494,6 +494,13 @@
                 0 0 18px rgba(16, 185, 129, 0.18);
         }
 
+        .field-error {
+            color: #fca5a5;
+            font-size: 0.78rem;
+            line-height: 1.4;
+            margin-top: 0.35rem;
+        }
+
         .btn-shimmer {
             position: relative;
             overflow: hidden;
@@ -891,7 +898,7 @@
                         @endphp
 
                         <span class="text-xs font-bold px-3.5 py-1.5 rounded-xl border {{ $bStatusColor }}">
-                            {{ ucfirst(str_replace('_', ' ', $booking->status)) }}
+                            {{ $booking->displayStatusLabel() }}
                         </span>
 
                     </div>
@@ -1214,11 +1221,12 @@
 
                                         <div>
 
-                                            <label class="block mb-2 text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
+                                            <label for="reason-{{ $booking->id }}" class="block mb-2 text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
                                                 Lý do hủy
                                             </label>
 
                                             <textarea
+                                                id="reason-{{ $booking->id }}"
                                                 name="reason"
                                                 rows="4"
                                                 required
@@ -1231,8 +1239,11 @@
                             focus:border-rose-400
                             focus:ring-4
                             focus:ring-rose-200
-                            outline-none transition-all"
+                            outline-none transition-all @error('reason') border-rose-400 ring-4 ring-rose-100 @enderror"
                                                 placeholder="Vui lòng nhập lý do hủy phòng...">{{ old('reason') }}</textarea>
+                                            @error('reason')
+                                                <p class="field-error">{{ $message }}</p>
+                                            @enderror
 
                                         </div>
 
@@ -1256,11 +1267,12 @@
 
                                             <div class="md:col-span-2">
 
-                                                <label class="block mb-2 text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
+                                                <label for="bank_name-{{ $booking->id }}" class="block mb-2 text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
                                                     Ngân hàng nhận refund
                                                 </label>
 
                                                 <input
+                                                    id="bank_name-{{ $booking->id }}"
                                                     type="text"
                                                     name="bank_name"
                                                     value="{{ old('bank_name') }}"
@@ -1270,17 +1282,21 @@
                                 bg-slate-50 p-4 text-slate-800
                                 focus:border-rose-400
                                 focus:ring-4 focus:ring-rose-200
-                                outline-none transition-all">
+                                outline-none transition-all @error('bank_name') border-rose-400 ring-4 ring-rose-100 @enderror">
+                                                @error('bank_name')
+                                                    <p class="field-error">{{ $message }}</p>
+                                                @enderror
 
                                             </div>
 
                                             <div>
 
-                                                <label class="block mb-2 text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
+                                                <label for="bank_account_number-{{ $booking->id }}" class="block mb-2 text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
                                                     Số tài khoản
                                                 </label>
 
                                                 <input
+                                                    id="bank_account_number-{{ $booking->id }}"
                                                     type="text"
                                                     name="bank_account_number"
                                                     value="{{ old('bank_account_number') }}"
@@ -1290,17 +1306,21 @@
                                 bg-slate-50 p-4 text-slate-800
                                 focus:border-rose-400
                                 focus:ring-4 focus:ring-rose-200
-                                outline-none transition-all">
+                                outline-none transition-all @error('bank_account_number') border-rose-400 ring-4 ring-rose-100 @enderror">
+                                                @error('bank_account_number')
+                                                    <p class="field-error">{{ $message }}</p>
+                                                @enderror
 
                                             </div>
 
                                             <div>
 
-                                                <label class="block mb-2 text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
+                                                <label for="bank_account_name-{{ $booking->id }}" class="block mb-2 text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
                                                     Chủ tài khoản
                                                 </label>
 
                                                 <input
+                                                    id="bank_account_name-{{ $booking->id }}"
                                                     type="text"
                                                     name="bank_account_name"
                                                     value="{{ old('bank_account_name') }}"
@@ -1310,7 +1330,10 @@
                                 bg-slate-50 p-4 text-slate-800
                                 focus:border-rose-400
                                 focus:ring-4 focus:ring-rose-200
-                                outline-none transition-all">
+                                outline-none transition-all @error('bank_account_name') border-rose-400 ring-4 ring-rose-100 @enderror">
+                                                @error('bank_account_name')
+                                                    <p class="field-error">{{ $message }}</p>
+                                                @enderror
 
                                             </div>
 
@@ -1444,6 +1467,17 @@
                 });
             }
         });
+
+        @if($errors->any())
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-cancel-modal]').forEach((modal) => {
+                if (!modal.classList.contains('hidden')) {
+                    return;
+                }
+                openCancelModal(modal.id);
+            });
+        });
+        @endif
     </script>
 
 </body>

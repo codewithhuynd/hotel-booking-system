@@ -177,16 +177,37 @@ class BookingController extends Controller
             in_array($booking->depositPayment->status, ['pending', 'paid'], true);
 
         $rules = [
-            'reason' => ['required', 'string', 'max:1000'],
+            'reason' => ['required', 'string', 'min:10', 'max:1000', 'regex:/^[\pL\pN\s.,;:!?()\-\/]+$/u'],
         ];
 
         if ($hasTransferredDeposit) {
-            $rules['bank_name'] = ['required', 'string', 'max:255'];
-            $rules['bank_account_number'] = ['required', 'string', 'max:255'];
-            $rules['bank_account_name'] = ['required', 'string', 'max:255'];
+            $rules['bank_name'] = ['required', 'string', 'min:3', 'max:255', 'regex:/^[\pL\pN\s\-\.\/()]+$/u'];
+            $rules['bank_account_number'] = ['required', 'string', 'min:6', 'max:30', 'regex:/^[0-9A-Za-z\-\/]+$/u'];
+            $rules['bank_account_name'] = ['required', 'string', 'min:5', 'max:255', 'regex:/^[\pL\s\.\'-]+$/u'];
         }
 
-        $validated = $request->validate($rules);
+        $validated = $request->validate($rules, [
+            'reason.required' => 'Vui lòng nhập lý do hủy phòng.',
+            'reason.string' => 'Lý do hủy phải là văn bản hợp lệ.',
+            'reason.min' => 'Lý do hủy phải có ít nhất 10 ký tự.',
+            'reason.max' => 'Lý do hủy không được vượt quá 1000 ký tự.',
+            'reason.regex' => 'Lý do hủy chỉ được chứa chữ, số và các ký tự cơ bản như dấu câu, dấu chấm, dấu gạch.',
+            'bank_name.required' => 'Vui lòng nhập tên ngân hàng nhận hoàn tiền.',
+            'bank_name.string' => 'Tên ngân hàng phải là chuỗi văn bản hợp lệ.',
+            'bank_name.min' => 'Tên ngân hàng phải có ít nhất 3 ký tự.',
+            'bank_name.max' => 'Tên ngân hàng không được vượt quá 255 ký tự.',
+            'bank_name.regex' => 'Tên ngân hàng chỉ được chứa chữ, số, khoảng trắng và các ký tự - . / ().',
+            'bank_account_number.required' => 'Vui lòng nhập số tài khoản ngân hàng.',
+            'bank_account_number.string' => 'Số tài khoản phải là chuỗi văn bản hợp lệ.',
+            'bank_account_number.min' => 'Số tài khoản phải có ít nhất 6 ký tự.',
+            'bank_account_number.max' => 'Số tài khoản không được vượt quá 30 ký tự.',
+            'bank_account_number.regex' => 'Số tài khoản chỉ được chứa chữ số, chữ cái và các ký tự - /.',
+            'bank_account_name.required' => 'Vui lòng nhập tên chủ tài khoản.',
+            'bank_account_name.string' => 'Tên chủ tài khoản phải là chuỗi văn bản hợp lệ.',
+            'bank_account_name.min' => 'Tên chủ tài khoản phải có ít nhất 5 ký tự.',
+            'bank_account_name.max' => 'Tên chủ tài khoản không được vượt quá 255 ký tự.',
+            'bank_account_name.regex' => 'Tên chủ tài khoản chỉ được chứa chữ cái, khoảng trắng, dấu chấm, dấu gạch và dấu nháy đơn.',
+        ]);
 
         DB::transaction(function () use ($booking, $validated, $hasTransferredDeposit) {
             BookingCancellation::create([

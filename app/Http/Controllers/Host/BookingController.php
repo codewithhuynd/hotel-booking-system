@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Host;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RefundCompletedMail;
 use App\Models\Booking;
 use App\Models\BookingCancellation;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class BookingController extends Controller
@@ -97,6 +99,12 @@ class BookingController extends Controller
             'status' => 'occupied',
         ]);
 
+        notifyUser($booking->user, 'Đã check-in thành công', 'Host đã xác nhận bạn đã check-in cho booking #' . $booking->booking_code . '.', 'success', [
+            'booking_id' => $booking->id,
+            'booking_code' => $booking->booking_code,
+            'url' => route('guest.bookings.show', ['booking' => $booking->id]),
+        ]);
+
         return back()->with('success', 'Guest checked in successfully.');
     }
 
@@ -136,6 +144,12 @@ class BookingController extends Controller
                 ]
             );
         }
+
+        notifyUser($booking->user, 'Đã checkout thành công', 'Host đã xác nhận bạn đã checkout cho booking #' . $booking->booking_code . '.', 'info', [
+            'booking_id' => $booking->id,
+            'booking_code' => $booking->booking_code,
+            'url' => route('guest.bookings.show', ['booking' => $booking->id]),
+        ]);
 
         return back()->with('success', 'Check-out thành công. Đã tạo payment cuối nếu còn dư.');
     }
@@ -237,6 +251,15 @@ class BookingController extends Controller
                 }
             }
         });
+
+        try {
+            if (! empty($cancellation->booking?->user?->email)) {
+                Mail::to($cancellation->booking->user->email)
+                    ->send(new RefundCompletedMail($cancellation->fresh()));
+            }
+        } catch (\Throwable $e) {
+            // Keep refund completion logic intact even if email delivery fails.
+        }
 
         return back()->with('success', 'Đã hoàn tiền thành công.');
     }

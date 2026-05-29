@@ -66,7 +66,7 @@
         textarea {
             width: 100%;
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 6px;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
             font-family: inherit;
@@ -89,6 +89,12 @@
             border-radius: 6px;
             margin-bottom: 20px;
             font-size: 14px;
+        }
+        .field-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-bottom: 14px;
+            line-height: 1.4;
         }
         /* Thông báo hoàn tiền */
         .muted {
@@ -127,7 +133,7 @@
 
     <div class="info-group">
         <p><strong>Phòng:</strong> {{ $booking->room->room_name }}</p>
-        <p><strong>Booking code:</strong> {{ $booking->booking_code }}</p>
+        <p><strong>Mã đặt phòng:</strong> {{ $booking->booking_code }}</p>
     </div>
 
     @if($errors->any())
@@ -141,8 +147,11 @@
     <form action="{{ route('guest.bookings.cancel', $booking) }}" method="POST">
         @csrf
 
-        <label>Lý do hủy</label>
-        <textarea name="reason" rows="4" required placeholder="Vui lòng nhập lý do hủy phòng...">{{ old('reason') }}</textarea>
+        <label for="reason">Lý do hủy</label>
+        <textarea id="reason" name="reason" rows="4" required placeholder="Ví dụ: Tôi cần hủy vì lịch trình thay đổi, phòng không phù hợp...">{{ old('reason') }}</textarea>
+        @error('reason')
+            <p class="field-error">{{ $message }}</p>
+        @enderror
 
         @php
             $needsRefund = $booking->depositPayment && in_array($booking->depositPayment->status, ['pending', 'paid'], true);
@@ -150,21 +159,30 @@
 
         @if($needsRefund)
             <div class="muted">
-                Bạn đã chuyển cọc. Vui lòng nhập thông tin tài khoản để nhận refund.
+                Bạn đã chuyển cọc. Vui lòng nhập thông tin tài khoản để nhận hoàn tiền.
             </div>
 
-            <label>Ngân hàng nhận refund</label>
-            <input type="text" name="bank_name" value="{{ old('bank_name') }}" placeholder="Ví dụ: Vietcombank, Techcombank..." required>
+            <label for="bank_name">Ngân hàng nhận hoàn tiền</label>
+            <input id="bank_name" type="text" name="bank_name" value="{{ old('bank_name') }}" placeholder="Ví dụ: Vietcombank, Techcombank..." required>
+            @error('bank_name')
+                <p class="field-error">{{ $message }}</p>
+            @enderror
 
-            <label>Số tài khoản</label>
-            <input type="text" name="bank_account_number" value="{{ old('bank_account_number') }}" placeholder="Nhập số tài khoản ngân hàng" required>
+            <label for="bank_account_number">Số tài khoản</label>
+            <input id="bank_account_number" type="text" name="bank_account_number" value="{{ old('bank_account_number') }}" placeholder="Nhập số tài khoản ngân hàng" required>
+            @error('bank_account_number')
+                <p class="field-error">{{ $message }}</p>
+            @enderror
 
-            <label>Tên chủ tài khoản</label>
-            <input type="text" name="bank_account_name" value="{{ old('bank_account_name') }}" placeholder="Ví dụ: NGUYEN VAN A" required>
+            <label for="bank_account_name">Tên chủ tài khoản</label>
+            <input id="bank_account_name" type="text" name="bank_account_name" value="{{ old('bank_account_name') }}" placeholder="Ví dụ: NGUYEN VAN A" required>
+            @error('bank_account_name')
+                <p class="field-error">{{ $message }}</p>
+            @enderror
         @endif
 
-        <button type="submit" onclick="return confirm('Bạn chắc chắn muốn hủy booking này?')">
-            Xác nhận hủy booking
+        <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn hủy đặt phòng này không?')">
+            Xác nhận hủy đặt phòng
         </button>
     </form>
 

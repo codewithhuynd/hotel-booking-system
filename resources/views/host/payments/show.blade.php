@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Payment Detail')
+@section('title', 'Chi tiết thanh toán')
 
 @section('content')
 
@@ -187,7 +187,7 @@
         
         <div class="grid">
             <div class="field">
-                <label>Payment ID</label>
+                <label>Mã thanh toán</label>
                 <div class="value"><strong>#{{ $payment->id }}</strong></div>
             </div>
 
@@ -227,7 +227,7 @@
             <div class="field">
                 <label>Số tiền</label>
                 <div class="value" style="color: #2563eb; font-weight: 600;">
-                    {{ number_format($payment->deposit_amount) }} VND
+                    {{ number_format($payment->deposit_amount) }} VNĐ
                 </div>
             </div>
 
@@ -263,7 +263,7 @@
         @if($payment->proof_image)
             <div class="proof-wrapper">
                 <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
-                    Hình ảnh minh chứng (Proof Image)
+                    Hình ảnh minh chứng
                 </label>
                 <a href="{{ asset('storage/' . $payment->proof_image) }}" target="_blank" title="Click để xem ảnh lớn">
                     <img

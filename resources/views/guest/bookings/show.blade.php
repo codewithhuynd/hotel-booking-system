@@ -21,7 +21,7 @@
             <h2 class="mb-4 text-xl font-semibold text-slate-900">Thông tin đặt phòng</h2>
             <dl class="grid gap-4 text-sm md:grid-cols-2">
                 <div><dt class="text-slate-500">Phòng</dt><dd class="font-semibold text-slate-900">{{ $booking->room->room_name ?? '—' }}</dd></div>
-                <div><dt class="text-slate-500">Trạng thái</dt><dd class="font-semibold text-slate-900">{{ ucfirst(str_replace('_', ' ', $booking->status)) }}</dd></div>
+                <div><dt class="text-slate-500">Trạng thái</dt><dd class="font-semibold text-slate-900">{{ $booking->displayStatusLabel() }}</dd></div>
                 <div><dt class="text-slate-500">Ngày nhận</dt><dd class="font-semibold text-slate-900">{{ $booking->check_in_date?->format('d/m/Y') }}</dd></div>
                 <div><dt class="text-slate-500">Ngày trả</dt><dd class="font-semibold text-slate-900">{{ $booking->check_out_date?->format('d/m/Y') }}</dd></div>
                 <div><dt class="text-slate-500">Số khách</dt><dd class="font-semibold text-slate-900">{{ $booking->guest_count }}</dd></div>
