@@ -150,7 +150,9 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            if (! Auth::user()->hasVerifiedEmail()) {
+            $user = Auth::user();
+
+            if ($user instanceof User && ! $user->hasVerifiedEmail()) {
                 return redirect()->route('verification.notice');
             }
 
