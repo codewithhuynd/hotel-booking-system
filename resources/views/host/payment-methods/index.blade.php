@@ -1,6 +1,6 @@
 @extends('host.layouts.app')
 
-@section('title', 'Payment Methods')
+@section('title', 'Phương thức thanh toán')
 
 @section('content')
 
@@ -13,14 +13,14 @@
         padding: 20px;
         color: #1e293b;
     }
-    
-    /* Cấu trúc Header phân tách nút tạo mới */
+
     .page-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 2rem;
     }
+
     .page-header h1 {
         font-size: 1.75rem;
         font-weight: 700;
@@ -28,7 +28,6 @@
         margin: 0;
     }
 
-    /* Nút tạo mới phương thức thanh toán */
     .btn-create {
         padding: 10px 18px;
         background: #16a34a;
@@ -41,11 +40,11 @@
         display: inline-flex;
         align-items: center;
     }
+
     .btn-create:hover {
         background: #15803d;
     }
 
-    /* Thiết kế bảng quản trị hiện đại */
     .table-responsive {
         width: 100%;
         overflow-x: auto;
@@ -54,12 +53,14 @@
         border: 1px solid #e2e8f0;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
+
     .admin-table {
         width: 100%;
         border-collapse: collapse;
         text-align: left;
         font-size: 0.95rem;
     }
+
     .admin-table th {
         background: #1e293b;
         color: white;
@@ -69,20 +70,18 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
+
     .admin-table td {
         padding: 16px;
         border-bottom: 1px solid #f1f5f9;
         color: #334155;
         vertical-align: middle;
     }
-    .admin-table tr:last-child td {
-        border-bottom: none;
-    }
+
     .admin-table tr:hover td {
         background-color: #f8fafc;
     }
 
-    /* Định dạng cột dữ liệu */
     .col-id { width: 70px; font-weight: 600; color: #64748b !important; }
     .col-name { font-weight: 600; color: #0f172a !important; }
     .col-type { font-weight: 500; color: #475569; }
@@ -90,7 +89,6 @@
     .col-status { width: 130px; }
     .col-actions { width: 160px; white-space: nowrap; }
 
-    /* Định dạng ảnh QR */
     .qr-preview {
         width: 70px;
         height: 70px;
@@ -101,36 +99,37 @@
         margin: 0 auto;
         background: #f8fafc;
     }
+
     .no-qr {
         font-size: 0.85rem;
         color: #94a3b8;
         font-style: italic;
     }
 
-    /* Badge trạng thái Active / Inactive */
     .badge {
         display: inline-flex;
         padding: 4px 10px;
         border-radius: 9999px;
         font-size: 0.75rem;
         font-weight: 600;
-        letter-spacing: 0.02em;
     }
+
     .badge-active {
         background: #dcfce7;
         color: #15803d;
     }
+
     .badge-inactive {
         background: #fee2e2;
         color: #b91c1c;
     }
 
-    /* Nhóm nút hành động */
     .action-group {
         display: flex;
         gap: 8px;
         align-items: center;
     }
+
     .btn-edit {
         padding: 6px 14px;
         background: #2563eb;
@@ -139,11 +138,12 @@
         border-radius: 6px;
         font-size: 0.85rem;
         font-weight: 600;
-        transition: background-color 0.15s ease;
     }
+
     .btn-edit:hover {
         background: #1d4ed8;
     }
+
     .btn-delete {
         padding: 6px 14px;
         background: #dc2626;
@@ -153,8 +153,8 @@
         font-size: 0.85rem;
         font-weight: 600;
         cursor: pointer;
-        transition: background-color 0.15s ease;
     }
+
     .btn-delete:hover {
         background: #b91c1c;
     }
@@ -163,9 +163,10 @@
 <div class="payment-container">
 
     <div class="page-header">
-        <h1>Payment Methods</h1>
+        <h1>Phương thức thanh toán</h1>
+
         <a href="{{ route('host.payment-methods.create') }}" class="btn-create">
-            Create Payment Method
+            Tạo phương thức mới
         </a>
     </div>
 
@@ -174,57 +175,56 @@
             <thead>
                 <tr>
                     <th class="col-id">ID</th>
-                    <th class="col-name">Name</th>
-                    <th>Type</th>
-                    <th class="col-qr" style="text-align: center;">QR</th>
-                    <th class="col-status">Status</th>
-                    <th class="col-actions">Actions</th>
+                    <th class="col-name">Tên</th>
+                    <th>Loại</th>
+                    <th class="col-qr" style="text-align:center;">Mã QR</th>
+                    <th class="col-status">Trạng thái</th>
+                    <th class="col-actions">Thao tác</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach($paymentMethods as $method)
                     <tr>
                         <td class="col-id">#{{ $method->id }}</td>
                         <td class="col-name">{{ $method->name }}</td>
                         <td class="col-type">{{ $method->type }}</td>
+
                         <td class="col-qr">
                             @if($method->qr_image)
-                                <img 
-                                    src="{{ asset('storage/' . $method->qr_image) }}" 
-                                    class="qr-preview"
-                                    alt="QR Code"
-                                >
+                                <img src="{{ asset('storage/' . $method->qr_image) }}"
+                                     class="qr-preview"
+                                     alt="QR Code">
                             @else
-                                <span class="no-qr">No QR</span>
+                                <span class="no-qr">Không có QR</span>
                             @endif
                         </td>
+
                         <td class="col-status">
                             @if($method->is_active)
-                                <span class="badge badge-active">Active</span>
+                                <span class="badge badge-active">Hoạt động</span>
                             @else
-                                <span class="badge badge-inactive">Inactive</span>
+                                <span class="badge badge-inactive">Không hoạt động</span>
                             @endif
                         </td>
+
                         <td class="col-actions">
                             <div class="action-group">
-                                <a href="{{ route('host.payment-methods.edit', $method) }}" class="btn-edit">
-                                    Edit
+                                <a href="{{ route('host.payment-methods.edit', $method) }}"
+                                   class="btn-edit">
+                                    Sửa
                                 </a>
 
-                                <form 
-                                    method="POST" 
-                                    action="{{ route('host.payment-methods.destroy', $method) }}"
-                                    style="display:inline;"
-                                >
+                                <form method="POST"
+                                      action="{{ route('host.payment-methods.destroy', $method) }}"
+                                      style="display:inline;">
                                     @csrf
                                     @method('DELETE')
 
-                                    <button 
-                                        type="submit" 
-                                        class="btn-delete"
-                                        onclick="return confirm('Delete?')"
-                                    >
-                                        Delete
+                                    <button type="submit"
+                                            class="btn-delete"
+                                            onclick="return confirm('Bạn có chắc muốn xoá?')">
+                                        Xoá
                                     </button>
                                 </form>
                             </div>
@@ -232,6 +232,7 @@
                     </tr>
                 @endforeach
             </tbody>
+
         </table>
     </div>
 
