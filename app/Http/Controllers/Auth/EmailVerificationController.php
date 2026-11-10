@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
 class EmailVerificationController extends Controller
@@ -14,17 +14,26 @@ class EmailVerificationController extends Controller
         return view('auth.verify-email');
     }
 
-    public function verify(EmailVerificationRequest $request)
+    public function verify(Request $request, int $id, string $hash)
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->route('home');
+        $user = User::findOrFail($id);
+
+        if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+            abort(403);
         }
 
-        if ($request->fulfill()) {
-            event(new Verified($request->user()));
+        if (! $user->hasVerifiedEmail() && $user->markEmailAsVerified()) {
+            event(new Verified($user));
         }
 
-        return redirect()->route('home')->with('success', 'Email của bạn đã được xác thực.');
+        if ($request->user()) {
+            return redirect()->route('home')->with('success', 'Email của bạn đã được xác thực.');
+        }
+
+        return redirect()->route('login')->with(
+            'status',
+            'Email đã được xác thực. Vui lòng đăng nhập để tiếp tục.'
+        );
     }
 
     public function resend(Request $request)

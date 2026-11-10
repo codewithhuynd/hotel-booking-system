@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Host\HostRegisterController;
 use App\Http\Controllers\Host\RoomController;
@@ -35,18 +36,27 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'createLinkRequest'])
+        ->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])
+        ->name('password.email');
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'createResetForm'])
+        ->name('password.reset');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])
+        ->name('password.update');
 });
 
 Route::get('/profile/change-password/confirm/{token}', [ProfileController::class, 'confirmPasswordChange'])
     ->name('profile.change-password.confirm');
 
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware(['signed'])
+    ->name('verification.verify');
+
 Route::middleware('auth')->group(function () {
     Route::get('/email/verify', [EmailVerificationController::class, 'notice'])
         ->name('verification.notice');
-
-    Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-        ->middleware(['signed'])
-        ->name('verification.verify');
 
     Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
         ->middleware(['throttle:6,1'])

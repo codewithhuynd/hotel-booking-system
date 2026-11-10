@@ -152,8 +152,14 @@
                         <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-gold-400 transition-all duration-300 group-focus-within:w-full"></span>
                     </div>
 
+                    <div class="text-right">
+                        <a href="{{ route('password.request') }}"
+                           class="text-xs tracking-wide text-gray-400 hover:text-gold-400 transition">
+                            Quên mật khẩu?
+                        </a>
+                    </div>
 
-                    <!-- Nút Đăng nhập phong cách quý tộc -->
+                    <!-- Nút đăng nhập phong cách quý tộc -->
                     <button type="submit" 
                             class="w-full bg-gradient-to-r from-gold-600 to-gold-400 text-luxury-dark font-semibold tracking-widest uppercase text-xs py-4 px-6 rounded-sm shadow-lg hover:from-gold-500 hover:to-gold-300 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-luxury-dark transform active:scale-[0.98] transition-all duration-300">
                         Đăng Nhập
