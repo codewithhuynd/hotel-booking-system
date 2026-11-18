@@ -672,7 +672,7 @@ html
                 Hồ sơ cá nhân
             </a>
 
-            <a href="{{ route('guest.bookings.create', $room) }}"
+            <a href="{{ route('guest.bookings.create', ['room' => $room, 'check_in' => request('check_in'), 'check_out' => request('check_out')]) }}"
                 class="btn-primary">
 
                 <i class="fa-solid fa-calendar-plus"></i>
@@ -806,7 +806,7 @@ html
 
                     @if(auth()->user()->role === 'guest')
 
-                    <a href="{{ route('guest.bookings.create', $room) }}"
+                    <a href="{{ route('guest.bookings.create', ['room' => $room, 'check_in' => request('check_in'), 'check_out' => request('check_out')]) }}"
                         class="btn-primary">
 
                         <i class="fa-solid fa-calendar-check"></i>

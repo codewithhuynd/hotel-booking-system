@@ -46,9 +46,13 @@ class BookingController extends Controller
         return view('guest.bookings.show', compact('booking'));
     }
 
-    public function create(Room $room)
+    public function create(Request $request, Room $room)
     {
-        return view('guest.bookings.create', compact('room'));
+        return view('guest.bookings.create', [
+            'room' => $room,
+            'checkIn' => $request->query('check_in'),
+            'checkOut' => $request->query('check_out'),
+        ]);
     }
 
     public function store(Request $request, Room $room)
@@ -90,11 +94,7 @@ class BookingController extends Controller
         ]);
 
         $hasConflict = Booking::where('room_id', $room->id)
-            ->whereIn('status', ['pending', 'awaiting_deposit', 'confirmed', 'checked_in'])
-            ->where(function ($query) use ($validated) {
-                $query->where('check_in_date', '<', $validated['check_out_date'])
-                    ->where('check_out_date', '>', $validated['check_in_date']);
-            })
+            ->overlapping($validated['check_in_date'], $validated['check_out_date'])
             ->exists();
 
         if ($hasConflict) {

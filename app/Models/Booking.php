@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
 class Booking extends Model
 {
@@ -32,6 +33,13 @@ class Booking extends Model
         'check_out_date' => 'date',
         'booked_at' => 'datetime',
     ];
+
+    public function scopeOverlapping(Builder $query, string $checkIn, string $checkOut): Builder
+    {
+        return $query->where('status', '!=', 'cancelled')
+            ->where('check_in_date', '<', $checkOut)
+            ->where('check_out_date', '>', $checkIn);
+    }
 
     public function user()
     {

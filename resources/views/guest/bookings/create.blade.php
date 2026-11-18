@@ -879,7 +879,7 @@
                                 <input type="date"
                                     id="check_in_date"
                                     name="check_in_date"
-                                    value="{{ old('check_in_date') }}"
+                                    value="{{ old('check_in_date', $checkIn ?? '') }}"
                                     class="glass-input @error('check_in_date') border-red-500 ring-1 ring-red-200 @enderror"
                                     required>
 
@@ -901,7 +901,7 @@
                                 <input type="date"
                                     id="check_out_date"
                                     name="check_out_date"
-                                    value="{{ old('check_out_date') }}"
+                                    value="{{ old('check_out_date', $checkOut ?? '') }}"
                                     class="glass-input @error('check_out_date') border-red-500 ring-1 ring-red-200 @enderror"
                                     required>
 

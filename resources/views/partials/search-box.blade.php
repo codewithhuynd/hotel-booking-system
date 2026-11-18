@@ -15,9 +15,19 @@
 
     </div>
 
-    <form method="GET" action="{{ route('home') }}">
+    <form method="GET" action="{{ route('rooms.index') }}">
 
         <div class="search-grid">
+
+            <div class="field">
+                <label>Ngày nhận phòng</label>
+                <input type="date" name="check_in" value="{{ request('check_in') }}">
+            </div>
+
+            <div class="field">
+                <label>Ngày trả phòng</label>
+                <input type="date" name="check_out" value="{{ request('check_out') }}">
+            </div>
 
             <!-- Keyword -->
             <div class="field">

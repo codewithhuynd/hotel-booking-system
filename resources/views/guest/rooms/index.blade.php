@@ -1114,6 +1114,16 @@
 
                 <div class="search-grid">
 
+                    <div class="field">
+                        <label>Ngày nhận phòng</label>
+                        <input type="date" name="check_in" value="{{ request('check_in') }}">
+                    </div>
+
+                    <div class="field">
+                        <label>Ngày trả phòng</label>
+                        <input type="date" name="check_out" value="{{ request('check_out') }}">
+                    </div>
+
                     <!-- Keyword -->
 
                     <div class="field">
@@ -1404,11 +1414,16 @@
 
                 <div class="px-2 pt-2">
 
-                    <a href="{{ route('rooms.show', $room) }}"
+                    <a href="{{ route('rooms.show', ['room' => $room, 'check_in' => request('check_in'), 'check_out' => request('check_out')]) }}"
                         class="block w-full border border-slate-700 group-hover:border-emerald-500/40 bg-slate-950/40 hover:bg-emerald-600 text-slate-300 hover:text-white text-center font-semibold py-3.5 px-6 rounded-2xl transition-all duration-300 text-sm">
 
                         Xem Chi Tiết
 
+                    </a>
+
+                    <a href="{{ route('guest.bookings.create', ['room' => $room, 'check_in' => request('check_in'), 'check_out' => request('check_out')]) }}"
+                        class="block w-full mt-2 text-center font-semibold py-3 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white">
+                        Đặt phòng
                     </a>
 
                 </div>
