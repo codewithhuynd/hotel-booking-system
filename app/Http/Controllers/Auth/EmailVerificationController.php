@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EmailVerificationController extends Controller
 {
@@ -42,7 +43,16 @@ class EmailVerificationController extends Controller
             return redirect()->route('home');
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        try {
+            $request->user()->sendEmailVerificationNotification();
+        } catch (\Throwable $exception) {
+            Log::warning('Unable to send email verification notification.', [
+                'user_id' => $request->user()->id,
+                'exception' => $exception,
+            ]);
+
+            return back()->with('error', 'Chưa gửi được email xác minh. Vui lòng kiểm tra kết nối SMTP rồi thử lại.');
+        }
 
         return back()->with('status', 'verification-link-sent');
     }
