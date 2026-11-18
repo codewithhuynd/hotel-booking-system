@@ -33,7 +33,7 @@ class BookingLifecycleTest extends TestCase
 
         $this->post(route('host.bookings.check-out', $booking))->assertRedirect();
         $this->assertSame('checked_out', $booking->fresh()->status);
-        $this->assertSame('available', $booking->room->fresh()->status);
+        $this->assertSame('cleaning', $booking->room->fresh()->status);
     }
 
     public function test_host_cannot_check_in_booking_before_confirmation(): void

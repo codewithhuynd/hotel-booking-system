@@ -22,6 +22,17 @@ class RoomController extends Controller
         return view('host.rooms.index', compact('rooms'));
     }
 
+    public function markAvailable(Room $room)
+    {
+        if (! in_array($room->status, ['cleaning', 'maintenance'], true)) {
+            return back()->with('error', 'Chỉ có thể mở phòng đang dọn hoặc bảo trì.');
+        }
+
+        $room->update(['status' => 'available']);
+
+        return redirect()->route('host.rooms.index')->with('success', 'Phòng đã sẵn sàng phục vụ.');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SHOW CREATE FORM

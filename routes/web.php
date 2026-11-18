@@ -125,6 +125,9 @@ Route::middleware('auth')->group(function () {
 
                 Route::resource('rooms', RoomController::class);
 
+                Route::post('/rooms/{room}/available', [RoomController::class, 'markAvailable'])
+                    ->name('rooms.available');
+
                 Route::post('/rooms/{room}/images', [RoomImageController::class, 'store'])
                     ->name('rooms.images.store');
 

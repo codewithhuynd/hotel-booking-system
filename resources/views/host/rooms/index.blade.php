@@ -111,6 +111,15 @@
 
                     <td style="padding:14px;text-align:right;white-space:nowrap;">
 
+                        @if(in_array($room->status, ['cleaning', 'maintenance'], true))
+                        <form method="POST" action="{{ route('host.rooms.available', $room) }}" style="display:inline;">
+                            @csrf
+                            <button type="submit" style="background:#dcfce7;color:#166534;border:none;padding:6px 10px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;">
+                                Đánh dấu sẵn sàng
+                            </button>
+                        </form>
+                        @endif
+
                         <a href="{{ route('host.rooms.edit', $room) }}"
                            style="background:#fff7ed;color:#ea580c;padding:6px 10px;border-radius:8px;text-decoration:none;font-weight:700;font-size:12px;">
                             Sửa
