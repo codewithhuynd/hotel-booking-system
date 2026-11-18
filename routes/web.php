@@ -20,6 +20,7 @@ use App\Http\Controllers\Host\ContactMessageController as HostContactMessageCont
 use App\Http\Controllers\Guest\ProfileController;
 use App\Http\Controllers\Host\UserController;
 use App\Http\Controllers\Host\PaymentMethodController;
+use App\Http\Controllers\Host\DashboardController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\NotificationController;
 
@@ -114,9 +115,7 @@ Route::middleware('auth')->group(function () {
             ->group(function () {
                 Route::redirect('/', '/host/dashboard');
 
-                Route::get('/dashboard', function () {
-                    return redirect()->route('host.bookings.index');
-                })->name('dashboard');
+                Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
                 Route::get('/register-host', [HostRegisterController::class, 'create'])
                     ->name('register-host.create');
