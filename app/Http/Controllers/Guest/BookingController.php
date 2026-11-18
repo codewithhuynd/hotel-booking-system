@@ -93,6 +93,9 @@ class BookingController extends Controller
             'note.max' => 'Ghi chú không được vượt quá 1000 ký tự.',
         ]);
 
+        $booking = DB::transaction(function () use ($room, $validated) {
+        $room = Room::query()->whereKey($room->id)->lockForUpdate()->firstOrFail();
+
         $hasConflict = Booking::where('room_id', $room->id)
             ->overlapping($validated['check_in_date'], $validated['check_out_date'])
             ->exists();
@@ -131,6 +134,13 @@ class BookingController extends Controller
             'status' => 'pending',
             'booked_at' => now(),
         ]);
+
+        return $booking;
+        });
+
+        if (! $booking instanceof Booking) {
+            return $booking;
+        }
 
         notifyRole('host', 'Yêu cầu đặt phòng mới', 'Khách ' . Auth::user()->full_name . ' vừa tạo booking #' . $booking->booking_code . '.', 'info', [
             'booking_id' => $booking->id,
