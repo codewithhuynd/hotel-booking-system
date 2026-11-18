@@ -186,4 +186,35 @@ class AuditFixesTest extends TestCase
         $this->post(route('login'), ['email' => $user->email, 'password' => 'sai-mat-khau'])
             ->assertStatus(429);
     }
+
+    public function test_host_can_edit_user_without_role_field(): void
+    {
+        $host = User::factory()->create(['role' => 'host']);
+        $guest = User::factory()->create(['role' => 'guest']);
+
+        $this->actingAs($host)
+            ->put(route('host.users.update', $guest), [
+                'full_name' => 'Tên mới',
+                'phone' => '0911222333',
+            ])
+            ->assertRedirect(route('host.users.index'));
+
+        $this->assertSame('Tên mới', $guest->fresh()->full_name);
+        $this->assertSame('guest', $guest->fresh()->role);
+    }
+
+    public function test_user_list_hides_delete_button_for_users_with_bookings(): void
+    {
+        $host = User::factory()->create(['role' => 'host']);
+        $booking = Booking::factory()->create();
+        $freeGuest = User::factory()->create(['role' => 'guest']);
+
+        $this->actingAs($host)
+            ->get(route('host.users.index'))
+            ->assertOk()
+            // Link "Xem" dùng cùng URL nên kiểm tra theo thuộc tính action của form xoá.
+            ->assertSee('action="'.route('host.users.destroy', $freeGuest).'"', false)
+            ->assertDontSee('action="'.route('host.users.destroy', $booking->user_id).'"', false)
+            ->assertDontSee('action="'.route('host.users.destroy', $host).'"', false);
+    }
 }

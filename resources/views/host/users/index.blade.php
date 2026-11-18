@@ -34,6 +34,13 @@
         </div>
     @endif
 
+    <!-- ERRORS -->
+    @if($errors->any())
+        <div style="padding:14px 16px;background:#fef2f2;border-left:4px solid #dc2626;border-radius:8px;margin-bottom:18px;color:#991b1b;font-weight:600;">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
     <!-- TABLE -->
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
 
@@ -102,14 +109,21 @@
                             Sửa
                         </a>
 
-                        <form method="POST" action="{{ route('host.users.destroy', $user) }}" style="display:inline;">
-                            @csrf @method('DELETE')
-
-                            <button onclick="return confirm('Xóa user này?')"
-                                style="border:none;background:#fef2f2;color:#dc2626;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:700;margin-left:6px;cursor:pointer;">
+                        @if($user->role === 'host' || $user->bookings_count > 0)
+                            <span title="{{ $user->role === 'host' ? 'Không thể xoá tài khoản host' : 'User đã có lịch sử đặt phòng nên không thể xoá' }}"
+                                style="display:inline-block;background:#f1f5f9;color:#94a3b8;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:700;margin-left:6px;cursor:not-allowed;">
                                 Xóa
-                            </button>
-                        </form>
+                            </span>
+                        @else
+                            <form method="POST" action="{{ route('host.users.destroy', $user) }}" style="display:inline;">
+                                @csrf @method('DELETE')
+
+                                <button onclick="return confirm('Xóa user này?')"
+                                    style="border:none;background:#fef2f2;color:#dc2626;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:700;margin-left:6px;cursor:pointer;">
+                                    Xóa
+                                </button>
+                            </form>
+                        @endif
 
                     </td>
 

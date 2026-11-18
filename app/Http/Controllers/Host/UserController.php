@@ -13,7 +13,9 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::withCount(['bookings' => fn ($query) => $query->withTrashed()])
+            ->latest()
+            ->paginate(10);
         return view('host.users.index', compact('users'));
     }
 
@@ -38,10 +40,10 @@ class UserController extends Controller
             'full_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'birthday' => 'nullable|date',
-            'role' => 'required|in:host,guest',
+            'role' => 'sometimes|in:host,guest',
         ]);
 
-        if ($user->role === 'host' && $request->role !== 'host') {
+        if ($user->role === 'host' && $request->filled('role') && $request->role !== 'host') {
             return back()
                 ->withInput()
                 ->withErrors(['role' => 'Không thể hạ quyền tài khoản host.']);
@@ -51,7 +53,7 @@ class UserController extends Controller
             'full_name' => $request->full_name,
             'phone' => $request->phone,
             'birthday' => $request->birthday,
-            'role' => $request->role,
+            'role' => $request->input('role', $user->role),
         ]);
 
         return redirect()->route('host.users.index')

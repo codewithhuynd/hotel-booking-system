@@ -140,6 +140,12 @@
             @csrf
             @method('PUT')
 
+            @if($errors->any())
+                <div style="padding:14px 16px;background:#fef2f2;border-left:4px solid #dc2626;border-radius:8px;margin-bottom:22px;color:#991b1b;font-weight:600;">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
             <!-- NAME -->
             <div style="margin-bottom:26px;">
 
