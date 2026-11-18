@@ -105,7 +105,7 @@ class BookingController extends Controller
             'url' => route('guest.bookings.show', ['booking' => $booking->id]),
         ]);
 
-        return back()->with('success', 'Guest checked in successfully.');
+        return back()->with('success', 'Khách đã nhận phòng thành công.');
     }
 
     public function checkOut(Booking $booking)
@@ -119,7 +119,7 @@ class BookingController extends Controller
         ]);
 
         $booking->room->update([
-            'status' => 'available',
+            'status' => 'cleaning',
         ]);
 
         $depositPaid = (float) $booking->payments()
@@ -151,7 +151,7 @@ class BookingController extends Controller
             'url' => route('guest.bookings.show', ['booking' => $booking->id]),
         ]);
 
-        return back()->with('success', 'Check-out thành công. Đã tạo payment cuối nếu còn dư.');
+        return back()->with('success', 'Check-out thành công. Phòng đã được chuyển sang trạng thái dọn phòng.');
     }
 
     public function cancel(Request $request, Booking $booking)

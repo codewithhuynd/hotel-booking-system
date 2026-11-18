@@ -351,6 +351,11 @@
 
             <div class="sidebar-menu">
 
+                <a href="{{ route('host.dashboard') }}">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Thống kê</span>
+                </a>
+
                 <a href="{{ route('home') }}">
                     <i class="fa-solid fa-house"></i>
                     <span>Trang chủ</span>

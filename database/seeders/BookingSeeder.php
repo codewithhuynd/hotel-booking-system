@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Booking;
+use App\Models\BookingCancellation;
 use App\Models\Payment;
 use App\Models\Room;
 use App\Models\User;
@@ -213,6 +214,82 @@ class BookingSeeder extends Seeder
             }
 
             Payment::create($paymentAttributes);
+        }
+
+        $rooms = Room::all();
+        $statuses = ['pending', 'awaiting_deposit', 'confirmed', 'checked_in', 'checked_out', 'completed', 'cancelled'];
+
+        for ($i = 0; $i < 33; $i++) {
+            $status = $statuses[$i % count($statuses)];
+            $room = $rooms[$i % $rooms->count()];
+            $user = $i % 2 === 0 ? $guest1 : $guest2;
+            $bookedAt = $today->copy()->subDays(175 - ($i * 5))->setTime(10 + ($i % 8), 0);
+            $slot = intdiv($i, count($statuses));
+
+            $checkIn = match ($status) {
+                'checked_in' => $today->copy()->subDay(),
+                'checked_out', 'completed' => $today->copy()->subDays(3 + ($slot * 2)),
+                'cancelled' => $today->copy()->addDays(($i % 2) ? 12 : 30 + $slot),
+                default => $today->copy()->addDays(10 + ($slot * 3)),
+            };
+            $checkOut = $checkIn->copy()->addDays(2);
+            $roomPrice = (float) $room->price;
+            $totalPrice = $roomPrice * 2;
+            $depositAmount = round($totalPrice * 0.3, 2);
+            $paymentStatus = match ($status) {
+                'pending' => 'unpaid',
+                'awaiting_deposit' => 'pending',
+                'cancelled' => $i % 2 === 0 ? 'refunded' : 'expired',
+                default => 'paid',
+            };
+
+            $booking = Booking::create([
+                'booking_code' => sprintf('BK-DEMO-%03d', $i + 8),
+                'user_id' => $user->id,
+                'room_id' => $room->id,
+                'check_in_date' => $checkIn,
+                'check_out_date' => $checkOut,
+                'guest_count' => min($room->capacity, 2),
+                'contact_name' => $user->full_name,
+                'contact_phone' => $user->phone ?? '0900000000',
+                'contact_email' => $user->email,
+                'room_price' => $roomPrice,
+                'total_price' => $totalPrice,
+                'deposit_amount' => $depositAmount,
+                'note' => 'Dữ liệu minh họa cho dashboard.',
+                'status' => $status,
+                'booked_at' => $bookedAt,
+            ]);
+
+            Payment::create([
+                'booking_id' => $booking->id,
+                'type' => 'deposit',
+                'transaction_code' => 'TXN-DEMO-'.sprintf('%03d', $i + 8),
+                'deposit_amount' => $depositAmount,
+                'payment_method' => 'banking',
+                'status' => $paymentStatus,
+                'paid_at' => in_array($paymentStatus, ['paid', 'refunded'], true) ? $bookedAt->copy()->addHours(2) : null,
+                'deposit_deadline' => $bookedAt->copy()->addDay(),
+            ]);
+
+            if ($status === 'cancelled') {
+                $refunded = $paymentStatus === 'refunded';
+
+                BookingCancellation::create([
+                    'booking_id' => $booking->id,
+                    'cancelled_by_user_id' => $user->id,
+                    'cancelled_by_type' => 'guest',
+                    'reason' => 'Booking dữ liệu minh họa bị hủy.',
+                    'cancelled_at' => $bookedAt->copy()->addHours(1),
+                    'bank_name' => $refunded ? 'Ngân hàng mẫu' : null,
+                    'bank_account_number' => $refunded ? '1234567890' : null,
+                    'bank_account_name' => $refunded ? 'NGUYEN VAN A' : null,
+                    'refund_info_submitted_at' => $refunded ? $bookedAt->copy()->addHours(1) : null,
+                    'refund_completed' => $refunded,
+                    'refund_completed_at' => $refunded ? $bookedAt->copy()->addHours(3) : null,
+                    'refund_transaction_code' => $refunded ? 'REF-DEMO-'.sprintf('%03d', $i + 8) : null,
+                ]);
+            }
         }
     }
 }

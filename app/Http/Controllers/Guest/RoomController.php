@@ -4,13 +4,29 @@ namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
     public function index(Request $request)
     {
+        $validated = $request->validate([
+            'check_in' => ['nullable', 'date', 'after_or_equal:today'],
+            'check_out' => ['nullable', 'date', 'required_with:check_in', 'after:check_in'],
+        ], [
+            'check_in.after_or_equal' => 'Ngày nhận phòng không được trước ngày hôm nay.',
+            'check_out.required_with' => 'Vui lòng chọn ngày trả phòng.',
+            'check_out.after' => 'Ngày trả phòng phải sau ngày nhận phòng.',
+        ]);
+
         $query = Room::query()->with(['mainImage', 'images']);
+
+        if (! empty($validated['check_in']) && ! empty($validated['check_out'])) {
+            $query->whereDoesntHave('bookings', function ($bookings) use ($validated) {
+                $bookings->overlapping($validated['check_in'], $validated['check_out']);
+            });
+        }
 
         if ($request->filled('keyword')) {
             $query->where('room_name', 'like', '%' . $request->keyword . '%');

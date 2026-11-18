@@ -35,5 +35,22 @@ class RoomSeeder extends Seeder
             'capacity' => 6,
             'status' => 'available',
         ]);
+
+        foreach ([
+            ['A102', 'Standard Twin', 550000, 2],
+            ['A103', 'Standard Family', 650000, 3],
+            ['B202', 'Deluxe Garden', 850000, 4],
+            ['B203', 'Deluxe Ocean', 950000, 4],
+            ['VIP302', 'Executive Suite', 1800000, 6],
+        ] as [$code, $name, $price, $capacity]) {
+            Room::create([
+                'room_code' => $code,
+                'room_name' => $name,
+                'description' => 'Phòng nghỉ tiện nghi tại khách sạn.',
+                'price' => $price,
+                'capacity' => $capacity,
+                'status' => 'available',
+            ]);
+        }
     }
 }

@@ -46,9 +46,13 @@ class BookingController extends Controller
         return view('guest.bookings.show', compact('booking'));
     }
 
-    public function create(Room $room)
+    public function create(Request $request, Room $room)
     {
-        return view('guest.bookings.create', compact('room'));
+        return view('guest.bookings.create', [
+            'room' => $room,
+            'checkIn' => $request->query('check_in'),
+            'checkOut' => $request->query('check_out'),
+        ]);
     }
 
     public function store(Request $request, Room $room)
@@ -89,12 +93,11 @@ class BookingController extends Controller
             'note.max' => 'Ghi chú không được vượt quá 1000 ký tự.',
         ]);
 
+        $booking = DB::transaction(function () use ($room, $validated) {
+        $room = Room::query()->whereKey($room->id)->lockForUpdate()->firstOrFail();
+
         $hasConflict = Booking::where('room_id', $room->id)
-            ->whereIn('status', ['pending', 'awaiting_deposit', 'confirmed', 'checked_in'])
-            ->where(function ($query) use ($validated) {
-                $query->where('check_in_date', '<', $validated['check_out_date'])
-                    ->where('check_out_date', '>', $validated['check_in_date']);
-            })
+            ->overlapping($validated['check_in_date'], $validated['check_out_date'])
             ->exists();
 
         if ($hasConflict) {
@@ -127,10 +130,17 @@ class BookingController extends Controller
             'room_price' => $roomPrice,
             'total_price' => $totalPrice,
             'deposit_amount' => $depositAmount,
-            'note' => $validated['note'],
+            'note' => $validated['note'] ?? null,
             'status' => 'pending',
             'booked_at' => now(),
         ]);
+
+        return $booking;
+        });
+
+        if (! $booking instanceof Booking) {
+            return $booking;
+        }
 
         notifyRole('host', 'Yêu cầu đặt phòng mới', 'Khách ' . Auth::user()->full_name . ' vừa tạo booking #' . $booking->booking_code . '.', 'info', [
             'booking_id' => $booking->id,
