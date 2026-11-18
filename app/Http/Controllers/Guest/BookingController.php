@@ -237,12 +237,6 @@ class BookingController extends Controller
                 'status' => 'cancelled',
             ]);
 
-            if ($booking->room) {
-                $booking->room->update([
-                    'status' => 'available',
-                ]);
-            }
-
             foreach ($booking->payments as $payment) {
                 if ($payment->status === 'unpaid') {
                     $payment->update([

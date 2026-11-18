@@ -41,6 +41,12 @@ class UserController extends Controller
             'role' => 'required|in:host,guest',
         ]);
 
+        if ($user->role === 'host' && $request->role !== 'host') {
+            return back()
+                ->withInput()
+                ->withErrors(['role' => 'Không thể hạ quyền tài khoản host.']);
+        }
+
         $user->update([
             'full_name' => $request->full_name,
             'phone' => $request->phone,
@@ -60,6 +66,10 @@ class UserController extends Controller
 
         if ($user->role === 'host') {
             return back()->withErrors('Bạn không thể xoá tài khoản quản trị viên khác');
+        }
+
+        if (Booking::withTrashed()->where('user_id', $user->id)->exists()) {
+            return back()->withErrors('Không thể xoá user đã có lịch sử đặt phòng vì sẽ mất dữ liệu booking và thanh toán.');
         }
 
         $user->delete();

@@ -11,7 +11,8 @@ class DepositPaymentService
     {
         $payments = Payment::query()
             ->deposit()
-            ->whereIn('status', ['unpaid', 'pending'])
+            // Chỉ hết hạn khoản chưa thanh toán; khoản 'pending' (khách đã gửi minh chứng) chờ host xử lý.
+            ->where('status', 'unpaid')
             ->whereNotNull('deposit_deadline')
             ->where('deposit_deadline', '<=', now())
             ->with('booking')

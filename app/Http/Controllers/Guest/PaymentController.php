@@ -7,6 +7,8 @@ use App\Models\Payment;
 use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class PaymentController extends Controller
 {
@@ -59,45 +61,46 @@ class PaymentController extends Controller
             403
         );
 
-        if ($payment->isPaid()) {
+        if (! in_array($payment->status, ['unpaid', 'pending', 'pending_cash'], true)
+            || $payment->booking->status === 'cancelled') {
             return back()->with(
                 'error',
-                'Payment đã được xác nhận.'
+                'Payment này không còn nhận minh chứng thanh toán.'
             );
         }
+
+        $request->validate([
+            'payment_method_id' => [
+                'required',
+                Rule::exists('payment_methods', 'id')->where('is_active', true),
+            ],
+        ], [
+            'payment_method_id.required' => 'Vui lòng chọn phương thức thanh toán.',
+            'payment_method_id.exists' => 'Phương thức thanh toán không hợp lệ hoặc đã ngừng sử dụng.',
+        ]);
 
         $paymentMethod = PaymentMethod::findOrFail(
             $request->payment_method_id
         );
 
-        $rules = [
-            'payment_method_id' => [
-                'required',
-                'exists:payment_methods,id',
+        $request->validate([
+            'proof_image' => [
+                $paymentMethod->type !== 'cash' ? 'required' : 'nullable',
+                'image',
+                'max:2048',
             ],
-        ];
-
-        if ($paymentMethod->type !== 'cash') {
-            $rules['proof_image'] = [
-                'required',
-                'image',
-                'max:2048',
-            ];
-        } else {
-            $rules['proof_image'] = [
-                'nullable',
-                'image',
-                'max:2048',
-            ];
-        }
-
-        $request->validate($rules);
+        ]);
 
         /*
         |--------------------------------------------------------------------------
         | UPLOAD ẢNH MINH CHỨNG (chỉ khi có file)
         |--------------------------------------------------------------------------
         */
+
+        // Xoá ảnh minh chứng cũ (nếu có) vì sẽ bị thay bằng ảnh mới hoặc bỏ trống.
+        if ($payment->proof_image) {
+            Storage::disk('public')->delete($payment->proof_image);
+        }
 
         $path = null;
 
@@ -121,8 +124,6 @@ class PaymentController extends Controller
             'proof_image' => $path,
 
             'payment_method' => $paymentMethod->type,
-
-            'payment_method_id' => $paymentMethod->id,
 
             'status' => $status,
         ]);
