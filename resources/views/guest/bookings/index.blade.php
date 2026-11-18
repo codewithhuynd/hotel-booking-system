@@ -1137,6 +1137,25 @@
 
                 @endif
 
+                <!-- REVIEW BUTTON -->
+
+                @if($booking->canBeReviewed() && $booking->room)
+
+                <div class="mt-6 pt-5 border-t border-white/10 text-right">
+
+                    <a href="{{ route('guest.bookings.show', $booking) }}#review"
+                        class="inline-flex items-center gap-1.5 border border-amber-400/30 bg-amber-400/10 hover:bg-amber-400 text-amber-300 hover:text-slate-900 font-bold text-xs px-5 py-2.5 rounded-xl transition-all duration-300 shadow-sm">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        {{ $booking->review ? 'Xem / sửa đánh giá (' . $booking->review->rating . '★)' : 'Đánh giá kỳ nghỉ' }}
+
+                    </a>
+
+                </div>
+
+                @endif
+
                 <!-- CANCEL BUTTON -->
 
                 @if(!in_array($booking->status, ['checked_in', 'checked_out', 'completed', 'cancelled'], true))

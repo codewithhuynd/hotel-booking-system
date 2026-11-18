@@ -84,6 +84,18 @@ class RoomController extends Controller
             'mainImage',
         ]);
 
-        return view('guest.rooms.show', compact('room'));
+        $reviews = $room->reviews()
+            ->visible()
+            ->with('user:id,full_name')
+            ->latest()
+            ->paginate(5)
+            ->withQueryString();
+
+        $reviewStats = $room->reviews()
+            ->visible()
+            ->selectRaw('COUNT(*) as total, AVG(rating) as average')
+            ->first();
+
+        return view('guest.rooms.show', compact('room', 'reviews', 'reviewStats'));
     }
 }

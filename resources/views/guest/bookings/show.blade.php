@@ -16,6 +16,14 @@
         <a href="{{ route('guest.bookings.index') }}" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Quay lại</a>
     </div>
 
+    @if(session('success'))
+        <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">{{ session('success') }}</div>
+    @endif
+
+    @if(session('error'))
+        <div class="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{{ session('error') }}</div>
+    @endif
+
     <div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
         <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 class="mb-4 text-xl font-semibold text-slate-900">Thông tin đặt phòng</h2>
@@ -52,6 +60,53 @@
             @endforelse
         </section>
     </div>
+
+    @if($booking->canBeReviewed() && $booking->room)
+        @php
+            $review = $booking->review;
+            $currentRating = (int) old('rating', $review?->rating ?? 0);
+        @endphp
+
+        <section id="review" class="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 class="mb-1 text-xl font-semibold text-slate-900">
+                {{ $review ? 'Đánh giá của bạn' : 'Đánh giá kỳ nghỉ' }}
+            </h2>
+            <p class="mb-5 text-sm text-slate-500">
+                Chia sẻ trải nghiệm của bạn tại phòng {{ $booking->room->room_name }}.
+                @if($review?->is_hidden)
+                    <span class="font-semibold text-amber-600">Đánh giá này đang bị khách sạn ẩn khỏi trang phòng.</span>
+                @endif
+            </p>
+
+            <form method="POST" action="{{ route('guest.bookings.review', $booking) }}" class="space-y-4">
+                @csrf
+
+                <fieldset>
+                    <legend class="mb-2 text-sm font-semibold text-slate-700">Số sao</legend>
+                    <div class="flex flex-row-reverse justify-end gap-1" id="star-rating">
+                        @for($star = 5; $star >= 1; $star--)
+                            <input type="radio" id="rating-{{ $star }}" name="rating" value="{{ $star }}" class="peer sr-only" @checked($currentRating === $star) required>
+                            <label for="rating-{{ $star }}" title="{{ $star }} sao"
+                                class="cursor-pointer text-3xl text-slate-300 transition hover:text-amber-400 peer-hover:text-amber-400 peer-checked:text-amber-400">★</label>
+                        @endfor
+                    </div>
+                    @error('rating') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                </fieldset>
+
+                <div>
+                    <label for="comment" class="mb-2 block text-sm font-semibold text-slate-700">Nhận xét (không bắt buộc)</label>
+                    <textarea id="comment" name="comment" rows="4" maxlength="1000"
+                        class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                        placeholder="Phòng sạch sẽ, nhân viên thân thiện...">{{ old('comment', $review?->comment) }}</textarea>
+                    @error('comment') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+
+                <button type="submit" class="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">
+                    {{ $review ? 'Cập nhật đánh giá' : 'Gửi đánh giá' }}
+                </button>
+            </form>
+        </section>
+    @endif
 </div>
 @include('partials.notification-modal')
 </body>

@@ -834,6 +834,76 @@ html
 
         </div>
 
+        <!-- REVIEWS -->
+
+        @php
+            $reviewTotal = (int) ($reviewStats->total ?? 0);
+            $reviewAverage = $reviewTotal > 0 ? round((float) $reviewStats->average, 1) : null;
+        @endphp
+
+        <section id="reviews" class="mt-10 rounded-[28px] border border-white/10 bg-white/5 p-6 md:p-10 backdrop-blur">
+
+            <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+
+                <div>
+                    <p class="text-xs uppercase tracking-[0.3em] text-amber-300 mb-2">Đánh giá từ khách</p>
+                    <h2 class="font-serif-luxury text-3xl text-white">Khách nói gì về phòng này</h2>
+                </div>
+
+                @if($reviewAverage !== null)
+                    <div class="text-right">
+                        <div class="text-4xl font-bold text-amber-300">{{ number_format($reviewAverage, 1) }} <span class="text-2xl">★</span></div>
+                        <div class="text-sm text-slate-400">{{ $reviewTotal }} đánh giá</div>
+                    </div>
+                @endif
+
+            </div>
+
+            @forelse($reviews as $review)
+
+                <article class="border-t border-white/10 py-5 first:border-t-0 first:pt-0">
+
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <div class="font-semibold text-white">{{ $review->user->full_name ?? 'Khách' }}</div>
+                        <div class="text-xs text-slate-400">{{ $review->created_at->format('d/m/Y') }}</div>
+                    </div>
+
+                    <div class="text-amber-300 tracking-widest mb-2" aria-label="{{ $review->rating }} trên 5 sao">
+                        {{ str_repeat('★', $review->rating) }}<span class="text-slate-600">{{ str_repeat('★', 5 - $review->rating) }}</span>
+                    </div>
+
+                    @if($review->comment)
+                        <p class="text-slate-300 leading-7">{{ $review->comment }}</p>
+                    @endif
+
+                </article>
+
+            @empty
+
+                <p class="text-slate-400">Phòng này chưa có đánh giá nào. Khách đã ở có thể đánh giá trong mục "Đặt phòng của tôi".</p>
+
+            @endforelse
+
+            @if($reviews->hasPages())
+                <div class="mt-6 flex items-center justify-between text-sm">
+                    @if($reviews->onFirstPage())
+                        <span class="text-slate-600">‹ Mới hơn</span>
+                    @else
+                        <a href="{{ $reviews->previousPageUrl() }}#reviews" class="text-amber-300 hover:underline">‹ Mới hơn</a>
+                    @endif
+
+                    <span class="text-slate-400">Trang {{ $reviews->currentPage() }} / {{ $reviews->lastPage() }}</span>
+
+                    @if($reviews->hasMorePages())
+                        <a href="{{ $reviews->nextPageUrl() }}#reviews" class="text-amber-300 hover:underline">Cũ hơn ›</a>
+                    @else
+                        <span class="text-slate-600">Cũ hơn ›</span>
+                    @endif
+                </div>
+            @endif
+
+        </section>
+
     </main>
 
     <script>

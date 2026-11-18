@@ -119,6 +119,24 @@
         </div>
     @endif
 
+    @if($errors->any())
+        <div style="padding:14px 16px;background:#fef2f2;border-left:4px solid #dc2626;border-radius:8px;margin-bottom:18px;color:#991b1b;font-weight:600;">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
+    @include('host.partials.list-filter', [
+        'action' => route('host.bookings.index'),
+        'placeholder' => 'Mã booking, tên khách, email, SĐT, tên phòng...',
+        'selects' => [
+            ['name' => 'status', 'label' => 'Trạng thái', 'options' => $statusOptions],
+        ],
+        'dates' => [
+            ['name' => 'from', 'label' => 'Nhận phòng từ'],
+            ['name' => 'to', 'label' => 'Nhận phòng đến'],
+        ],
+    ])
+
     <!-- TABLE -->
     <div class="table-wrapper">
         <table>
@@ -222,6 +240,8 @@
 
         </table>
     </div>
+
+    {{ $bookings->links('host.partials.pagination') }}
 
 </div>
 

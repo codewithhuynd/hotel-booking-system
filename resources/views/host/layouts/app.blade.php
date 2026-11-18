@@ -396,6 +396,11 @@
                     <span>Dịch vụ khách sạn</span>
                 </a>
 
+                <a href="{{ route('host.reviews.index') }}">
+                    <i class="fa-solid fa-star"></i>
+                    <span>Đánh giá phòng</span>
+                </a>
+
                 <a href="{{ route('host.contact-messages.index') }}">
                     <i class="fa-solid fa-envelope"></i>
                     <span>Tin nhắn liên hệ</span>
@@ -409,6 +414,11 @@
                 <a href="{{ route('host.register-host.create') }}">
                     <i class="fa-solid fa-user-plus"></i>
                     <span>Tạo tài khoản host</span>
+                </a>
+
+                <a href="{{ route('profile.edit') }}">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span>Hồ sơ của tôi</span>
                 </a>
 
             </div>

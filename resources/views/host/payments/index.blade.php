@@ -165,7 +165,7 @@
 
         <div class="card">
             <div class="card-title">Tổng thanh toán</div>
-            <div class="card-value">{{ $payments->count() }}</div>
+            <div class="card-value">{{ $payments->total() }}</div>
         </div>
 
     </div>
@@ -184,6 +184,15 @@
             {{ $expiredCount }} khoản đặt cọc quá hạn.
         </div>
     @endif
+
+    @include('host.partials.list-filter', [
+        'action' => route('host.payments.index'),
+        'placeholder' => 'Mã giao dịch, mã booking, tên khách, email...',
+        'selects' => [
+            ['name' => 'type', 'label' => 'Loại', 'options' => $typeOptions],
+            ['name' => 'status', 'label' => 'Trạng thái', 'options' => $statusOptions],
+        ],
+    ])
 
     <!-- TABLE -->
     <div class="table-wrapper">
@@ -267,6 +276,8 @@
         </table>
 
     </div>
+
+    {{ $payments->links('host.partials.pagination') }}
 
 </div>
 

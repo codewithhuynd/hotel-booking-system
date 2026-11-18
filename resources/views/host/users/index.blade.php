@@ -41,6 +41,14 @@
         </div>
     @endif
 
+    @include('host.partials.list-filter', [
+        'action' => route('host.users.index'),
+        'placeholder' => 'Họ tên, email, số điện thoại...',
+        'selects' => [
+            ['name' => 'role', 'label' => 'Vai trò', 'options' => ['host' => 'Host', 'guest' => 'Khách']],
+        ],
+    ])
+
     <!-- TABLE -->
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
 
@@ -59,7 +67,7 @@
 
             <tbody>
 
-                @foreach($users as $user)
+                @forelse($users as $user)
 
                 @php
                     $roleText = 'Khách hàng';
@@ -129,7 +137,13 @@
 
                 </tr>
 
-                @endforeach
+                @empty
+
+                <tr>
+                    <td colspan="7" style="text-align:center;padding:40px;color:#94a3b8;">Không tìm thấy người dùng nào.</td>
+                </tr>
+
+                @endforelse
 
             </tbody>
 
@@ -137,9 +151,7 @@
 
     </div>
 
-    <div style="margin-top:20px;display:flex;justify-content:center;">
-        {{ $users->links() }}
-    </div>
+    {{ $users->links('host.partials.pagination') }}
 
 </div>
 

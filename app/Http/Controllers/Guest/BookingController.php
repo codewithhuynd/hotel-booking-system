@@ -21,6 +21,7 @@ class BookingController extends Controller
                 'depositPayment',
                 'finalPayment',
                 'cancellation',
+                'review',
             ])
             ->where('user_id', Auth::id())
             ->latest()
@@ -41,6 +42,7 @@ class BookingController extends Controller
             'finalPayment',
             'payments',
             'cancellation',
+            'review',
         ]);
 
         return view('guest.bookings.show', compact('booking'));

@@ -11,11 +11,27 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $filters = $request->validate([
+            'q' => ['nullable', 'string', 'max:100'],
+            'role' => ['nullable', 'in:host,guest'],
+        ]);
+
         $users = User::withCount(['bookings' => fn ($query) => $query->withTrashed()])
+            ->when($filters['q'] ?? null, function ($query, string $keyword) {
+                $like = '%' . $keyword . '%';
+
+                $query->where(function ($query) use ($like) {
+                    $query->where('full_name', 'like', $like)
+                        ->orWhere('email', 'like', $like)
+                        ->orWhere('phone', 'like', $like);
+                });
+            })
+            ->when($filters['role'] ?? null, fn ($query, string $role) => $query->where('role', $role))
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
         return view('host.users.index', compact('users'));
     }
 

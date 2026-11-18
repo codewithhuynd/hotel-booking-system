@@ -12,11 +12,31 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class BookingController extends Controller
 {
-    public function index()
+    public const STATUS_OPTIONS = [
+        'pending' => 'Chờ xác nhận',
+        'awaiting_deposit' => 'Chờ đặt cọc',
+        'confirmed' => 'Đã xác nhận',
+        'checked_in' => 'Đã check-in',
+        'checked_out' => 'Đã check-out',
+        'completed' => 'Hoàn tất',
+        'cancelled' => 'Đã hủy',
+    ];
+
+    public function index(Request $request)
     {
+        $filters = $request->validate([
+            'q' => ['nullable', 'string', 'max:100'],
+            'status' => ['nullable', Rule::in(array_keys(self::STATUS_OPTIONS))],
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date', 'after_or_equal:from'],
+        ], [
+            'to.after_or_equal' => 'Ngày kết thúc phải bằng hoặc sau ngày bắt đầu.',
+        ]);
+
         $bookings = Booking::with([
             'user',
             'room',
@@ -24,10 +44,28 @@ class BookingController extends Controller
             'depositPayment',
             'finalPayment',
         ])
-            ->latest()
-            ->get();
+            ->when($filters['q'] ?? null, function ($query, string $keyword) {
+                $like = '%' . $keyword . '%';
 
-        return view('host.bookings.index', compact('bookings'));
+                $query->where(function ($query) use ($like) {
+                    $query->where('booking_code', 'like', $like)
+                        ->orWhere('contact_name', 'like', $like)
+                        ->orWhere('contact_phone', 'like', $like)
+                        ->orWhereHas('user', fn ($user) => $user->where('full_name', 'like', $like)->orWhere('email', 'like', $like))
+                        ->orWhereHas('room', fn ($room) => $room->where('room_name', 'like', $like)->orWhere('room_code', 'like', $like));
+                });
+            })
+            ->when($filters['status'] ?? null, fn ($query, string $status) => $query->where('status', $status))
+            ->when($filters['from'] ?? null, fn ($query, string $from) => $query->whereDate('check_in_date', '>=', $from))
+            ->when($filters['to'] ?? null, fn ($query, string $to) => $query->whereDate('check_in_date', '<=', $to))
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('host.bookings.index', [
+            'bookings' => $bookings,
+            'statusOptions' => self::STATUS_OPTIONS,
+        ]);
     }
 
     public function show(Booking $booking)

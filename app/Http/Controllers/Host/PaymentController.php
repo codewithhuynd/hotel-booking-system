@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Services\DepositPaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 class PaymentController extends Controller
 {
@@ -21,21 +22,59 @@ class PaymentController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
+    public const STATUS_OPTIONS = [
+        'unpaid' => 'Chờ thanh toán',
+        'pending' => 'Chờ xác nhận',
+        'pending_cash' => 'Chờ thanh toán tiền mặt',
+        'cash_on_arrival' => 'Thanh toán khi nhận phòng',
+        'paid' => 'Đã thanh toán',
+        'expired' => 'Hết hạn',
+        'refunded' => 'Đã hoàn tiền',
+    ];
+
+    public const TYPE_OPTIONS = [
+        'deposit' => 'Đặt cọc',
+        'final' => 'Thanh toán cuối',
+    ];
+
+    public function index(Request $request)
     {
+        $filters = $request->validate([
+            'q' => ['nullable', 'string', 'max:100'],
+            'status' => ['nullable', Rule::in(array_keys(self::STATUS_OPTIONS))],
+            'type' => ['nullable', Rule::in(array_keys(self::TYPE_OPTIONS))],
+        ]);
+
         $expiredCount = $this->depositPaymentService->expireOverduePayments();
 
         $payments = Payment::with([
                 'booking.user',
                 'booking.room',
             ])
-            ->latest()
-            ->get();
+            ->when($filters['q'] ?? null, function ($query, string $keyword) {
+                $like = '%' . $keyword . '%';
 
-        return view(
-            'host.payments.index',
-            compact('payments', 'expiredCount')
-        );
+                $query->where(function ($query) use ($like) {
+                    $query->where('transaction_code', 'like', $like)
+                        ->orWhereHas('booking', function ($booking) use ($like) {
+                            $booking->where('booking_code', 'like', $like)
+                                ->orWhere('contact_name', 'like', $like)
+                                ->orWhereHas('user', fn ($user) => $user->where('full_name', 'like', $like)->orWhere('email', 'like', $like));
+                        });
+                });
+            })
+            ->when($filters['status'] ?? null, fn ($query, string $status) => $query->where('status', $status))
+            ->when($filters['type'] ?? null, fn ($query, string $type) => $query->where('type', $type))
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('host.payments.index', [
+            'payments' => $payments,
+            'expiredCount' => $expiredCount,
+            'statusOptions' => self::STATUS_OPTIONS,
+            'typeOptions' => self::TYPE_OPTIONS,
+        ]);
     }
 
     /*

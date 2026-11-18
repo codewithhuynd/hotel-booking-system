@@ -23,6 +23,8 @@ use App\Http\Controllers\Host\PaymentMethodController;
 use App\Http\Controllers\Host\DashboardController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Guest\ReviewController as GuestReviewController;
+use App\Http\Controllers\Host\ReviewController as HostReviewController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -71,6 +73,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
 
     Route::middleware('verified')->group(function () {
+        // Hồ sơ cá nhân dùng chung cho cả guest và host.
+        Route::get('/profile', [ProfileController::class, 'edit'])
+            ->name('profile.edit');
+
+        Route::post('/profile', [ProfileController::class, 'update'])
+            ->name('profile.update');
+
+        Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])
+            ->name('profile.change-password');
+
         Route::middleware('guest.role')->group(function () {
             Route::get('/my-bookings', [GuestBookingController::class, 'index'])
                 ->name('guest.bookings.index');
@@ -93,20 +105,15 @@ Route::middleware('auth')->group(function () {
             Route::post('/my-bookings/{booking}/refund-bank', [GuestBookingController::class, 'submitRefundBank'])
                 ->name('guest.bookings.refund-bank');
 
+            Route::post('/my-bookings/{booking}/review', [GuestReviewController::class, 'store'])
+                ->name('guest.bookings.review');
+
             Route::get('/payments/{payment}', [GuestPaymentController::class, 'show'])
                 ->name('guest.payments.show');
 
             Route::post('/payments/{payment}/upload-proof', [GuestPaymentController::class, 'uploadProof'])
                 ->name('guest.payments.upload-proof');
 
-            Route::get('/profile', [ProfileController::class, 'edit'])
-                ->name('profile.edit');
-
-            Route::post('/profile', [ProfileController::class, 'update'])
-                ->name('profile.update');
-
-            Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])
-                ->name('profile.change-password');
         });
 
         Route::middleware('host')
@@ -183,6 +190,12 @@ Route::middleware('auth')->group(function () {
                     '/contact-messages/{contactMessage}/send-reply',
                     [HostContactMessageController::class, 'sendReply']
                 )->name('contact-messages.send-reply');
+
+                Route::get('/reviews', [HostReviewController::class, 'index'])
+                    ->name('reviews.index');
+
+                Route::post('/reviews/{review}/toggle', [HostReviewController::class, 'toggle'])
+                    ->name('reviews.toggle');
 
                 Route::resource('users', UserController::class)
                     ->only(['index', 'show', 'edit', 'update', 'destroy']);

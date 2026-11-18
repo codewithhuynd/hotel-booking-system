@@ -20,8 +20,10 @@ class ProfileController extends Controller
 {
     public function edit()
     {
-        return view('guest.profile.edit', [
-            'user' => Auth::user()
+        $user = Auth::user();
+
+        return view($user->role === 'host' ? 'host.profile.edit' : 'guest.profile.edit', [
+            'user' => $user,
         ]);
     }
 

@@ -46,6 +46,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->hasMany(Booking::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function contactMessages()
     {
         return $this->hasMany(ContactMessage::class);

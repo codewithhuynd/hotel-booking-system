@@ -68,6 +68,16 @@ class Booking extends Model
         return $this->hasOne(Payment::class)->where('type', 'final');
     }
 
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
+
+    public function canBeReviewed(): bool
+    {
+        return in_array($this->status, Review::REVIEWABLE_BOOKING_STATUSES, true);
+    }
+
     public function cancellation()
     {
         return $this->hasOne(BookingCancellation::class);
