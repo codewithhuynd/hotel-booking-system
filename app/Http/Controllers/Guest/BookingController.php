@@ -130,7 +130,7 @@ class BookingController extends Controller
             'room_price' => $roomPrice,
             'total_price' => $totalPrice,
             'deposit_amount' => $depositAmount,
-            'note' => $validated['note'],
+            'note' => $validated['note'] ?? null,
             'status' => 'pending',
             'booked_at' => now(),
         ]);
