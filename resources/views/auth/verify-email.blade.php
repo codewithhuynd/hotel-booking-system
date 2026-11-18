@@ -52,6 +52,12 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div class="mt-6 rounded-2xl bg-red-900/40 border border-red-500 p-4 text-red-200">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="mt-6 rounded-3xl bg-[#171a20] border border-gray-800 p-6 space-y-5">
 
                 <div>

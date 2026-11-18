@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class HostRegisterController extends Controller
 {
@@ -30,11 +31,25 @@ class HostRegisterController extends Controller
             'role' => 'host',
         ]);
 
-        $user->sendEmailVerificationNotification();
+        $verificationEmailSent = true;
+
+        try {
+            $user->sendEmailVerificationNotification();
+        } catch (\Throwable $exception) {
+            $verificationEmailSent = false;
+            Log::warning('Unable to send host verification email after registration.', [
+                'user_id' => $user->id,
+                'exception' => $exception,
+            ]);
+        }
 
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('verification.notice');
+        $response = redirect()->route('verification.notice');
+
+        return $verificationEmailSent
+            ? $response
+            : $response->with('error', 'Tài khoản đã được tạo nhưng chưa gửi được email xác minh. Vui lòng kiểm tra SMTP và gửi lại.');
     }
 }
