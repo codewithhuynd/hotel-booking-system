@@ -224,6 +224,12 @@ class BookingSeeder extends Seeder
             $room = $rooms[$i % $rooms->count()];
             $user = $i % 2 === 0 ? $guest1 : $guest2;
             $bookedAt = $today->copy()->subDays(175 - ($i * 5))->setTime(10 + ($i % 8), 0);
+
+            // Booking chờ duyệt phải là booking mới đặt, nếu không sẽ bị tự huỷ
+            // theo quy tắc hotel.pending_expire_hours.
+            if ($status === 'pending') {
+                $bookedAt = now()->subHours(2 + ($i % 10));
+            }
             $slot = intdiv($i, count($statuses));
 
             $checkIn = match ($status) {

@@ -165,6 +165,21 @@
                         <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-gold-400 transition-all duration-300 group-focus-within:w-full"></span>
                     </div>
 
+                    <!-- Trường Xác nhận mật khẩu -->
+                    <div class="relative group">
+                        <input type="password"
+                               name="password_confirmation"
+                               placeholder=" "
+                               required
+                               class="luxury-input w-full bg-transparent border-b-2 border-gray-700 focus:border-gold-400 text-white py-3 px-1 outline-none transition-all duration-300 tracking-wide text-sm placeholder-transparent">
+                        <label class="absolute left-1 top-3 text-gray-500 text-sm tracking-wider pointer-events-none transition-all duration-300 transform origin-left uppercase">
+                            Xác nhận mật khẩu
+                        </label>
+                        <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-gold-400 transition-all duration-300 group-focus-within:w-full"></span>
+                    </div>
+
+                    <p class="text-xs text-gray-500 tracking-wide -mt-2">Mật khẩu tối thiểu 8 ký tự, gồm cả chữ và số.</p>
+
                     <!-- Nút Đăng ký phong cách quý tộc -->
                     <button type="submit" 
                             class="w-full bg-gradient-to-r from-gold-600 to-gold-400 text-luxury-dark font-semibold tracking-widest uppercase text-xs py-4 px-6 rounded-sm shadow-lg hover:from-gold-500 hover:to-gold-300 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-luxury-dark transform active:scale-[0.98] transition-all duration-300">

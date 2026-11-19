@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProofFileController;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class PaymentController extends Controller
@@ -98,16 +98,14 @@ class PaymentController extends Controller
         */
 
         // Xoá ảnh minh chứng cũ (nếu có) vì sẽ bị thay bằng ảnh mới hoặc bỏ trống.
-        if ($payment->proof_image) {
-            Storage::disk('public')->delete($payment->proof_image);
-        }
+        ProofFileController::delete($payment->proof_image);
 
         $path = null;
 
         if ($request->hasFile('proof_image')) {
             $path = $request
                 ->file('proof_image')
-                ->store('payment_proofs', 'public');
+                ->store('payment_proofs', ProofFileController::DISK);
         }
 
         /*

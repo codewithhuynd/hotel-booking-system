@@ -16,7 +16,11 @@ class BookingLifecycleTest extends TestCase
     public function test_host_confirms_checkin_and_checks_out_booking(): void
     {
         $host = User::factory()->create(['role' => 'host']);
-        $booking = Booking::factory()->create(['status' => 'pending']);
+        $booking = Booking::factory()->create([
+            'status' => 'pending',
+            'check_in_date' => today()->toDateString(),
+            'check_out_date' => today()->addDays(2)->toDateString(),
+        ]);
 
         $this->actingAs($host)->post(route('host.bookings.confirm', $booking))->assertRedirect();
         $booking->refresh();

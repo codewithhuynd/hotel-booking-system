@@ -672,6 +672,7 @@ html
                 Hồ sơ cá nhân
             </a>
 
+            @if($room->isBookable())
             <a href="{{ route('guest.bookings.create', ['room' => $room, 'check_in' => request('check_in'), 'check_out' => request('check_out')]) }}"
                 class="btn-primary">
 
@@ -679,6 +680,7 @@ html
                 Đặt Phòng
 
             </a>
+            @endif
 
             @endif
 
@@ -798,13 +800,24 @@ html
                     {{ $room->description }}
                 </div>
 
+                @if(session('error'))
+                    <div class="mt-6 rounded-2xl border border-red-400/30 bg-red-500/10 px-5 py-4 text-red-200">{{ session('error') }}</div>
+                @endif
+
+                @unless($room->isBookable())
+                    <div class="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 px-5 py-4 text-amber-200">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        Phòng đang bảo trì, tạm thời không nhận đặt phòng.
+                    </div>
+                @endunless
+
                 <!-- ACTION -->
 
                 <div class="action-bar">
 
                     @auth
 
-                    @if(auth()->user()->role === 'guest')
+                    @if(auth()->user()->role === 'guest' && $room->isBookable())
 
                     <a href="{{ route('guest.bookings.create', ['room' => $room, 'check_in' => request('check_in'), 'check_out' => request('check_out')]) }}"
                         class="btn-primary">

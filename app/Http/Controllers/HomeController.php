@@ -42,7 +42,7 @@ class HomeController extends Controller
         }
 
         try {
-            $query = Room::with('images');
+            $query = Room::with('images')->bookable();
 
             /*
             |--------------------------------------------------------------------------

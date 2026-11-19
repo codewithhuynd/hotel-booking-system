@@ -12,6 +12,10 @@ class RoomImage extends Model
         'is_main',
     ];
 
+    protected $casts = [
+        'is_main' => 'boolean',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONSHIPS

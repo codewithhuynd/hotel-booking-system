@@ -50,6 +50,12 @@ class BookingController extends Controller
 
     public function create(Request $request, Room $room)
     {
+        if (! $room->isBookable()) {
+            return redirect()
+                ->route('rooms.show', $room)
+                ->with('error', 'Phòng đang bảo trì, tạm thời không nhận đặt phòng.');
+        }
+
         return view('guest.bookings.create', [
             'room' => $room,
             'checkIn' => $request->query('check_in'),
@@ -97,6 +103,14 @@ class BookingController extends Controller
 
         $booking = DB::transaction(function () use ($room, $validated) {
         $room = Room::query()->whereKey($room->id)->lockForUpdate()->firstOrFail();
+
+        if (! $room->isBookable()) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'room' => 'Phòng đang bảo trì, tạm thời không nhận đặt phòng.',
+                ]);
+        }
 
         $hasConflict = Booking::where('room_id', $room->id)
             ->overlapping($validated['check_in_date'], $validated['check_out_date'])
@@ -184,9 +198,9 @@ class BookingController extends Controller
                 ->with('error', 'Booking này không thể hủy.');
         }
 
-        $hasTransferredDeposit =
-            $booking->depositPayment &&
-            in_array($booking->depositPayment->status, ['pending', 'paid'], true);
+        // Theo chính sách huỷ: chỉ hoàn cọc khi huỷ đủ sớm trước ngày nhận phòng.
+        $hasTransferredDeposit = $booking->isDepositRefundableOnGuestCancel();
+        $depositForfeited = $booking->hasTransferredDeposit() && ! $hasTransferredDeposit;
 
         $rules = [
             'reason' => ['required', 'string', 'min:10', 'max:1000', 'regex:/^[\pL\pN\s.,;:!?()\-\/]+$/u'],
@@ -221,12 +235,14 @@ class BookingController extends Controller
             'bank_account_name.regex' => 'Tên chủ tài khoản chỉ được chứa chữ cái, khoảng trắng, dấu chấm, dấu gạch và dấu nháy đơn.',
         ]);
 
-        DB::transaction(function () use ($booking, $validated, $hasTransferredDeposit) {
+        DB::transaction(function () use ($booking, $validated, $hasTransferredDeposit, $depositForfeited) {
             BookingCancellation::create([
                 'booking_id' => $booking->id,
                 'cancelled_by_user_id' => Auth::id(),
                 'cancelled_by_type' => 'guest',
-                'reason' => $validated['reason'],
+                'reason' => $depositForfeited
+                    ? $validated['reason'] . ' [Huỷ muộn: không hoàn cọc theo chính sách]'
+                    : $validated['reason'],
                 'bank_name' => $hasTransferredDeposit ? $validated['bank_name'] : null,
                 'bank_account_number' => $hasTransferredDeposit ? $validated['bank_account_number'] : null,
                 'bank_account_name' => $hasTransferredDeposit ? $validated['bank_account_name'] : null,
@@ -256,7 +272,9 @@ class BookingController extends Controller
 
         return redirect()
             ->route('guest.bookings.index')
-            ->with('success', 'Đã hủy booking thành công.');
+            ->with('success', $depositForfeited
+                ? 'Đã hủy booking. Do hủy trong vòng ' . config('hotel.free_cancellation_days', 3) . ' ngày trước ngày nhận phòng nên tiền cọc không được hoàn lại.'
+                : 'Đã hủy booking thành công.');
     }
 
     public function submitRefundBank(Request $request, Booking $booking)

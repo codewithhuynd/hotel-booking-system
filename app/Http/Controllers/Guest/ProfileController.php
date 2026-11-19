@@ -140,7 +140,15 @@ class ProfileController extends Controller
             Auth::logout();
         }
 
-        Mail::to($user->email)->send(new PasswordChangedMail($user));
+        try {
+            Mail::to($user->email)->send(new PasswordChangedMail($user));
+        } catch (\Throwable $exception) {
+            // Mật khẩu đã đổi xong; lỗi gửi mail thông báo không được làm hỏng luồng.
+            Log::warning('Unable to send password changed email.', [
+                'user_id' => $user->id,
+                'exception' => $exception,
+            ]);
+        }
 
         return redirect()->route('login')->with('success', 'Mật khẩu của bạn đã được thay đổi thành công.');
     }

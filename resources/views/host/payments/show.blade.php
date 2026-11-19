@@ -265,9 +265,9 @@
                 <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
                     Hình ảnh minh chứng
                 </label>
-                <a href="{{ asset('storage/' . $payment->proof_image) }}" target="_blank" title="Click để xem ảnh lớn">
+                <a href="{{ route('files.payment-proof', $payment) }}" target="_blank" title="Click để xem ảnh lớn">
                     <img
-                        src="{{ asset('storage/' . $payment->proof_image) }}"
+                        src="{{ route('files.payment-proof', $payment) }}"
                         class="proof-image"
                         alt="Proof image"
                     >

@@ -478,7 +478,7 @@
                             <label>Proof image</label>
                             <div class="value">
                                 @if($payment->proof_image)
-                                    <a href="{{ asset('storage/' . $payment->proof_image) }}" target="_blank" class="proof-link">Xem ảnh</a>
+                                    <a href="{{ route('files.payment-proof', $payment) }}" target="_blank" class="proof-link">Xem ảnh</a>
                                 @else
                                     <span class="muted">—</span>
                                 @endif
@@ -577,7 +577,7 @@
                             <div class="value">
                                 @if($booking->cancellation->refund_proof_image)
                                     <a
-                                        href="{{ asset('storage/' . $booking->cancellation->refund_proof_image) }}"
+                                        href="{{ route('files.refund-proof', $booking->cancellation) }}"
                                         target="_blank"
                                         class="proof-link"
                                     >

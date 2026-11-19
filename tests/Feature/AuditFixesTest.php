@@ -120,6 +120,7 @@ class AuditFixesTest extends TestCase
     public function test_guest_cannot_upload_proof_for_expired_payment(): void
     {
         Storage::fake('public');
+        Storage::fake('local');
 
         $booking = Booking::factory()->create(['status' => 'cancelled']);
         $payment = Payment::factory()->create(['booking_id' => $booking->id, 'status' => 'expired']);
@@ -138,6 +139,7 @@ class AuditFixesTest extends TestCase
     public function test_guest_cannot_use_inactive_payment_method(): void
     {
         Storage::fake('public');
+        Storage::fake('local');
 
         $booking = Booking::factory()->create(['status' => 'awaiting_deposit']);
         $payment = Payment::factory()->create(['booking_id' => $booking->id]);
@@ -156,6 +158,7 @@ class AuditFixesTest extends TestCase
     public function test_reuploading_proof_deletes_previous_image(): void
     {
         Storage::fake('public');
+        Storage::fake('local');
 
         $booking = Booking::factory()->create(['status' => 'awaiting_deposit']);
         $payment = Payment::factory()->create(['booking_id' => $booking->id]);
@@ -171,8 +174,8 @@ class AuditFixesTest extends TestCase
         $firstPath = $payment->fresh()->proof_image;
         $upload();
 
-        Storage::disk('public')->assertMissing($firstPath);
-        Storage::disk('public')->assertExists($payment->fresh()->proof_image);
+        Storage::disk('local')->assertMissing($firstPath);
+        Storage::disk('local')->assertExists($payment->fresh()->proof_image);
     }
 
     public function test_login_is_rate_limited(): void

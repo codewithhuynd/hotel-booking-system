@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ContactReplyMail;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ContactMessageController extends Controller
@@ -55,8 +56,19 @@ class ContactMessageController extends Controller
             'reply_message.max' => 'Nội dung phản hồi không được vượt quá 2000 ký tự.',
         ]);
 
-        Mail::to($contactMessage->email)
-            ->send(new ContactReplyMail($contactMessage, $validated['reply_message']));
+        try {
+            Mail::to($contactMessage->email)
+                ->send(new ContactReplyMail($contactMessage, $validated['reply_message']));
+        } catch (\Throwable $exception) {
+            Log::warning('Unable to send contact reply email.', [
+                'contact_message_id' => $contactMessage->id,
+                'exception' => $exception,
+            ]);
+
+            return back()
+                ->withInput()
+                ->withErrors(['reply_message' => 'Chưa gửi được email phản hồi (lỗi kết nối mail). Nội dung chưa được lưu, vui lòng thử lại sau.']);
+        }
 
         $contactMessage->update([
             'reply_message' => $validated['reply_message'],

@@ -18,6 +18,7 @@ class BookingCancelRefundTest extends TestCase
     public function test_guest_submits_bank_details_and_host_completes_refund(): void
     {
         Storage::fake('public');
+        Storage::fake('local');
         $guest = User::factory()->create(['role' => 'guest']);
         $host = User::factory()->create(['role' => 'host']);
         $booking = Booking::factory()->create(['user_id' => $guest->id, 'status' => 'confirmed']);

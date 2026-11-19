@@ -23,6 +23,7 @@ use App\Http\Controllers\Host\PaymentMethodController;
 use App\Http\Controllers\Host\DashboardController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProofFileController;
 use App\Http\Controllers\Guest\ReviewController as GuestReviewController;
 use App\Http\Controllers\Host\ReviewController as HostReviewController;
 
@@ -31,6 +32,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/rooms', [GuestRoomController::class, 'index'])->name('rooms.index');
 Route::get('/rooms/{room}', [GuestRoomController::class, 'show'])->name('rooms.show');
 Route::post('/contact-message', [ContactMessageController::class, 'store'])
+    ->middleware('throttle:3,10')
     ->name('contact-messages.store');
 
 Route::middleware('guest')->group(function () {
@@ -71,6 +73,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
     Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
+
+    // Ảnh minh chứng riêng tư: chỉ host và khách của booking được xem.
+    Route::get('/files/payments/{payment}/proof', [ProofFileController::class, 'paymentProof'])
+        ->name('files.payment-proof');
+
+    Route::get('/files/cancellations/{cancellation}/refund-proof', [ProofFileController::class, 'refundProof'])
+        ->name('files.refund-proof');
 
     Route::middleware('verified')->group(function () {
         // Hồ sơ cá nhân dùng chung cho cả guest và host.

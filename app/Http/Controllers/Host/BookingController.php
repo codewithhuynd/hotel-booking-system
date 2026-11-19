@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Host;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProofFileController;
 use App\Mail\RefundCompletedMail;
 use App\Models\Booking;
 use App\Models\BookingCancellation;
 use App\Models\Payment;
+use App\Services\BookingExpiryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,8 +28,11 @@ class BookingController extends Controller
         'cancelled' => 'Đã hủy',
     ];
 
-    public function index(Request $request)
+    public function index(Request $request, BookingExpiryService $expiryService)
     {
+        // Áp dụng quy tắc tự huỷ ngay khi host mở danh sách (phòng khi scheduler chưa chạy).
+        $expiryService->run();
+
         $filters = $request->validate([
             'q' => ['nullable', 'string', 'max:100'],
             'status' => ['nullable', Rule::in(array_keys(self::STATUS_OPTIONS))],
@@ -127,6 +132,14 @@ class BookingController extends Controller
 
         if (! $depositPaid) {
             return back()->with('error', 'Khách chưa thanh toán cọc.');
+        }
+
+        if ($booking->check_in_date->isFuture()) {
+            return back()->with('error', 'Chưa đến ngày nhận phòng (' . $booking->check_in_date->format('d/m/Y') . ').');
+        }
+
+        if ($booking->room?->status === 'occupied') {
+            return back()->with('error', 'Phòng đang có khách khác lưu trú, chưa thể check-in.');
         }
 
         $booking->update([
@@ -263,7 +276,7 @@ class BookingController extends Controller
         ]);
 
         $proofPath = $request->file('refund_proof_image')
-            ->store('refund_proofs', 'public');
+            ->store('refund_proofs', ProofFileController::DISK);
 
         DB::transaction(function () use ($cancellation, $validated, $proofPath) {
             $cancellation->update([

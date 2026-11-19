@@ -154,8 +154,16 @@
         @enderror
 
         @php
-            $needsRefund = $booking->depositPayment && in_array($booking->depositPayment->status, ['pending', 'paid'], true);
+            $needsRefund = $booking->isDepositRefundableOnGuestCancel();
+            $freeDays = config('hotel.free_cancellation_days', 3);
         @endphp
+
+        @if($booking->hasTransferredDeposit() && ! $needsRefund)
+            <div class="muted" style="border-left:4px solid #e11d48;color:#9f1239;">
+                Lưu ý: bạn đang huỷ trong vòng {{ $freeDays }} ngày trước ngày nhận phòng.
+                Theo chính sách của khách sạn, tiền cọc sẽ không được hoàn lại.
+            </div>
+        @endif
 
         @if($needsRefund)
             <div class="muted">

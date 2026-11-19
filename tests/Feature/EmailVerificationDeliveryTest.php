@@ -34,6 +34,7 @@ class EmailVerificationDeliveryTest extends TestCase
             'full_name' => 'Guest Mail Test',
             'email' => 'guest-mail-test@example.com',
             'password' => 'secret123',
+            'password_confirmation' => 'secret123',
         ])
             ->assertRedirect(route('verification.notice'))
             ->assertSessionHas('error', 'Tài khoản đã được tạo nhưng chưa gửi được email xác minh. Vui lòng kiểm tra SMTP và gửi lại.');

@@ -19,9 +19,17 @@ class RoomImageController extends Controller
     public function store(Request $request, Room $room)
     {
         $request->validate([
-            'images' => 'required',
+            'images' => 'required|array|max:10',
             'images.*' => 'image|max:5120',
+        ], [
+            'images.required' => 'Vui lòng chọn ít nhất một ảnh.',
+            'images.max' => 'Mỗi lần chỉ tải tối đa 10 ảnh.',
+            'images.*.image' => 'File tải lên phải là ảnh.',
+            'images.*.max' => 'Mỗi ảnh không được vượt quá 5MB.',
         ]);
+
+        // Phòng chưa có ảnh chính thì ảnh đầu tiên tải lên sẽ là ảnh chính.
+        $needsMain = ! $room->images()->where('is_main', true)->exists();
 
         foreach ($request->file('images') as $file) {
 
@@ -33,8 +41,10 @@ class RoomImageController extends Controller
             RoomImage::create([
                 'room_id' => $room->id,
                 'image_path' => $path,
-                'is_main' => false,
+                'is_main' => $needsMain,
             ]);
+
+            $needsMain = false;
         }
 
         return back()->with(
@@ -55,7 +65,15 @@ class RoomImageController extends Controller
             $roomImage->image_path
         );
 
+        $wasMain = $roomImage->is_main;
+        $roomId = $roomImage->room_id;
+
         $roomImage->delete();
+
+        // Xoá ảnh chính thì chọn ảnh còn lại đầu tiên làm ảnh chính.
+        if ($wasMain) {
+            RoomImage::where('room_id', $roomId)->orderBy('id')->first()?->update(['is_main' => true]);
+        }
 
         return back()->with(
             'success',

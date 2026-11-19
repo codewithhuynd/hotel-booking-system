@@ -49,7 +49,7 @@
                     <p class="text-slate-500">Phương thức: {{ $payment->payment_method }}</p>
                     <p class="text-slate-500">Trạng thái: {{ $payment->displayStatusLabel() }}</p>
                     @if($payment->proof_image)
-                        <a href="{{ asset('storage/' . $payment->proof_image) }}" target="_blank" class="mt-2 inline-block text-emerald-700 hover:underline">Xem minh chứng</a>
+                        <a href="{{ route('files.payment-proof', $payment) }}" target="_blank" class="mt-2 inline-block text-emerald-700 hover:underline">Xem minh chứng</a>
                     @endif
                     @if($payment->type === 'deposit')
                         <a href="{{ route('guest.payments.show', $payment) }}" class="mt-3 inline-block rounded-xl bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700">Xem / cập nhật thanh toán</a>

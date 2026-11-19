@@ -36,6 +36,17 @@ class Room extends Model
         return $this->hasMany(Booking::class);
     }
 
+    /** Phòng khách có thể đặt (loại phòng đang bảo trì). */
+    public function scopeBookable($query)
+    {
+        return $query->where('status', '!=', 'maintenance');
+    }
+
+    public function isBookable(): bool
+    {
+        return $this->status !== 'maintenance';
+    }
+
     public function reviews()
     {
         return $this->hasMany(Review::class);

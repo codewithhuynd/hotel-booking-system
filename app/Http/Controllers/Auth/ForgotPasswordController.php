@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
@@ -23,7 +24,18 @@ class ForgotPasswordController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        Password::sendResetLink($request->only('email'));
+        try {
+            Password::sendResetLink($request->only('email'));
+        } catch (\Throwable $exception) {
+            Log::warning('Unable to send password reset email.', [
+                'email' => $request->input('email'),
+                'exception' => $exception,
+            ]);
+
+            return back()
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => 'Hệ thống chưa gửi được email đặt lại mật khẩu. Vui lòng thử lại sau hoặc liên hệ khách sạn.']);
+        }
 
         return redirect()->route('password.request')->with(
             'status',

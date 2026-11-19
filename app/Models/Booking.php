@@ -68,6 +68,29 @@ class Booking extends Model
         return $this->hasOne(Payment::class)->where('type', 'final');
     }
 
+    /** Khách đã chuyển cọc (đang chờ xác nhận hoặc đã xác nhận). */
+    public function hasTransferredDeposit(): bool
+    {
+        return $this->depositPayment
+            && in_array($this->depositPayment->status, ['pending', 'paid'], true);
+    }
+
+    /** Số ngày còn lại tới ngày nhận phòng (âm nếu đã qua). */
+    public function daysUntilCheckIn(): int
+    {
+        return (int) today()->diffInDays($this->check_in_date, false);
+    }
+
+    /**
+     * Chính sách huỷ: khách tự huỷ trước ngày nhận phòng ít nhất
+     * `hotel.free_cancellation_days` ngày thì được hoàn cọc, muộn hơn thì mất cọc.
+     */
+    public function isDepositRefundableOnGuestCancel(): bool
+    {
+        return $this->hasTransferredDeposit()
+            && $this->daysUntilCheckIn() >= (int) config('hotel.free_cancellation_days', 3);
+    }
+
     public function review()
     {
         return $this->hasOne(Review::class);

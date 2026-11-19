@@ -17,6 +17,10 @@ return Application::configure(
 
     ->withMiddleware(function (Middleware $middleware): void {
 
+        // Railway (và các nền tảng PaaS) đặt app sau reverse proxy: tin header X-Forwarded-*
+        // để Laravel lấy đúng IP thật (cho rate limit) và scheme https (cho URL, form).
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
 
             /*

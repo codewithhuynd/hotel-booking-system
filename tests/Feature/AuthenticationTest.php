@@ -51,6 +51,7 @@ class AuthenticationTest extends TestCase
         $this->post(route('login'), [
             'email' => $user->email,
             'password' => 'secret123',
+            'password_confirmation' => 'secret123',
         ])
             ->assertRedirect(route('verification.notice'));
 
@@ -99,6 +100,7 @@ class AuthenticationTest extends TestCase
             'full_name' => 'New Guest',
             'email' => 'new-guest@example.com',
             'password' => 'secret123',
+            'password_confirmation' => 'secret123',
         ])
             ->assertRedirect(route('verification.notice'));
 

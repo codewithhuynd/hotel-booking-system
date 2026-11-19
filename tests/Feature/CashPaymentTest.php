@@ -19,6 +19,7 @@ class CashPaymentTest extends TestCase
     public function test_cash_payment_does_not_require_proof_image(): void
     {
         Storage::fake('public');
+        Storage::fake('local');
 
         $user = User::factory()->create([
             'role' => 'guest',
@@ -86,6 +87,7 @@ class CashPaymentTest extends TestCase
     public function test_non_cash_payment_still_requires_proof_image(): void
     {
         Storage::fake('public');
+        Storage::fake('local');
 
         $user = User::factory()->create([
             'role' => 'guest',

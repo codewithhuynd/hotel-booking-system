@@ -20,7 +20,7 @@ class RoomController extends Controller
             'check_out.after' => 'Ngày trả phòng phải sau ngày nhận phòng.',
         ]);
 
-        $query = Room::query()->with(['mainImage', 'images']);
+        $query = Room::query()->bookable()->with(['mainImage', 'images']);
 
         if (! empty($validated['check_in']) && ! empty($validated['check_out'])) {
             $query->whereDoesntHave('bookings', function ($bookings) use ($validated) {

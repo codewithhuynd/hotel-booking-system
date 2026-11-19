@@ -39,19 +39,33 @@ class AuthController extends Controller
 
             'full_name' => [
                 'required',
+                'string',
                 'max:255'
             ],
 
             'email' => [
                 'required',
                 'email',
+                'max:255',
                 'unique:users,email'
             ],
 
+            // Cùng quy tắc với đổi mật khẩu: tối thiểu 8 ký tự, có chữ và số.
             'password' => [
                 'required',
-                'min:6'
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
             ],
+        ], [
+            'full_name.required' => 'Vui lòng nhập họ và tên.',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Email không đúng định dạng.',
+            'email.unique' => 'Email này đã được đăng ký.',
+            'password.required' => 'Vui lòng nhập mật khẩu.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+            'password.regex' => 'Mật khẩu phải chứa ít nhất 1 chữ cái và 1 số.',
         ]);
 
         /*
